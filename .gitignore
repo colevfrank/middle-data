@@ -1,3 +1,6 @@
+# Tailwind build output
+public/styles.css
+
 # Logs
 logs
 *.log
