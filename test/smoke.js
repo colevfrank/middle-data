@@ -555,6 +555,54 @@ test('consent refusal redirects to return URL', async () => {
   }
 });
 
+test('/start preserves ?mode=settings in redirect (new + resume)', async () => {
+  const express = require('express');
+  const cookieParser = require('cookie-parser');
+
+  for (const k of Object.keys(require.cache)) {
+    if (k.includes('/server/') || k.includes('/test/')) delete require.cache[k];
+  }
+  mockState.participants.clear();
+  mockState.byPid.clear();
+
+  const startRoute = require('../server/routes/start');
+  const app = express();
+  app.use(cookieParser());
+  app.use(startRoute);
+
+  const port = 31996;
+  const server = app.listen(port);
+
+  try {
+    // New participant + mode=settings -> redirect to /screen.html?mode=settings
+    const r1 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=MODE_NEW&mode=settings`);
+    assert.equal(r1.status, 302);
+    assert.equal(r1.headers.location, '/screen.html?mode=settings');
+
+    // Resume same PID + mode=settings -> still preserves
+    const r2 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=MODE_NEW&mode=settings`);
+    assert.equal(r2.status, 302);
+    assert.equal(r2.headers.location, '/screen.html?mode=settings');
+
+    // Resume same PID WITHOUT mode -> falls back to plain
+    const r3 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=MODE_NEW`);
+    assert.equal(r3.status, 302);
+    assert.equal(r3.headers.location, '/screen.html');
+
+    // New participant, no mode -> no qs
+    const r4 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=NOMODE_NEW`);
+    assert.equal(r4.status, 302);
+    assert.equal(r4.headers.location, '/screen.html');
+
+    // Unknown mode value -> ignored
+    const r5 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=BADMODE_NEW&mode=junk`);
+    assert.equal(r5.status, 302);
+    assert.equal(r5.headers.location, '/screen.html');
+  } finally {
+    server.close();
+  }
+});
+
 test('rate-limit: 15 allowed, 16th rejected, distinct IPs independent', () => {
   // Clear cache so ratelimit module is fresh
   for (const k of Object.keys(require.cache)) {

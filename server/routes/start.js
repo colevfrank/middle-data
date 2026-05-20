@@ -13,6 +13,7 @@ router.get('/start', asyncHandler(async (req, res) => {
   const pid = req.query.PROLIFIC_PID;
   const studyId = req.query.STUDY_ID || null;
   const sessionId = req.query.SESSION_ID || null;
+  const modeQs = req.query.mode === 'settings' ? '?mode=settings' : '';
 
   if (!pid || typeof pid !== 'string' || pid.length < 4 || pid.length > 64 || !/^[A-Za-z0-9_-]+$/.test(pid)) {
     return res.status(400).send(renderError('Invalid or missing PROLIFIC_PID. Please return to Prolific and try again.'));
@@ -29,7 +30,7 @@ router.get('/start', asyncHandler(async (req, res) => {
       return res.redirect(returnUrl());
     }
     setSessionCookie(res, p.session_token);
-    return res.redirect('/screen.html');
+    return res.redirect('/screen.html' + modeQs);
   }
 
   // Rate-limit only first-time IPs.
@@ -66,7 +67,7 @@ router.get('/start', asyncHandler(async (req, res) => {
   );
 
   setSessionCookie(res, token);
-  return res.redirect('/screen.html');
+  return res.redirect('/screen.html' + modeQs);
 }));
 
 function returnUrl() {

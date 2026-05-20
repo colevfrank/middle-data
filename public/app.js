@@ -9,6 +9,20 @@
   let timestampShown = 0;
   let inputEvents = [];
 
+  // ===== Presentation mode (plain | settings) =====
+  // `?mode=settings` opts a participant into the settings-style scenario UI.
+  // Persisted to sessionStorage so reloads within the tab keep the mode.
+  function detectMode() {
+    try {
+      const urlMode = new URLSearchParams(location.search).get('mode');
+      if (urlMode === 'settings') sessionStorage.setItem('appx_mode', 'settings');
+      return sessionStorage.getItem('appx_mode') || 'plain';
+    } catch (e) {
+      return 'plain';
+    }
+  }
+  const MODE = detectMode();
+
   // ===== Back-button interception =====
   history.pushState({ survey: true }, '', location.href);
   window.addEventListener('popstate', () => {
@@ -118,7 +132,11 @@
     clearError();
     setProgress(payload.progress || 0);
     clear(root);
-    const renderer = RENDERERS[payload.screen];
+    const useSettings = MODE === 'settings' && SETTINGS_RENDERERS[payload.screen];
+    // Settings-mode scenarios render their own browser-frame container; drop the
+    // outer card wrapper for those screens so the frame stands alone.
+    root.className = useSettings ? '' : 'card';
+    const renderer = useSettings ? SETTINGS_RENDERERS[payload.screen] : RENDERERS[payload.screen];
     if (!renderer) {
       root.appendChild(el('p', { class: 'text-slate-700' }, 'Unknown screen: ' + payload.screen));
       return;
@@ -746,6 +764,327 @@
   RENDERERS.returned = function (p) {
     if (p.redirect) window.location.href = p.redirect;
     else root.appendChild(el('p', {}, 'Survey ended.'));
+  };
+
+  // ===== Settings-mode renderers (pilot, opt-in via ?mode=settings) =====
+  // These mirror the data shape of the plain renderers exactly — they read the
+  // same server payload and submit the same body — but present the scenarios
+  // inside a desktop-web-app settings page (browser chrome + sidebar + rows).
+  const SETTINGS_RENDERERS = {};
+
+  function browserChrome(urlText) {
+    return el('div', { class: 'browser-chrome' }, [
+      el('div', { class: 'browser-dot bg-red-400' }),
+      el('div', { class: 'browser-dot bg-yellow-400' }),
+      el('div', { class: 'browser-dot bg-green-400' }),
+      el('div', { class: 'browser-url' }, urlText)
+    ]);
+  }
+
+  function settingsSidebar(activeKey) {
+    const items = [
+      { key: 'account',      label: 'Account' },
+      { key: 'subscription', label: 'Subscription' },
+      { key: 'premium',      label: 'Premium features' },
+      { key: 'privacy',      label: 'Privacy' },
+      { key: 'marketplace',  label: 'Data Marketplace' },
+      { key: 'notifications',label: 'Notifications' },
+      { key: 'billing',      label: 'Billing' }
+    ];
+    const nav = el('div', { class: 'settings-nav' });
+    for (const it of items) {
+      const cls = 'settings-nav-item' + (it.key === activeKey ? ' settings-nav-item-active' : '');
+      nav.appendChild(el('div', { class: cls }, it.label));
+    }
+    return el('div', { class: 'settings-sidebar' }, [
+      el('div', { class: 'settings-brand' }, 'AppX'),
+      nav
+    ]);
+  }
+
+  // Inline Yes/No (or Yes/No/Not sure) segmented control. Stores chosen value
+  // on `wrap.dataset.value`; records an input event on each click.
+  function segmented(name, options) {
+    const wrap = el('div', { class: 'settings-segmented', 'data-name': name, role: 'radiogroup' });
+    for (const o of options) {
+      const btn = el('button', { type: 'button', 'data-val': o.value }, o.label);
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        wrap.querySelectorAll('button').forEach(b => b.classList.remove('is-selected'));
+        btn.classList.add('is-selected');
+        wrap.dataset.value = o.value;
+        recordInput(name, o.value);
+        wrap.dispatchEvent(new CustomEvent('seg-change', { bubbles: true }));
+      });
+      wrap.appendChild(btn);
+    }
+    return wrap;
+  }
+  function segGet(wrap) { return wrap.dataset.value || null; }
+  function segSetDisabled(wrap, disabled) {
+    wrap.classList.toggle('settings-disabled', disabled);
+    wrap.querySelectorAll('button').forEach(b => { b.disabled = disabled; });
+    if (disabled) {
+      wrap.querySelectorAll('button').forEach(b => b.classList.remove('is-selected'));
+      delete wrap.dataset.value;
+    }
+  }
+
+  function settingsFooter(saveBtn, noteText) {
+    const footer = el('div', { class: 'settings-footer' }, [
+      noteText ? el('span', { class: 'settings-footer-note' }, noteText) : null,
+      saveBtn
+    ]);
+    return footer;
+  }
+
+  function settingsSaveBtn(onClick, label) {
+    const btn = el('button', { type: 'button', class: 'settings-save-btn', disabled: true, id: 'continue-btn' }, label || 'Save changes');
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
+
+  // ===== Scenario 1 (subscription discount, settings mode) =====
+  SETTINGS_RENDERERS.scenario_1 = function (p) {
+    const frame = el('div', { class: 'browser-frame' });
+    frame.appendChild(browserChrome('appx.com/settings/subscription'));
+
+    const body = el('div', { class: 'browser-body' });
+    body.appendChild(settingsSidebar('subscription'));
+
+    const content = el('div', { class: 'settings-content' });
+    content.appendChild(el('h2', { class: 'settings-section-title' }, 'Subscription'));
+    content.appendChild(el('p', { class: 'settings-section-helper' }, 'Manage your AppX plan and data-sharing preferences.'));
+    content.appendChild(el('div', { class: 'settings-divider' }));
+
+    // Current plan info row (read-only)
+    content.appendChild(el('div', { class: 'settings-row' }, [
+      el('div', { class: 'settings-row-text' }, [
+        el('div', { class: 'settings-row-label' }, 'Current plan'),
+        el('div', { class: 'settings-row-description' }, 'AppX Premium — $20 / month')
+      ])
+    ]));
+
+    // Section: discount offers
+    content.appendChild(el('h3', { class: 'mt-6 text-sm font-semibold uppercase tracking-wide text-slate-500' }, 'Save with data sharing'));
+    content.appendChild(el('p', { class: 'settings-section-helper' }, p.prompt));
+    content.appendChild(el('p', { class: 'settings-section-helper mt-1' }, 'Choose the discount offers you would accept:'));
+
+    const rowsBox = el('div', { class: 'mt-3' });
+    const segs = {};
+    for (const t of p.tiers) {
+      const seg = segmented(t.key, [
+        { value: 'yes', label: 'Yes' },
+        { value: 'no',  label: 'No'  }
+      ]);
+      segs[t.key] = seg;
+      const row = el('div', { class: 'settings-row' }, [
+        el('div', { class: 'settings-row-text' }, [
+          el('div', { class: 'settings-row-label' }, t.label),
+          el('div', { class: 'settings-row-description' }, 'Share data to receive this discount')
+        ]),
+        seg
+      ]);
+      rowsBox.appendChild(row);
+    }
+    content.appendChild(rowsBox);
+
+    // Decline-all row
+    const declineLabel = el('label', { class: 'settings-decline-row' }, [
+      el('input', { type: 'checkbox', name: 's1_none', id: 's1_none', class: 'h-4 w-4' }),
+      el('span', {}, p.none_label)
+    ]);
+    content.appendChild(declineLabel);
+
+    // Save footer
+    const btn = settingsSaveBtn(() => {
+      const body = {};
+      const declined = declineLabel.querySelector('#s1_none').checked;
+      if (declined) {
+        body.s1_none = true;
+      } else {
+        body.s1_none = false;
+        for (const t of p.tiers) {
+          const v = segGet(segs[t.key]);
+          body[t.key] = v === 'yes';
+        }
+      }
+      submit('scenario_1', body);
+    });
+    content.appendChild(settingsFooter(btn, 'Changes are saved automatically.'));
+
+    body.appendChild(content);
+    frame.appendChild(body);
+    root.appendChild(frame);
+
+    // Wire up disable behavior + Continue gating
+    const declineBox = declineLabel.querySelector('#s1_none');
+    function refresh() {
+      const declined = declineBox.checked;
+      for (const t of p.tiers) segSetDisabled(segs[t.key], declined);
+      const allAnswered = declined || p.tiers.every(t => segGet(segs[t.key]) != null);
+      btn.disabled = !allAnswered;
+    }
+    declineBox.addEventListener('change', () => {
+      recordInput('s1_none', declineBox.checked);
+      refresh();
+    });
+    frame.addEventListener('seg-change', refresh);
+    refresh();
+  };
+
+  // ===== Scenario 2 (feature tradeoff, settings mode) =====
+  SETTINGS_RENDERERS.scenario_2 = function (p) {
+    const frame = el('div', { class: 'browser-frame' });
+    frame.appendChild(browserChrome('appx.com/settings/premium'));
+
+    const body = el('div', { class: 'browser-body' });
+    body.appendChild(settingsSidebar('premium'));
+
+    const content = el('div', { class: 'settings-content' });
+    content.appendChild(el('h2', { class: 'settings-section-title' }, 'Premium features'));
+    content.appendChild(el('p', { class: 'settings-section-helper' }, p.intro));
+    content.appendChild(el('div', { class: 'settings-callout' }, p.reminder));
+    content.appendChild(el('div', { class: 'settings-divider' }));
+
+    const seg = segmented('s2_response', [
+      { value: 'yes',      label: 'Yes' },
+      { value: 'no',       label: 'No' },
+      { value: 'not_sure', label: 'Not sure' }
+    ]);
+    content.appendChild(el('div', { class: 'settings-row' }, [
+      el('div', { class: 'settings-row-text' }, [
+        el('div', { class: 'settings-row-label' }, p.prompt),
+        el('div', { class: 'settings-row-description' }, p.feature)
+      ]),
+      seg
+    ]));
+
+    const btn = settingsSaveBtn(() => {
+      submit('scenario_2', { s2_response: segGet(seg) });
+    });
+    content.appendChild(settingsFooter(btn));
+
+    body.appendChild(content);
+    frame.appendChild(body);
+    root.appendChild(frame);
+
+    frame.addEventListener('seg-change', () => {
+      btn.disabled = segGet(seg) == null;
+    });
+  };
+
+  // ===== Scenario 3 (data marketplace, settings mode) =====
+  SETTINGS_RENDERERS.scenario_3 = function (p) {
+    const frame = el('div', { class: 'browser-frame' });
+    frame.appendChild(browserChrome('appx.com/settings/marketplace'));
+
+    const body = el('div', { class: 'browser-body' });
+    body.appendChild(settingsSidebar('marketplace'));
+
+    const content = el('div', { class: 'settings-content' });
+    content.appendChild(el('h2', { class: 'settings-section-title' }, 'Data Marketplace'));
+    content.appendChild(el('p', { class: 'settings-section-helper' }, p.intro));
+
+    const bullets = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-slate-600 space-y-1' });
+    p.setup.forEach(s => bullets.appendChild(el('li', {}, s)));
+    content.appendChild(bullets);
+
+    content.appendChild(el('div', { class: 'settings-divider' }));
+    content.appendChild(el('h3', { class: 'text-sm font-semibold uppercase tracking-wide text-slate-500' }, 'Revenue share'));
+    content.appendChild(el('p', { class: 'settings-section-helper' }, p.instruction));
+
+    const segs = {};
+    const rowsBox = el('div', { class: 'mt-3' });
+    for (const t of p.tiers) {
+      const seg = segmented(t.key, [
+        { value: 'yes', label: 'Yes' },
+        { value: 'no',  label: 'No'  }
+      ]);
+      segs[t.key] = seg;
+      rowsBox.appendChild(el('div', { class: 'settings-row' }, [
+        el('div', { class: 'settings-row-text' }, [
+          el('div', { class: 'settings-row-label' }, t.label),
+          el('div', { class: 'settings-row-description' }, 'Allow AppX to sell at this revenue share')
+        ]),
+        seg
+      ]));
+    }
+    content.appendChild(rowsBox);
+
+    // Decline-all row
+    const declineLabel = el('label', { class: 'settings-decline-row' }, [
+      el('input', { type: 'checkbox', name: 's3_none', id: 's3_none', class: 'h-4 w-4' }),
+      el('span', {}, p.none_label)
+    ]);
+    content.appendChild(declineLabel);
+
+    // Follow-up panel (hidden until triggered)
+    const followup = el('div', { class: 'mt-5 pt-4 border-t border-slate-200 hidden', id: 'followup' });
+    followup.appendChild(el('p', { class: 'text-slate-800 font-medium mb-2' }, p.followup_prompt));
+    for (const o of p.followup_options) {
+      followup.appendChild(el('label', { class: 'flex items-center gap-3 py-1 cursor-pointer text-slate-800' }, [
+        el('input', { type: 'radio', name: 's3_reason', value: o.value, class: 'h-4 w-4' }),
+        el('span', {}, o.label)
+      ]));
+    }
+    const otherInput = el('input', { type: 'text', name: 's3_reason_other', placeholder: 'Please describe', class: 'input-text mt-2 hidden', maxlength: 500 });
+    followup.appendChild(otherInput);
+    content.appendChild(followup);
+
+    const btn = settingsSaveBtn(() => {
+      const out = {};
+      const declined = declineLabel.querySelector('#s3_none').checked;
+      if (declined) {
+        out.s3_none = true;
+      } else {
+        out.s3_none = false;
+        for (const t of p.tiers) {
+          const v = segGet(segs[t.key]);
+          out[t.key] = v === 'yes';
+        }
+      }
+      if (!followup.classList.contains('hidden')) {
+        const reasonSel = followup.querySelector('input[name="s3_reason"]:checked');
+        out.s3_reason = reasonSel ? reasonSel.value : null;
+        if (out.s3_reason === 'other') {
+          out.s3_reason_other = otherInput.value.trim();
+        }
+      }
+      submit('scenario_3', out);
+    });
+    content.appendChild(settingsFooter(btn));
+
+    body.appendChild(content);
+    frame.appendChild(body);
+    root.appendChild(frame);
+
+    const declineBox = declineLabel.querySelector('#s3_none');
+    function refresh() {
+      const declined = declineBox.checked;
+      for (const t of p.tiers) segSetDisabled(segs[t.key], declined);
+
+      const tiersAnswered = p.tiers.every(t => segGet(segs[t.key]) != null);
+      const allNo = !declined && tiersAnswered && p.tiers.every(t => segGet(segs[t.key]) === 'no');
+      const showFollowup = declined || allNo;
+      followup.classList.toggle('hidden', !showFollowup);
+
+      const baseComplete = declined || tiersAnswered;
+      const reasonSel = followup.querySelector('input[name="s3_reason"]:checked');
+      otherInput.classList.toggle('hidden', !reasonSel || reasonSel.value !== 'other');
+      const reasonOk = !showFollowup || (
+        !!reasonSel && (reasonSel.value !== 'other' || otherInput.value.trim().length > 0)
+      );
+      btn.disabled = !(baseComplete && reasonOk);
+    }
+    declineBox.addEventListener('change', () => {
+      recordInput('s3_none', declineBox.checked);
+      refresh();
+    });
+    frame.addEventListener('seg-change', refresh);
+    followup.addEventListener('change', refresh);
+    followup.addEventListener('input', refresh);
+    refresh();
   };
 
   // ===== Boot =====
