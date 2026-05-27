@@ -58,12 +58,12 @@ const SCENARIO_COPY = {
     },
     s2: {
       reminder: (dt, uc) => `As a reminder: we'd use your ${dt.inline} to ${uc.verbatim}.`,
-      intro:    (dt)     => `We're also exploring a different option: instead of a discount, users could unlock an additional feature by sharing their ${dt.inline} with us.`,
+      intro:    (dt)     => `We're offering users the opportunity to unlock additional functionality by sharing their ${dt.inline} with us.`,
       feature:  'The feature: Premium features — priority access to new features, additional storage, and an ad-free experience.',
       prompt:   (dt)     => `Would you share your ${dt.inline} with us to unlock this feature?`
     },
     s3: {
-      intro: "We're exploring another option: an opt-in data marketplace program.",
+      intro: "We're exploring an opt-in data marketplace program for our users.",
       setup: (dt) => [
         `You currently pay $20 per month for AppX. We don't record, store, or sell your ${dt.inline}.`,
         "We're considering offering an opt-in marketplace program. If you joined:",
