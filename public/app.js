@@ -23,6 +23,25 @@
   }
   const MODE = detectMode();
 
+  // ===== Scenario voice (researcher | appx) =====
+  // `?voice=appx` opts into the AppX-product-team-voice scenario copy. The
+  // server selects which copy bundle to send, so the client just needs to
+  // forward the param on every /screen request. Orthogonal to MODE.
+  function detectVoice() {
+    try {
+      const urlVoice = new URLSearchParams(location.search).get('voice');
+      if (urlVoice === 'appx') sessionStorage.setItem('appx_voice', 'appx');
+      return sessionStorage.getItem('appx_voice') || 'researcher';
+    } catch (e) {
+      return 'researcher';
+    }
+  }
+  const VOICE = detectVoice();
+  function voiceQs(url) {
+    if (VOICE !== 'appx') return url;
+    return url + (url.includes('?') ? '&' : '?') + 'voice=appx';
+  }
+
   // ===== Back-button interception =====
   history.pushState({ survey: true }, '', location.href);
   window.addEventListener('popstate', () => {
@@ -113,7 +132,7 @@
     });
     clearError();
     try {
-      const next = await postJson('/screen/' + screenId, payload);
+      const next = await postJson(voiceQs('/screen/' + screenId), payload);
       if (next.redirect) {
         window.location.href = next.redirect;
         return;
@@ -1092,7 +1111,7 @@
     try {
       const tok = await getJson('/session-token');
       csrfToken = tok.token;
-      const screen = await getJson('/screen');
+      const screen = await getJson(voiceQs('/screen'));
       if (screen.redirect) {
         window.location.href = screen.redirect;
         return;

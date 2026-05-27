@@ -401,6 +401,47 @@ test('scenario_1 prompt embeds inline data type + use case verbatim', () => {
   assert.ok(p.prompt.includes(content.DATA_TYPES[4].inline));
   assert.ok(p.prompt.includes('personalize'));
 });
+test('voice=appx selects AppX-voice copy for S1/S2/S3; default stays researcher', () => {
+  // Default voice (researcher) — sanity check on signature strings.
+  const r1 = screenPayload(fakeParticipant, 'scenario_1');
+  const r2 = screenPayload(fakeParticipant, 'scenario_2');
+  const r3 = screenPayload(fakeParticipant, 'scenario_3');
+  assert.ok(r1.prompt.startsWith('AppX offers you a discount'));
+  assert.ok(r2.reminder.startsWith('Reminder: AppX would use'));
+  assert.equal(r3.intro, 'Now imagine a different arrangement.');
+
+  // voice=appx — AppX-product-team voice.
+  const a1 = screenPayload(fakeParticipant, 'scenario_1', { voice: 'appx' });
+  const a2 = screenPayload(fakeParticipant, 'scenario_2', { voice: 'appx' });
+  const a3 = screenPayload(fakeParticipant, 'scenario_3', { voice: 'appx' });
+  assert.ok(a1.prompt.startsWith("We're considering"));
+  assert.ok(a1.instruction.includes('To help us design fair pricing'));
+  assert.ok(a2.reminder.startsWith('As a reminder'));
+  assert.ok(a2.intro.includes("We're also exploring"));
+  assert.ok(a2.prompt.includes('with us to unlock'));
+  assert.ok(a3.intro.startsWith("We're exploring another option"));
+  assert.ok(a3.instruction.includes('To help us design fair revenue sharing'));
+  assert.ok(a3.setup[1].startsWith("We're considering offering"));
+
+  // Manipulation preserved: data type and use case verbatim still appear.
+  assert.ok(a1.prompt.includes(content.DATA_TYPES[4].inline));
+  assert.ok(a1.prompt.includes('personalize'));
+  assert.ok(a2.reminder.includes('personalize'));
+
+  // Payload shape unchanged.
+  assert.deepEqual(Object.keys(r1).sort(), Object.keys(a1).sort());
+  assert.deepEqual(Object.keys(r2).sort(), Object.keys(a2).sort());
+  assert.deepEqual(Object.keys(r3).sort(), Object.keys(a3).sort());
+
+  // Tiers and reason options are voice-neutral.
+  assert.deepEqual(a1.tiers, content.S1_TIERS);
+  assert.deepEqual(a3.tiers, content.S3_TIERS);
+  assert.deepEqual(a3.followup_options, content.S3_REASON_OPTIONS);
+});
+test('unknown voice value falls back to researcher copy', () => {
+  const p = screenPayload(fakeParticipant, 'scenario_1', { voice: 'junk' });
+  assert.ok(p.prompt.startsWith('AppX offers you a discount'));
+});
 test('supplementary items are in supp_question_order', () => {
   const p = screenPayload(fakeParticipant, 'supplementary');
   const ids = p.items.map(i => i.id);
@@ -598,6 +639,49 @@ test('/start preserves ?mode=settings in redirect (new + resume)', async () => {
     const r5 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=BADMODE_NEW&mode=junk`);
     assert.equal(r5.status, 302);
     assert.equal(r5.headers.location, '/screen.html');
+  } finally {
+    server.close();
+  }
+});
+
+test('/start preserves ?voice=appx in redirect, alone and combined with mode', async () => {
+  const express = require('express');
+  const cookieParser = require('cookie-parser');
+
+  for (const k of Object.keys(require.cache)) {
+    if (k.includes('/server/') || k.includes('/test/')) delete require.cache[k];
+  }
+  mockState.participants.clear();
+  mockState.byPid.clear();
+
+  const startRoute = require('../server/routes/start');
+  const app = express();
+  app.use(cookieParser());
+  app.use(startRoute);
+
+  const port = 31995;
+  const server = app.listen(port);
+
+  try {
+    // voice=appx alone -> /screen.html?voice=appx
+    const r1 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=VOICE_NEW&voice=appx`);
+    assert.equal(r1.status, 302);
+    assert.equal(r1.headers.location, '/screen.html?voice=appx');
+
+    // Resume same PID + voice=appx -> still preserves
+    const r2 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=VOICE_NEW&voice=appx`);
+    assert.equal(r2.status, 302);
+    assert.equal(r2.headers.location, '/screen.html?voice=appx');
+
+    // mode=settings + voice=appx combined -> both preserved in order
+    const r3 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=BOTH_NEW&mode=settings&voice=appx`);
+    assert.equal(r3.status, 302);
+    assert.equal(r3.headers.location, '/screen.html?mode=settings&voice=appx');
+
+    // Unknown voice value -> ignored
+    const r4 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=BADVOICE_NEW&voice=junk`);
+    assert.equal(r4.status, 302);
+    assert.equal(r4.headers.location, '/screen.html');
   } finally {
     server.close();
   }

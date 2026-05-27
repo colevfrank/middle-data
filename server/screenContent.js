@@ -15,6 +15,69 @@ function getUseCase(p) {
   return USE_CASES[p.use_case];
 }
 
+function pickVoice(extra) {
+  return extra && extra.voice === 'appx' ? 'appx' : 'researcher';
+}
+
+// Scenario copy bundles, keyed by voice. `researcher` is the original
+// experimenter-narrated wording; `appx` is the pilot variant written as if
+// AppX's product team is consulting the participant. Selected per request via
+// ?voice=appx (orthogonal to ?mode=settings).
+const SCENARIO_COPY = {
+  researcher: {
+    s1: {
+      prompt: (dt, uc) => `AppX offers you a discount on your $20/month subscription if you agree to share your ${dt.inline} to ${uc.verbatim}.`,
+      instruction: 'For each discount amount below, would you share your data?',
+      none_label: 'I would not share at any price'
+    },
+    s2: {
+      reminder: (dt, uc) => `Reminder: AppX would use your ${dt.inline} to ${uc.verbatim}.`,
+      intro:    (dt)     => `Instead of a discount, AppX offers you an additional feature in exchange for sharing your ${dt.inline}.`,
+      feature:  'The feature is: Premium features — priority access to new features, additional storage, and an ad-free experience.',
+      prompt:   (dt)     => `Would you share your ${dt.inline} in exchange for this feature?`
+    },
+    s3: {
+      intro: 'Now imagine a different arrangement.',
+      setup: (dt) => [
+        `You pay $20 per month for AppX. By default, AppX does not record, store, or sell your ${dt.inline}.`,
+        'AppX offers you the option to join a data marketplace program. If you opt in:',
+        `AppX will sell your ${dt.inline} to third-party companies on your behalf.`,
+        'You will receive a percentage of the selling price back as a discount on your monthly subscription.',
+        'You can opt out at any time, but data that has already been sold cannot be taken back.'
+      ],
+      instruction: 'For each revenue share below, would you participate?',
+      none_label: 'I would not participate at any revenue share',
+      followup_prompt: 'What is the main reason you chose not to participate?'
+    }
+  },
+  appx: {
+    s1: {
+      prompt: (dt, uc) => `We're considering a new program: users could share their ${dt.inline} with us — we'd use it to ${uc.verbatim} — in exchange for a discount on their $20/month subscription.`,
+      instruction: 'To help us design fair pricing, tell us — for each discount amount below, would you be willing to share?',
+      none_label: 'I would not share at any price'
+    },
+    s2: {
+      reminder: (dt, uc) => `As a reminder: we'd use your ${dt.inline} to ${uc.verbatim}.`,
+      intro:    (dt)     => `We're also exploring a different option: instead of a discount, users could unlock an additional feature by sharing their ${dt.inline} with us.`,
+      feature:  'The feature: Premium features — priority access to new features, additional storage, and an ad-free experience.',
+      prompt:   (dt)     => `Would you share your ${dt.inline} with us to unlock this feature?`
+    },
+    s3: {
+      intro: "We're exploring another option: an opt-in data marketplace program.",
+      setup: (dt) => [
+        `You currently pay $20 per month for AppX. We don't record, store, or sell your ${dt.inline}.`,
+        "We're considering offering an opt-in marketplace program. If you joined:",
+        `We would sell your ${dt.inline} to third-party companies on your behalf.`,
+        'You would receive a percentage of the selling price back as a discount on your monthly subscription.',
+        "You could opt out at any time, but data that's already been sold could not be taken back."
+      ],
+      instruction: "To help us design fair revenue sharing, tell us — for each revenue share below, would you participate?",
+      none_label: 'I would not participate at any revenue share',
+      followup_prompt: 'What is the main reason you chose not to participate?'
+    }
+  }
+};
+
 function screenPayload(p, screenId, extra = {}) {
   const dt = getDataType(p);
   const uc = getUseCase(p);
@@ -71,22 +134,24 @@ function screenPayload(p, screenId, extra = {}) {
     }
 
     case 'scenario_1': {
+      const c = SCENARIO_COPY[pickVoice(extra)].s1;
       return {
         screen: 'scenario_1',
-        prompt: `AppX offers you a discount on your $20/month subscription if you agree to share your ${dt.inline} to ${uc.verbatim}.`,
-        instruction: 'For each discount amount below, would you share your data?',
+        prompt: c.prompt(dt, uc),
+        instruction: c.instruction,
         tiers: S1_TIERS,
-        none_label: 'I would not share at any price'
+        none_label: c.none_label
       };
     }
 
     case 'scenario_2': {
+      const c = SCENARIO_COPY[pickVoice(extra)].s2;
       return {
         screen: 'scenario_2',
-        reminder: `Reminder: AppX would use your ${dt.inline} to ${uc.verbatim}.`,
-        intro: `Instead of a discount, AppX offers you an additional feature in exchange for sharing your ${dt.inline}.`,
-        feature: 'The feature is: Premium features — priority access to new features, additional storage, and an ad-free experience.',
-        prompt: `Would you share your ${dt.inline} in exchange for this feature?`,
+        reminder: c.reminder(dt, uc),
+        intro: c.intro(dt),
+        feature: c.feature,
+        prompt: c.prompt(dt),
         options: [
           { value: 'yes',      label: 'Yes' },
           { value: 'no',       label: 'No' },
@@ -96,20 +161,15 @@ function screenPayload(p, screenId, extra = {}) {
     }
 
     case 'scenario_3': {
+      const c = SCENARIO_COPY[pickVoice(extra)].s3;
       return {
         screen: 'scenario_3',
-        intro: 'Now imagine a different arrangement.',
-        setup: [
-          `You pay $20 per month for AppX. By default, AppX does not record, store, or sell your ${dt.inline}.`,
-          'AppX offers you the option to join a data marketplace program. If you opt in:',
-          `AppX will sell your ${dt.inline} to third-party companies on your behalf.`,
-          'You will receive a percentage of the selling price back as a discount on your monthly subscription.',
-          'You can opt out at any time, but data that has already been sold cannot be taken back.'
-        ],
-        instruction: 'For each revenue share below, would you participate?',
+        intro: c.intro,
+        setup: c.setup(dt),
+        instruction: c.instruction,
         tiers: S3_TIERS,
-        none_label: 'I would not participate at any revenue share',
-        followup_prompt: 'What is the main reason you chose not to participate?',
+        none_label: c.none_label,
+        followup_prompt: c.followup_prompt,
         followup_options: S3_REASON_OPTIONS
       };
     }

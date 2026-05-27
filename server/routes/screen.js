@@ -30,7 +30,7 @@ router.get('/screen', authenticate, asyncHandler(async (req, res) => {
     return res.json({ screen: 'complete', redirect: completionUrl() });
   }
 
-  const payload = screenPayload(p, p.current_screen);
+  const payload = screenPayload(p, p.current_screen, { voice: req.query.voice });
   payload.progress = progressFor(p.current_screen, p);
   return res.json(payload);
 }));
@@ -134,7 +134,7 @@ router.post('/screen/:id', authenticate, asyncHandler(async (req, res) => {
   const refreshed = await query('SELECT * FROM participants WHERE id = $1', [p.id]);
   const np = refreshed.rows[0];
 
-  const extra = {};
+  const extra = { voice: req.query.voice };
   if (nextScreen === 'scenario_intro' && submittedScreen === 'comprehension' && !result.passed) {
     extra.retry = true;
   }
