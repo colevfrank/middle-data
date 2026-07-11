@@ -1,6 +1,6 @@
 const {
-  S1_TIERS, S3_TIERS, S3_REASON_OPTIONS, SUPP_QUESTIONS, COMP_MODELS,
-  AI_USAGE_OPTIONS, DEMOGRAPHICS
+  S1_TIERS, S2_TIERS, S2_REASON_OPTIONS, POST_QUESTIONS,
+  AI_LITERACY_QUESTIONS, DEMOGRAPHICS
 } = require('./content');
 
 const MAX_TEXT = 500;
@@ -10,6 +10,7 @@ function isBool(v) { return typeof v === 'boolean'; }
 function isStr(v, max) { return typeof v === 'string' && v.length <= max; }
 function inSet(v, set) { return set.includes(v); }
 function isInt(v, lo, hi) { return Number.isInteger(v) && v >= lo && v <= hi; }
+function toInt(v) { return typeof v === 'number' ? v : (typeof v === 'string' && /^-?\d+$/.test(v) ? parseInt(v, 10) : NaN); }
 
 // Each validator returns { ok: true, fields: {...} } or { ok: false, error: '...' }.
 // `fields` maps column name → value, suitable for direct DB write.
@@ -80,119 +81,95 @@ function validateScenario1(body) {
   return { ok: true, fields };
 }
 
+// Scenario 2 = data marketplace (revenue-share tiers + optional decline reason).
 function validateScenario2(body) {
-  const b = body || {};
-  if (!inSet(b.s2_response, ['yes', 'no', 'not_sure'])) {
-    return { ok: false, error: 'scenario2_invalid' };
-  }
-  return { ok: true, fields: { s2_response: b.s2_response } };
-}
-
-function validateScenario3(body) {
   const b = body || {};
   const fields = {};
   let allNo = false;
 
-  if (b.s3_none === true) {
-    fields.s3_none = true;
-    for (const t of S3_TIERS) fields[t.key] = null;
+  if (b.s2_none === true) {
+    fields.s2_none = true;
+    for (const t of S2_TIERS) fields[t.key] = null;
     allNo = true;
   } else {
-    for (const t of S3_TIERS) {
-      if (!isBool(b[t.key])) return { ok: false, error: 'scenario3_incomplete' };
+    for (const t of S2_TIERS) {
+      if (!isBool(b[t.key])) return { ok: false, error: 'scenario2_incomplete' };
       fields[t.key] = b[t.key];
     }
-    fields.s3_none = false;
-    allNo = S3_TIERS.every(t => b[t.key] === false);
+    fields.s2_none = false;
+    allNo = S2_TIERS.every(t => b[t.key] === false);
   }
 
-  // Follow-up reason is required iff allNo is true (or s3_none true).
+  // Follow-up reason is required iff allNo is true (or s2_none true).
   if (allNo) {
-    const allowed = S3_REASON_OPTIONS.map(o => o.value);
-    if (!inSet(b.s3_reason, allowed)) {
-      return { ok: false, error: 'scenario3_reason_required' };
+    const allowed = S2_REASON_OPTIONS.map(o => o.value);
+    if (!inSet(b.s2_reason, allowed)) {
+      return { ok: false, error: 'scenario2_reason_required' };
     }
-    fields.s3_reason = b.s3_reason;
-    if (b.s3_reason === 'other') {
-      if (!isStr(b.s3_reason_other, MAX_TEXT) || b.s3_reason_other.trim().length === 0) {
-        return { ok: false, error: 'scenario3_reason_other_required' };
+    fields.s2_reason = b.s2_reason;
+    if (b.s2_reason === 'other') {
+      if (!isStr(b.s2_reason_other, MAX_TEXT) || b.s2_reason_other.trim().length === 0) {
+        return { ok: false, error: 'scenario2_reason_other_required' };
       }
-      fields.s3_reason_other = b.s3_reason_other.trim();
+      fields.s2_reason_other = b.s2_reason_other.trim();
     } else {
-      fields.s3_reason_other = null;
+      fields.s2_reason_other = null;
     }
   } else {
-    fields.s3_reason = null;
-    fields.s3_reason_other = null;
+    fields.s2_reason = null;
+    fields.s2_reason_other = null;
   }
   return { ok: true, fields };
 }
 
-function validateSupplementary(body) {
+// Validate a single post-scenario question screen (postq_<id>).
+function validatePostQuestion(body, screenId) {
   const b = body || {};
-  const fields = {};
-  for (const q of SUPP_QUESTIONS) {
-    const v = b[q.key];
-    if (q.type === 'likert5') {
-      if (!isInt(v, 1, 5)) return { ok: false, error: `supp_${q.id}_invalid` };
-      fields[q.key] = v;
-    } else if (q.type === 'choice') {
-      const allowed = q.options.map(o => o.value);
-      if (!inSet(v, allowed)) return { ok: false, error: `supp_${q.id}_invalid` };
-      fields[q.key] = v;
-    }
-  }
-  return { ok: true, fields };
-}
+  const qid = parseInt(String(screenId).split('_')[1], 10);
+  const q = POST_QUESTIONS.find(x => x.id === qid);
+  if (!q) return { ok: false, error: 'unknown_post_question' };
 
-function validateCompensation(body) {
-  const b = body || {};
+  const v = b[q.key];
   const fields = {};
-  // Ranks: each comp model has rank 1-5, all unique
-  const ranks = [];
-  for (const m of COMP_MODELS) {
-    const r = b[`rank_${m.key}`];
-    if (!isInt(r, 1, 5)) return { ok: false, error: 'comp_rank_invalid' };
-    ranks.push(r);
-    fields[`rank_${m.key}`] = r;
-  }
-  const sortedRanks = ranks.slice().sort();
-  if (sortedRanks.join(',') !== '1,2,3,4,5') {
-    return { ok: false, error: 'comp_rank_not_permutation' };
-  }
-  // Fairness + Practicality per model: 1-5
-  for (const m of COMP_MODELS) {
-    const fair = b[`fair_${m.key}`];
-    const prac = b[`practical_${m.key}`];
-    if (!isInt(fair, 1, 5)) return { ok: false, error: `fair_${m.key}_invalid` };
-    if (!isInt(prac, 1, 5)) return { ok: false, error: `practical_${m.key}_invalid` };
-    fields[`fair_${m.key}`] = fair;
-    fields[`practical_${m.key}`] = prac;
+
+  if (q.type === 'likert5') {
+    if (!isInt(v, 1, 5)) return { ok: false, error: `${q.key}_invalid` };
+    fields[q.key] = v;
+  } else if (q.type === 'attention') {
+    if (!isInt(v, 1, 5)) return { ok: false, error: 'attention_check_invalid' };
+    fields.attention_check_value = v;
+    fields.attention_check_pass = v === q.expected;
+  } else if (q.type === 'choice_num') {
+    const n = toInt(v);
+    const allowed = q.options.map(o => o.value);
+    if (!inSet(n, allowed)) return { ok: false, error: `${q.key}_invalid` };
+    fields[q.key] = n;
+  } else if (q.type === 'choice') {
+    const allowed = q.options.map(o => o.value);
+    if (!inSet(v, allowed)) return { ok: false, error: `${q.key}_invalid` };
+    fields[q.key] = v;
+  } else if (q.type === 'multiselect') {
+    const allowed = q.options.map(o => o.value);
+    if (!Array.isArray(v) || v.length === 0) return { ok: false, error: `${q.key}_required` };
+    const uniq = new Set(v);
+    if (uniq.size !== v.length) return { ok: false, error: `${q.key}_invalid` };
+    if (!v.every(x => allowed.includes(x))) return { ok: false, error: `${q.key}_invalid` };
+    fields[q.key] = v;
+  } else {
+    return { ok: false, error: 'unknown_post_question_type' };
   }
   return { ok: true, fields };
 }
 
 function validateAiUsage(body) {
   const b = body || {};
-  const allowed = AI_USAGE_OPTIONS.map(o => o.value);
-  if (!inSet(b.ai_usage, allowed)) return { ok: false, error: 'ai_usage_invalid' };
-  return { ok: true, fields: { ai_usage: b.ai_usage } };
-}
-
-function validateAttitudes(body, attentionExpected) {
-  const b = body || {};
   const fields = {};
-  for (let i = 1; i <= 6; i++) {
-    const key = `attitude_${i}`;
-    const v = b[key];
-    if (!isInt(v, 1, 7)) return { ok: false, error: `${key}_invalid` };
-    fields[key] = v;
+  for (const q of AI_LITERACY_QUESTIONS) {
+    const allowed = q.options.map(o => o.value);
+    const v = b[q.key];
+    if (!inSet(v, allowed)) return { ok: false, error: `${q.key}_invalid` };
+    fields[q.key] = v;
   }
-  if (!isInt(b.attention_check_value, 1, 7)) {
-    return { ok: false, error: 'attention_check_invalid' };
-  }
-  fields.attention_check_value = b.attention_check_value;
-  fields.attention_check_pass = b.attention_check_value === attentionExpected;
   return { ok: true, fields };
 }
 
@@ -225,13 +202,9 @@ const VALIDATORS = {
   comprehension: validateComprehension,
   scenario_1: validateScenario1,
   scenario_2: validateScenario2,
-  scenario_3: validateScenario3,
-  supplementary: validateSupplementary,
-  compensation: validateCompensation,
   ai_usage: validateAiUsage,
-  attitudes: validateAttitudes,
   demographics: validateDemographics,
   debrief: validateDebrief
 };
 
-module.exports = { VALIDATORS, MAX_TEXT, MAX_SHORT_TEXT };
+module.exports = { VALIDATORS, validatePostQuestion, MAX_TEXT, MAX_SHORT_TEXT };

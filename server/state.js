@@ -5,23 +5,24 @@ const FIXED_ORDER = [
   'scenario_intro',
   'data_type_intro',
   'comprehension',
-  '__scenarios__',  // expanded via scenario_order
-  'supplementary',
-  'compensation',
+  '__scenarios__',      // expanded via scenario_order
+  '__post_questions__', // expanded via post_question_order
   'ai_usage',
-  'attitudes',
   'demographics',
   'debrief',
   'complete'
 ];
 
-function scenarioIdAt(participant, position) {
-  const scenarioNum = participant.scenario_order[position];
-  return `scenario_${scenarioNum}`;
+function isScenario(screenId) {
+  return /^scenario_[12]$/.test(screenId);
 }
 
-function isScenario(screenId) {
-  return /^scenario_[123]$/.test(screenId);
+function isPostQuestion(screenId) {
+  return /^postq_\d+$/.test(screenId);
+}
+
+function firstPostQuestion(participant) {
+  return `postq_${participant.post_question_order[0]}`;
 }
 
 // After a successful submit of `currentScreen`, what's next?
@@ -32,7 +33,16 @@ function nextAfter(participant, currentScreen) {
     if (idx < participant.scenario_order.length - 1) {
       return `scenario_${participant.scenario_order[idx + 1]}`;
     }
-    return 'supplementary';
+    return firstPostQuestion(participant);
+  }
+
+  if (isPostQuestion(currentScreen)) {
+    const qid = parseInt(currentScreen.split('_')[1], 10);
+    const idx = participant.post_question_order.indexOf(qid);
+    if (idx < participant.post_question_order.length - 1) {
+      return `postq_${participant.post_question_order[idx + 1]}`;
+    }
+    return 'ai_usage';
   }
 
   const linear = [
@@ -46,11 +56,11 @@ function nextAfter(participant, currentScreen) {
     return linear[idx + 1];
   }
   if (currentScreen === 'comprehension') {
-    return scenarioIdAt(participant, 0);
+    return `scenario_${participant.scenario_order[0]}`;
   }
 
-  // post-scenarios sequence
-  const post = ['supplementary', 'compensation', 'ai_usage', 'attitudes', 'demographics', 'debrief', 'complete'];
+  // post-questions sequence
+  const post = ['ai_usage', 'demographics', 'debrief', 'complete'];
   const postIdx = post.indexOf(currentScreen);
   if (postIdx >= 0 && postIdx < post.length - 1) {
     return post[postIdx + 1];
@@ -64,4 +74,4 @@ function resumeScreen(participant) {
   return participant.current_screen;
 }
 
-module.exports = { nextAfter, resumeScreen, isScenario };
+module.exports = { nextAfter, resumeScreen, isScenario, isPostQuestion };

@@ -12,16 +12,12 @@ CREATE TABLE IF NOT EXISTS participants (
   session_token UUID UNIQUE NOT NULL,
 
   -- Condition assignment (server-only)
-  data_type SMALLINT NOT NULL CHECK (data_type BETWEEN 1 AND 11),
+  data_type SMALLINT NOT NULL CHECK (data_type BETWEEN 1 AND 16),
   use_case CHAR(2) NOT NULL CHECK (use_case IN ('B1','B2')),
 
   -- Randomized orderings
-  scenario_order INT[] NOT NULL,
-  supp_question_order INT[] NOT NULL,
-  attitude_item_order INT[] NOT NULL,
-  s4_option_order INT[] NOT NULL,
-  comp_model_order INT[] NOT NULL,
-  attention_check_position SMALLINT NOT NULL,
+  scenario_order INT[] NOT NULL,        -- permutation of [1,2]
+  post_question_order INT[] NOT NULL,   -- permutation of [1..14] (13 questions + attention check)
 
   -- State machine
   current_screen TEXT NOT NULL DEFAULT 'consent',
@@ -50,68 +46,47 @@ CREATE TABLE IF NOT EXISTS participants (
   s1_share_20off BOOLEAN,
   s1_none BOOLEAN,
 
-  -- Scenario 2: feature tradeoff
-  s2_response TEXT CHECK (s2_response IN ('yes','no','not_sure')),
+  -- Scenario 2: data marketplace
+  s2_share_10 BOOLEAN,
+  s2_share_50 BOOLEAN,
+  s2_share_90 BOOLEAN,
+  s2_none BOOLEAN,
+  s2_reason TEXT,
+  s2_reason_other TEXT,
 
-  -- Scenario 3: data marketplace
-  s3_share_10 BOOLEAN,
-  s3_share_50 BOOLEAN,
-  s3_share_90 BOOLEAN,
-  s3_none BOOLEAN,
-  s3_reason TEXT,
-  s3_reason_other TEXT,
+  -- Post-scenario questions, Block A (about the data type)
+  postq_importance SMALLINT,             -- A1: 1-5
+  postq_sensitivity SMALLINT,            -- A2: 1-5
+  postq_ownership SMALLINT,              -- A3: 1-5
+  postq_share_public SMALLINT,           -- A4: 0-3
+  postq_buy_sell_appropriate SMALLINT,   -- A5: 1-5
+  postq_upset_if_leaked SMALLINT,        -- A6: 1-5
 
-  -- Supplementary
-  supp_sensitivity SMALLINT,           -- S1: 1-5
-  supp_harm SMALLINT,                  -- S2: 1-5
-  supp_compensation_feel TEXT,         -- S3
-  supp_primary_concern TEXT,           -- S4
-  supp_service_improvement SMALLINT,   -- S5: 1-5
-  supp_understanding SMALLINT,         -- S6: 1-5
-  supp_take_back TEXT,                 -- S7
-  supp_value_to_companies SMALLINT,    -- S8: 1-5
-  supp_currently_share TEXT,           -- S9
+  -- Post-scenario questions, Block B (about compensation for the use case)
+  postq_comp_by_amount TEXT,             -- B1: yes/no/unsure
+  postq_comp_per_use TEXT,               -- B2: yes/no/unsure
+  postq_comp_by_effort TEXT,             -- B3: yes/no/unsure
+  postq_comp_by_originality TEXT,        -- B4: yes/no/unsure
+  postq_coworker_sells_feel TEXT,        -- B5
+  postq_credit_ack SMALLINT,             -- B6: 1-5
+  postq_concerns TEXT[],                 -- B7: multi-select
 
-  -- Compensation rankings (1-5 unique)
-  rank_per_transaction SMALLINT,
-  rank_royalty SMALLINT,
-  rank_subscription SMALLINT,
-  rank_dividend SMALLINT,
-  rank_wage SMALLINT,
-
-  -- Compensation fairness/practicality (1-5)
-  fair_per_transaction SMALLINT,
-  fair_royalty SMALLINT,
-  fair_subscription SMALLINT,
-  fair_dividend SMALLINT,
-  fair_wage SMALLINT,
-  practical_per_transaction SMALLINT,
-  practical_royalty SMALLINT,
-  practical_subscription SMALLINT,
-  practical_dividend SMALLINT,
-  practical_wage SMALLINT,
-
-  -- AI usage
-  ai_usage TEXT,
-
-  -- Attitudes (1-7) — fixed columns, content stored in display order via attitude_item_order
-  attitude_1 SMALLINT,
-  attitude_2 SMALLINT,
-  attitude_3 SMALLINT,
-  attitude_4 SMALLINT,
-  attitude_5 SMALLINT,
-  attitude_6 SMALLINT,
-  attention_check_pass BOOLEAN,
+  -- Attention check (pooled + randomized with the post-scenario questions)
   attention_check_value SMALLINT,
+  attention_check_pass BOOLEAN,
+
+  -- Screen 21: AI usage & literacy
+  ai_tools_freq TEXT,
+  social_media_freq TEXT,
+  search_engine_freq TEXT,
+  tech_current TEXT,
+  tech_ever TEXT,
 
   -- Demographics
   age_band TEXT,
   gender TEXT,
   gender_other TEXT,
   education TEXT,
-  income_band TEXT,
-  employment TEXT,
-  tech_industry TEXT,
 
   -- Lifecycle
   completed BOOLEAN DEFAULT FALSE,

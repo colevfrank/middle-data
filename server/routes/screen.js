@@ -1,10 +1,9 @@
 const express = require('express');
 const { query } = require('../db');
 const { authenticate, clearSessionCookie } = require('../session');
-const { VALIDATORS } = require('../validation');
-const { nextAfter } = require('../state');
+const { VALIDATORS, validatePostQuestion } = require('../validation');
+const { nextAfter, isPostQuestion } = require('../state');
 const { screenPayload, progressFor } = require('../screenContent');
-const { ATTENTION_CHECK_EXPECTED } = require('../content');
 
 const router = express.Router();
 
@@ -44,18 +43,19 @@ router.post('/screen/:id', authenticate, asyncHandler(async (req, res) => {
     return res.status(409).json({ error: 'screen_mismatch', expected: p.current_screen });
   }
 
-  const validator = VALIDATORS[submittedScreen];
-  if (!validator) {
-    return res.status(400).json({ error: 'unknown_screen' });
-  }
-
   let result;
-  if (submittedScreen === 'comprehension') {
-    result = validator(req.body, p.data_type, p.use_case);
-  } else if (submittedScreen === 'attitudes') {
-    result = validator(req.body, ATTENTION_CHECK_EXPECTED);
+  if (isPostQuestion(submittedScreen)) {
+    result = validatePostQuestion(req.body, submittedScreen);
   } else {
-    result = validator(req.body);
+    const validator = VALIDATORS[submittedScreen];
+    if (!validator) {
+      return res.status(400).json({ error: 'unknown_screen' });
+    }
+    if (submittedScreen === 'comprehension') {
+      result = validator(req.body, p.data_type, p.use_case);
+    } else {
+      result = validator(req.body);
+    }
   }
 
   if (!result.ok) {

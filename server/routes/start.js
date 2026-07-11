@@ -51,21 +51,16 @@ router.get('/start', asyncHandler(async (req, res) => {
     `INSERT INTO participants (
         prolific_pid, study_id, session_id, session_token,
         data_type, use_case,
-        scenario_order, supp_question_order, attitude_item_order, s4_option_order, comp_model_order,
-        attention_check_position,
+        scenario_order, post_question_order,
         current_screen
      ) VALUES (
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,'consent'
+        $1,$2,$3,$4,$5,$6,$7,$8,'consent'
      )`,
     [
       pid, studyId, sessionId, token,
       cell.data_type, cell.use_case,
       orderings.scenario_order,
-      orderings.supp_question_order,
-      orderings.attitude_item_order,
-      orderings.s4_option_order,
-      orderings.comp_model_order,
-      orderings.attention_check_position
+      orderings.post_question_order
     ]
   );
 

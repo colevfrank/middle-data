@@ -47,13 +47,12 @@ function makeMockPool() {
       return { rows: [], rowCount: 0 };
     }
     if (/^INSERT INTO participants/i.test(text)) {
-      const [pid, studyId, sessionId, token, dt, uc, so, sqo, aio, s4o, cmo, acp] = params;
+      const [pid, studyId, sessionId, token, dt, uc, so, pqo] = params;
       const row = {
         id: mockState.nextId++,
         prolific_pid: pid, study_id: studyId, session_id: sessionId, session_token: token,
         data_type: dt, use_case: uc,
-        scenario_order: so, supp_question_order: sqo, attitude_item_order: aio,
-        s4_option_order: s4o, comp_model_order: cmo, attention_check_position: acp,
+        scenario_order: so, post_question_order: pqo,
         current_screen: 'consent', completed: false,
         learn_more_clicked: false, comp_check_retry: false
       };
@@ -125,7 +124,7 @@ process.env.NODE_ENV = 'test';
 
 // ===== Now require everything =====
 const content = require('../server/content');
-const { VALIDATORS } = require('../server/validation');
+const { VALIDATORS, validatePostQuestion } = require('../server/validation');
 const { generateAllOrderings, assignCell, shuffle } = require('../server/randomization');
 const { nextAfter } = require('../server/state');
 const { screenPayload, progressFor } = require('../server/screenContent');
@@ -148,24 +147,27 @@ async function runTests() {
 }
 
 section('content');
-test('11 data types each with label, inline, definition', () => {
-  assert.equal(content.DATA_TYPES.length, 11);
+test('16 data types each with label, inline, definition, learn_more', () => {
+  assert.equal(content.DATA_TYPES.length, 16);
   for (const d of content.DATA_TYPES) {
-    assert.ok(d.label && d.inline && d.definition);
+    assert.ok(d.label && d.inline && d.definition && d.learn_more && d.category);
   }
 });
-test('2 use cases B1 and B2', () => {
+test('2 use cases B1 and B2 with data_use noun form', () => {
   assert.ok(content.USE_CASES.B1 && content.USE_CASES.B2);
-  assert.ok(content.USE_CASES.B1.intro_text);
+  assert.ok(content.USE_CASES.B1.intro_text && content.USE_CASES.B1.data_use);
+  assert.ok(content.USE_CASES.B2.data_use);
 });
-test('9 supplementary questions', () => {
-  assert.equal(content.SUPP_QUESTIONS.length, 9);
+test('14 post-scenario questions (13 + attention check)', () => {
+  assert.equal(content.POST_QUESTIONS.length, 14);
+  const ac = content.POST_QUESTIONS.find(q => q.type === 'attention');
+  assert.ok(ac && ac.expected === 1);
 });
-test('5 compensation models', () => {
-  assert.equal(content.COMP_MODELS.length, 5);
+test('5 AI-literacy questions', () => {
+  assert.equal(content.AI_LITERACY_QUESTIONS.length, 5);
 });
-test('6 attitude items', () => {
-  assert.equal(content.ATTITUDE_ITEMS.length, 6);
+test('3 demographics questions', () => {
+  assert.equal(content.DEMOGRAPHICS.length, 3);
 });
 
 section('randomization');
@@ -177,31 +179,15 @@ test('shuffle preserves length and contents', () => {
 });
 test('generateAllOrderings returns valid permutations', () => {
   const o = generateAllOrderings();
-  assert.deepEqual([...o.scenario_order].sort(), [1, 2, 3]);
-  assert.deepEqual([...o.supp_question_order].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-  assert.deepEqual([...o.attitude_item_order].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6]);
-  assert.deepEqual([...o.comp_model_order].sort((a, b) => a - b), [1, 2, 3, 4, 5]);
-  assert.equal(o.s4_option_order.length, 6);
-  assert.ok(o.attention_check_position >= 0 && o.attention_check_position <= 6);
+  assert.deepEqual([...o.scenario_order].sort(), [1, 2]);
+  assert.deepEqual([...o.post_question_order].sort((a, b) => a - b),
+    Array.from({ length: 14 }, (_, i) => i + 1));
 });
-test('s4_option_order pins "Not sure" last', () => {
-  const s4 = content.SUPP_QUESTIONS.find(q => q.id === 4);
-  const pinnedLastIdx = s4.options.findIndex(o => o.pin_last);
-  for (let i = 0; i < 20; i++) {
-    const o = generateAllOrderings();
-    assert.equal(o.s4_option_order[o.s4_option_order.length - 1], pinnedLastIdx);
-  }
-});
-test('assignCell yields balanced distribution over 22 starts', async () => {
-  // Clear state
+test('assignCell yields a valid cell (dt 1..16, uc B1/B2)', async () => {
   mockState.participants.clear();
   mockState.byPid.clear();
-  // Note: randomization caches the bag; we need to clear it. The module-level
-  // bag is reset only on refill when empty, which happens on first call. To
-  // simulate, force re-require would need module cache clear. Skip this strict
-  // test — just verify single-call shape.
   const cell = await assignCell();
-  assert.ok(cell.data_type >= 1 && cell.data_type <= 11);
+  assert.ok(cell.data_type >= 1 && cell.data_type <= 16);
   assert.ok(['B1', 'B2'].includes(cell.use_case));
 });
 
@@ -248,114 +234,96 @@ test('scenario_1: all 6 tiers boolean', () => {
   assert.equal(r.fields.s1_none, false);
   assert.equal(r.fields.s1_share_5off, true);
 });
-test('scenario_2: yes/no/not_sure valid', () => {
-  assert.equal(VALIDATORS.scenario_2({ s2_response: 'yes' }).ok, true);
-  assert.equal(VALIDATORS.scenario_2({ s2_response: 'maybe' }).ok, false);
-});
-test('scenario_3: all No triggers reason requirement', () => {
-  const r = VALIDATORS.scenario_3({ s3_share_10: false, s3_share_50: false, s3_share_90: false });
+test('scenario_2 (marketplace): all No triggers reason requirement', () => {
+  const r = VALIDATORS.scenario_2({ s2_share_10: false, s2_share_50: false, s2_share_90: false });
   assert.equal(r.ok, false);
-  assert.equal(r.error, 'scenario3_reason_required');
+  assert.equal(r.error, 'scenario2_reason_required');
 });
-test('scenario_3: all No + reason → ok', () => {
-  const r = VALIDATORS.scenario_3({
-    s3_share_10: false, s3_share_50: false, s3_share_90: false,
-    s3_reason: 'no_trust'
+test('scenario_2 (marketplace): all No + reason → ok', () => {
+  const r = VALIDATORS.scenario_2({
+    s2_share_10: false, s2_share_50: false, s2_share_90: false,
+    s2_reason: 'no_trust'
   });
   assert.equal(r.ok, true);
 });
-test('scenario_3: other reason needs text', () => {
-  const r1 = VALIDATORS.scenario_3({
-    s3_share_10: false, s3_share_50: false, s3_share_90: false,
-    s3_reason: 'other'
+test('scenario_2 (marketplace): other reason needs text', () => {
+  const r1 = VALIDATORS.scenario_2({
+    s2_share_10: false, s2_share_50: false, s2_share_90: false, s2_reason: 'other'
   });
   assert.equal(r1.ok, false);
-  const r2 = VALIDATORS.scenario_3({
-    s3_share_10: false, s3_share_50: false, s3_share_90: false,
-    s3_reason: 'other', s3_reason_other: 'because reasons'
+  const r2 = VALIDATORS.scenario_2({
+    s2_share_10: false, s2_share_50: false, s2_share_90: false,
+    s2_reason: 'other', s2_reason_other: 'because reasons'
   });
   assert.equal(r2.ok, true);
 });
-test('scenario_3: mixed responses (not all No) → no reason', () => {
-  const r = VALIDATORS.scenario_3({ s3_share_10: false, s3_share_50: true, s3_share_90: false });
+test('scenario_2 (marketplace): mixed responses → no reason; s2_none clears tiers', () => {
+  const r = VALIDATORS.scenario_2({ s2_share_10: false, s2_share_50: true, s2_share_90: false });
   assert.equal(r.ok, true);
-  assert.equal(r.fields.s3_reason, null);
+  assert.equal(r.fields.s2_reason, null);
+  const rn = VALIDATORS.scenario_2({ s2_none: true, s2_reason: 'no_price' });
+  assert.equal(rn.ok, true);
+  assert.equal(rn.fields.s2_none, true);
+  assert.equal(rn.fields.s2_share_10, null);
 });
-test('supplementary: requires all 9', () => {
-  const r = VALIDATORS.supplementary({});
-  assert.equal(r.ok, false);
+test('post-question likert5 (postq_1): 1-5 valid, out-of-range invalid', () => {
+  assert.equal(validatePostQuestion({ postq_importance: 3 }, 'postq_1').ok, true);
+  assert.equal(validatePostQuestion({ postq_importance: 3 }, 'postq_1').fields.postq_importance, 3);
+  assert.equal(validatePostQuestion({ postq_importance: 6 }, 'postq_1').ok, false);
+  assert.equal(validatePostQuestion({}, 'postq_1').ok, false);
 });
-test('supplementary: complete payload validates', () => {
-  const r = VALIDATORS.supplementary({
-    supp_sensitivity: 3, supp_harm: 4,
-    supp_compensation_feel: 'willing_uneasy',
-    supp_primary_concern: 'too_personal',
-    supp_service_improvement: 2, supp_understanding: 4,
-    supp_take_back: 'partially',
-    supp_value_to_companies: 5,
-    supp_currently_share: 'no'
-  });
-  assert.equal(r.ok, true);
+test('post-question choice_num (postq_4): 0-3 valid, coerces strings', () => {
+  assert.equal(validatePostQuestion({ postq_share_public: 0 }, 'postq_4').ok, true);
+  assert.equal(validatePostQuestion({ postq_share_public: '2' }, 'postq_4').fields.postq_share_public, 2);
+  assert.equal(validatePostQuestion({ postq_share_public: 4 }, 'postq_4').ok, false);
 });
-test('compensation: ranks must be permutation 1..5', () => {
-  const bad = VALIDATORS.compensation({
-    rank_per_transaction: 1, rank_royalty: 1, rank_subscription: 3, rank_dividend: 4, rank_wage: 5,
-    fair_per_transaction: 1, fair_royalty: 1, fair_subscription: 1, fair_dividend: 1, fair_wage: 1,
-    practical_per_transaction: 1, practical_royalty: 1, practical_subscription: 1, practical_dividend: 1, practical_wage: 1
-  });
-  assert.equal(bad.ok, false);
-  const good = VALIDATORS.compensation({
-    rank_per_transaction: 1, rank_royalty: 2, rank_subscription: 3, rank_dividend: 4, rank_wage: 5,
-    fair_per_transaction: 3, fair_royalty: 3, fair_subscription: 3, fair_dividend: 3, fair_wage: 3,
-    practical_per_transaction: 3, practical_royalty: 3, practical_subscription: 3, practical_dividend: 3, practical_wage: 3
-  });
-  assert.equal(good.ok, true);
+test('post-question choice (postq_7): yes/no/unsure', () => {
+  assert.equal(validatePostQuestion({ postq_comp_by_amount: 'yes' }, 'postq_7').ok, true);
+  assert.equal(validatePostQuestion({ postq_comp_by_amount: 'maybe' }, 'postq_7').ok, false);
 });
-test('attitudes: attention check pass = (value === expected)', () => {
-  const r = VALIDATORS.attitudes({
-    attitude_1: 1, attitude_2: 2, attitude_3: 3, attitude_4: 4, attitude_5: 5, attitude_6: 6,
-    attention_check_value: 6
-  }, 6);
-  assert.equal(r.ok, true);
-  assert.equal(r.fields.attention_check_pass, true);
-  const r2 = VALIDATORS.attitudes({
-    attitude_1: 1, attitude_2: 2, attitude_3: 3, attitude_4: 4, attitude_5: 5, attitude_6: 6,
-    attention_check_value: 4
-  }, 6);
-  assert.equal(r2.fields.attention_check_pass, false);
+test('post-question multiselect (postq_13): requires >=1, all valid, unique', () => {
+  assert.equal(validatePostQuestion({ postq_concerns: ['too_personal', 'no_trust'] }, 'postq_13').ok, true);
+  assert.equal(validatePostQuestion({ postq_concerns: [] }, 'postq_13').ok, false);
+  assert.equal(validatePostQuestion({ postq_concerns: ['nope'] }, 'postq_13').ok, false);
+  assert.equal(validatePostQuestion({ postq_concerns: ['no_trust', 'no_trust'] }, 'postq_13').ok, false);
 });
-test('demographics: all keys required', () => {
-  const incomplete = VALIDATORS.demographics({ age_band: '25-34' });
-  assert.equal(incomplete.ok, false);
-  const complete = VALIDATORS.demographics({
-    age_band: '25-34', gender: 'man', education: 'bachelors',
-    income_band: '50_74', employment: 'full_time', tech_industry: 'no'
+test('post-question attention (postq_14): pass iff value === expected', () => {
+  const pass = validatePostQuestion({ attention_check: 1 }, 'postq_14');
+  assert.equal(pass.ok, true);
+  assert.equal(pass.fields.attention_check_value, 1);
+  assert.equal(pass.fields.attention_check_pass, true);
+  const fail = validatePostQuestion({ attention_check: 3 }, 'postq_14');
+  assert.equal(fail.fields.attention_check_pass, false);
+});
+test('ai_usage: all 5 fields required', () => {
+  assert.equal(VALIDATORS.ai_usage({ ai_tools_freq: 'daily' }).ok, false);
+  const complete = VALIDATORS.ai_usage({
+    ai_tools_freq: 'daily', social_media_freq: 'never',
+    search_engine_freq: 'weekly', tech_current: 'no', tech_ever: 'yes'
   });
   assert.equal(complete.ok, true);
 });
+test('demographics: age/gender/education required', () => {
+  const incomplete = VALIDATORS.demographics({ age_band: '25-34' });
+  assert.equal(incomplete.ok, false);
+  const complete = VALIDATORS.demographics({ age_band: '25-34', gender: 'man', education: 'bachelors' });
+  assert.equal(complete.ok, true);
+});
 test('demographics: gender=other requires text', () => {
-  const noText = VALIDATORS.demographics({
-    age_band: '25-34', gender: 'other', education: 'bachelors',
-    income_band: '50_74', employment: 'full_time', tech_industry: 'no'
-  });
+  const noText = VALIDATORS.demographics({ age_band: '25-34', gender: 'other', education: 'bachelors' });
   assert.equal(noText.ok, false);
   const withText = VALIDATORS.demographics({
-    age_band: '25-34', gender: 'other', gender_other: 'genderqueer',
-    education: 'bachelors', income_band: '50_74', employment: 'full_time', tech_industry: 'no'
+    age_band: '25-34', gender: 'other', gender_other: 'genderqueer', education: 'bachelors'
   });
   assert.equal(withText.ok, true);
 });
 
 section('state machine');
 const fakeParticipant = {
-  scenario_order: [2, 1, 3],
+  scenario_order: [2, 1],
   current_screen: 'consent',
   data_type: 5, use_case: 'B1',
-  supp_question_order: [4, 1, 7, 9, 2, 5, 3, 8, 6],
-  attitude_item_order: [3, 1, 6, 2, 5, 4],
-  s4_option_order: [3, 1, 0, 4, 2, 5],
-  comp_model_order: [3, 1, 5, 2, 4],
-  attention_check_position: 3
+  post_question_order: [4, 1, 7, 14, 2, 5, 3, 8, 6, 11, 9, 13, 10, 12]
 };
 test('consent → scenario_intro → data_type_intro → comprehension', () => {
   assert.equal(nextAfter(fakeParticipant, 'consent'), 'scenario_intro');
@@ -365,119 +333,106 @@ test('consent → scenario_intro → data_type_intro → comprehension', () => {
 test('comprehension → first scenario per scenario_order', () => {
   assert.equal(nextAfter(fakeParticipant, 'comprehension'), 'scenario_2');
 });
-test('scenarios follow scenario_order', () => {
+test('scenarios follow scenario_order, then first post-question', () => {
   assert.equal(nextAfter(fakeParticipant, 'scenario_2'), 'scenario_1');
-  assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'scenario_3');
-  assert.equal(nextAfter(fakeParticipant, 'scenario_3'), 'supplementary');
+  assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'postq_4');
+});
+test('post-questions follow post_question_order, then ai_usage', () => {
+  assert.equal(nextAfter(fakeParticipant, 'postq_4'), 'postq_1');
+  assert.equal(nextAfter(fakeParticipant, 'postq_1'), 'postq_7');
+  assert.equal(nextAfter(fakeParticipant, 'postq_12'), 'ai_usage');
 });
 test('post-scenarios sequence', () => {
-  assert.equal(nextAfter(fakeParticipant, 'supplementary'), 'compensation');
-  assert.equal(nextAfter(fakeParticipant, 'compensation'), 'ai_usage');
-  assert.equal(nextAfter(fakeParticipant, 'ai_usage'), 'attitudes');
-  assert.equal(nextAfter(fakeParticipant, 'attitudes'), 'demographics');
+  assert.equal(nextAfter(fakeParticipant, 'ai_usage'), 'demographics');
   assert.equal(nextAfter(fakeParticipant, 'demographics'), 'debrief');
   assert.equal(nextAfter(fakeParticipant, 'debrief'), 'complete');
 });
 
 section('screen content');
+const dt5 = content.DATA_TYPES.find(d => d.id === 5);
 test('scenario_intro uses use_case text', () => {
   const p = screenPayload(fakeParticipant, 'scenario_intro');
   assert.ok(p.use_case_text.includes('personalize'));
 });
-test('data_type_intro uses label, definition, and learn-more', () => {
+test('data_type_intro uses label, short definition, and per-type learn-more', () => {
   const p = screenPayload(fakeParticipant, 'data_type_intro');
-  assert.equal(p.data_label, content.DATA_TYPES[4].label);
-  assert.ok(p.learn_more_text.toLowerCase().includes('lorem'));
+  assert.equal(p.data_label, dt5.label);
+  assert.equal(p.data_definition, dt5.definition);
+  assert.equal(p.learn_more_text, dt5.learn_more);
 });
 test('comprehension statements include data def + use case verbatim', () => {
   const p = screenPayload(fakeParticipant, 'comprehension');
   assert.equal(p.statements.length, 3);
-  assert.ok(p.statements[0].text.includes(content.DATA_TYPES[4].definition));
+  assert.ok(p.statements[0].text.includes(dt5.definition));
   assert.ok(p.statements[1].text.includes('personalize'));
   assert.ok(p.statements[2].text.includes('permanently deleted after 30 days'));
 });
 test('scenario_1 prompt embeds inline data type + use case verbatim', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1');
-  assert.ok(p.prompt.includes(content.DATA_TYPES[4].inline));
+  assert.ok(p.prompt.includes(dt5.inline));
   assert.ok(p.prompt.includes('personalize'));
 });
-test('voice=appx selects AppX-voice copy for S1/S2/S3; default stays researcher', () => {
-  // Default voice (researcher) — sanity check on signature strings.
+test('voice=appx selects AppX-voice copy for S1/S2; default stays researcher', () => {
   const r1 = screenPayload(fakeParticipant, 'scenario_1');
   const r2 = screenPayload(fakeParticipant, 'scenario_2');
-  const r3 = screenPayload(fakeParticipant, 'scenario_3');
   assert.ok(r1.prompt.startsWith('AppX offers you a discount'));
-  assert.ok(r2.reminder.startsWith('Reminder: AppX would use'));
-  assert.equal(r3.intro, 'Now imagine a different arrangement.');
+  assert.equal(r2.intro, 'Now imagine a different arrangement.');
 
-  // voice=appx — AppX-product-team voice.
   const a1 = screenPayload(fakeParticipant, 'scenario_1', { voice: 'appx' });
   const a2 = screenPayload(fakeParticipant, 'scenario_2', { voice: 'appx' });
-  const a3 = screenPayload(fakeParticipant, 'scenario_3', { voice: 'appx' });
   assert.ok(a1.prompt.startsWith("We're considering"));
   assert.ok(a1.instruction.includes('To help us design fair pricing'));
-  assert.ok(a2.reminder.startsWith('As a reminder'));
-  assert.ok(a2.intro.includes("We're also exploring"));
-  assert.ok(a2.prompt.includes('with us to unlock'));
-  assert.ok(a3.intro.startsWith("We're exploring another option"));
-  assert.ok(a3.instruction.includes('To help us design fair revenue sharing'));
-  assert.ok(a3.setup[1].startsWith("We're considering offering"));
+  assert.ok(a2.intro.startsWith("We're exploring an opt-in data marketplace"));
+  assert.ok(a2.instruction.includes('To help us design fair revenue sharing'));
 
-  // Manipulation preserved: data type and use case verbatim still appear.
-  assert.ok(a1.prompt.includes(content.DATA_TYPES[4].inline));
+  // Manipulation preserved.
+  assert.ok(a1.prompt.includes(dt5.inline));
   assert.ok(a1.prompt.includes('personalize'));
-  assert.ok(a2.reminder.includes('personalize'));
 
-  // Payload shape unchanged.
+  // Payload shape unchanged between voices.
   assert.deepEqual(Object.keys(r1).sort(), Object.keys(a1).sort());
   assert.deepEqual(Object.keys(r2).sort(), Object.keys(a2).sort());
-  assert.deepEqual(Object.keys(r3).sort(), Object.keys(a3).sort());
 
-  // Tiers and reason options are voice-neutral.
+  // Tiers/reason options are voice-neutral.
   assert.deepEqual(a1.tiers, content.S1_TIERS);
-  assert.deepEqual(a3.tiers, content.S3_TIERS);
-  assert.deepEqual(a3.followup_options, content.S3_REASON_OPTIONS);
+  assert.deepEqual(a2.tiers, content.S2_TIERS);
+  assert.deepEqual(a2.followup_options, content.S2_REASON_OPTIONS);
 });
 test('unknown voice value falls back to researcher copy', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1', { voice: 'junk' });
   assert.ok(p.prompt.startsWith('AppX offers you a discount'));
 });
-test('supplementary items are in supp_question_order', () => {
-  const p = screenPayload(fakeParticipant, 'supplementary');
-  const ids = p.items.map(i => i.id);
-  assert.deepEqual(ids, fakeParticipant.supp_question_order);
+test('post-question payload carries the item + substituted prompt', () => {
+  const p = screenPayload(fakeParticipant, 'postq_1');
+  assert.equal(p.kind, 'post_question');
+  assert.equal(p.screen, 'postq_1');
+  assert.equal(p.item.key, 'postq_importance');
+  assert.equal(p.item.type, 'likert5');
+  assert.ok(p.item.prompt.includes(dt5.label));
 });
-test('supplementary S4 options are reordered per s4_option_order with Not sure last', () => {
-  const p = screenPayload(fakeParticipant, 'supplementary');
-  const s4item = p.items.find(i => i.id === 4);
-  // last option should be "Not sure"
-  assert.equal(s4item.options[s4item.options.length - 1].value, 'not_sure');
+test('post-question B-block substitutes the use case data_use form', () => {
+  const p = screenPayload(fakeParticipant, 'postq_7');
+  assert.equal(p.item.key, 'postq_comp_by_amount');
+  assert.ok(p.item.prompt.includes(content.USE_CASES.B1.data_use));
 });
-test('attitudes injects attention check at attention_check_position', () => {
-  const p = screenPayload(fakeParticipant, 'attitudes');
-  assert.equal(p.items.length, 7);
-  const attention = p.items[fakeParticipant.attention_check_position];
-  assert.equal(attention.kind, 'attention');
-  assert.equal(attention.key, 'attention_check_value');
+test('attention-check payload (postq_14) renders as a plain item', () => {
+  const p = screenPayload(fakeParticipant, 'postq_14');
+  assert.equal(p.item.type, 'attention');
+  assert.equal(p.item.key, 'attention_check');
+  assert.ok(p.item.anchors);
 });
-test('attitudes substantive items follow attitude_item_order', () => {
-  const p = screenPayload(fakeParticipant, 'attitudes');
-  const attitudes = p.items.filter(i => i.kind === 'attitude').map(i => parseInt(i.key.split('_')[1], 10));
-  assert.deepEqual(attitudes, fakeParticipant.attitude_item_order);
+test('ai_usage lists the 5 literacy questions', () => {
+  const p = screenPayload(fakeParticipant, 'ai_usage');
+  assert.equal(p.items.length, 5);
+  assert.equal(p.items[0].key, 'ai_tools_freq');
 });
 test('demographics list matches DEMOGRAPHICS', () => {
   const p = screenPayload(fakeParticipant, 'demographics');
   assert.equal(p.items.length, content.DEMOGRAPHICS.length);
 });
-test('compensation items follow comp_model_order', () => {
-  const p = screenPayload(fakeParticipant, 'compensation');
-  const keys = p.items.map(i => i.key);
-  const expectedKeys = fakeParticipant.comp_model_order.map(id => content.COMP_MODELS.find(m => m.id === id).key);
-  assert.deepEqual(keys, expectedKeys);
-});
-test('progressFor returns increasing values', () => {
+test('progressFor returns increasing values, ending at 100', () => {
   const before = progressFor('consent', fakeParticipant);
-  const mid = progressFor('scenario_1', fakeParticipant);
+  const mid = progressFor('postq_1', fakeParticipant);
   const end = progressFor('debrief', fakeParticipant);
   assert.ok(before < mid && mid < end);
   assert.equal(end, 100);
