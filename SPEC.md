@@ -85,8 +85,8 @@ Screens 5–6: Scenarios 1 and 2 (order randomized)
 (The "Scenario 1 / Scenario 2" labels below are internal identifiers only. Because the order is randomized, each is shown to participants with a neutral, unnumbered "Scenario" heading — no copy may imply that one comes before another.)
 Scenario 1 — Discount valuation:
 "AppX offers you a discount on your $20/month subscription if you agree to share your [DATA TYPE] to [USE CASE VERBATIM]."
-"For each discount amount below, would you share your data?"
-Display a table with rows for each discount level. Each row has the discount amount and Yes/No radio buttons:
+"What is the least you would accept in exchange for sharing your data?"
+Single-select — the participant picks ONE radio (the least discount they would accept), or the standalone "would not share" option. Stored in s1_min_share as the tier code ('1off'…'20off') or 'none'.
 
 $1 off / month ($19/mo)
 $3 off / month ($17/mo)
@@ -105,9 +105,14 @@ Scenario 2 — Data marketplace:
 "You will receive a percentage of the selling price back as a discount on your monthly subscription."
 "You can opt out at any time, but data that has already been sold cannot be taken back."
 
-"For each revenue share below, would you participate?"
-Revenue shareParticipate?You receive 10% of the selling price◯ Yes ◯ NoYou receive 50% of the selling price◯ Yes ◯ NoYou receive 90% of the selling price◯ Yes ◯ NoI would not participate at any revenue share◯ (standalone checkbox)
-If all responses are "No" (or the standalone option is checked), show follow-up: "What is the main reason you chose not to participate?"
+"What is the least revenue share you would accept to sell your data?"
+Single-select — the participant picks ONE radio (the least revenue share they would accept), or "I would not participate at any revenue share." Stored in s2_min_share as '10' / '50' / '90' or 'none'.
+
+◯ You receive 10% of the selling price
+◯ You receive 50% of the selling price
+◯ You receive 90% of the selling price
+◯ I would not participate at any revenue share (standalone option)
+If they select "I would not participate," show follow-up: "What is the main reason you chose not to participate?"
 
 ◯ I don't want my data sold at any price
 ◯ I don't trust AppX to handle this correctly
@@ -219,7 +224,7 @@ comp_check_1_correct, comp_check_2_correct (boolean)
 comp_check_retry (boolean)
 completed (boolean)
 created_at, completed_at (timestamps)
-All response fields (Scenario 1 discount-tier responses; Scenario 2 marketplace responses + follow-up reason; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the Screen 21 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
+All response fields (Scenario 1 least-acceptable discount (s1_min_share); Scenario 2 least-acceptable revenue share (s2_min_share) + follow-up reason; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the Screen 21 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
 
 events — one row per screen view, for latency tracking:
 

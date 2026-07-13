@@ -215,56 +215,28 @@ test('comprehension: T,T,T → not passed', () => {
   assert.equal(r.passed, false);
   assert.equal(r.fields.comp_check_3_correct, false);
 });
-test('scenario_1: s1_none=true clears tiers', () => {
-  const r = VALIDATORS.scenario_1({ s1_none: true });
-  assert.equal(r.ok, true);
-  assert.equal(r.fields.s1_none, true);
-  assert.equal(r.fields.s1_share_1off, null);
+test('scenario_1: single-select tier or none valid; bad/missing rejected', () => {
+  assert.equal(VALIDATORS.scenario_1({ s1_min_share: '5off' }).ok, true);
+  assert.equal(VALIDATORS.scenario_1({ s1_min_share: '5off' }).fields.s1_min_share, '5off');
+  assert.equal(VALIDATORS.scenario_1({ s1_min_share: 'none' }).ok, true);
+  assert.equal(VALIDATORS.scenario_1({ s1_min_share: 'bogus' }).ok, false);
+  assert.equal(VALIDATORS.scenario_1({}).ok, false);
 });
-test('scenario_1: requires all 6 tiers', () => {
-  const r = VALIDATORS.scenario_1({ s1_share_1off: true });
-  assert.equal(r.ok, false);
+test('scenario_2 (marketplace): tier valid; decline requires a reason', () => {
+  assert.equal(VALIDATORS.scenario_2({ s2_min_share: '50' }).ok, true);
+  const declineNoReason = VALIDATORS.scenario_2({ s2_min_share: 'none' });
+  assert.equal(declineNoReason.ok, false);
+  assert.equal(declineNoReason.error, 'scenario2_reason_required');
+  const declineReason = VALIDATORS.scenario_2({ s2_min_share: 'none', s2_reason: 'no_trust' });
+  assert.equal(declineReason.ok, true);
 });
-test('scenario_1: all 6 tiers boolean', () => {
-  const r = VALIDATORS.scenario_1({
-    s1_share_1off: false, s1_share_3off: false, s1_share_5off: true,
-    s1_share_8off: true, s1_share_12off: true, s1_share_20off: true
-  });
-  assert.equal(r.ok, true);
-  assert.equal(r.fields.s1_none, false);
-  assert.equal(r.fields.s1_share_5off, true);
-});
-test('scenario_2 (marketplace): all No triggers reason requirement', () => {
-  const r = VALIDATORS.scenario_2({ s2_share_10: false, s2_share_50: false, s2_share_90: false });
-  assert.equal(r.ok, false);
-  assert.equal(r.error, 'scenario2_reason_required');
-});
-test('scenario_2 (marketplace): all No + reason → ok', () => {
-  const r = VALIDATORS.scenario_2({
-    s2_share_10: false, s2_share_50: false, s2_share_90: false,
-    s2_reason: 'no_trust'
-  });
-  assert.equal(r.ok, true);
-});
-test('scenario_2 (marketplace): other reason needs text', () => {
-  const r1 = VALIDATORS.scenario_2({
-    s2_share_10: false, s2_share_50: false, s2_share_90: false, s2_reason: 'other'
-  });
-  assert.equal(r1.ok, false);
-  const r2 = VALIDATORS.scenario_2({
-    s2_share_10: false, s2_share_50: false, s2_share_90: false,
-    s2_reason: 'other', s2_reason_other: 'because reasons'
-  });
-  assert.equal(r2.ok, true);
-});
-test('scenario_2 (marketplace): mixed responses → no reason; s2_none clears tiers', () => {
-  const r = VALIDATORS.scenario_2({ s2_share_10: false, s2_share_50: true, s2_share_90: false });
-  assert.equal(r.ok, true);
-  assert.equal(r.fields.s2_reason, null);
-  const rn = VALIDATORS.scenario_2({ s2_none: true, s2_reason: 'no_price' });
-  assert.equal(rn.ok, true);
-  assert.equal(rn.fields.s2_none, true);
-  assert.equal(rn.fields.s2_share_10, null);
+test('scenario_2 (marketplace): other reason needs text; participating clears reason', () => {
+  assert.equal(VALIDATORS.scenario_2({ s2_min_share: 'none', s2_reason: 'other' }).ok, false);
+  assert.equal(VALIDATORS.scenario_2({ s2_min_share: 'none', s2_reason: 'other', s2_reason_other: 'x' }).ok, true);
+  const participate = VALIDATORS.scenario_2({ s2_min_share: '10' });
+  assert.equal(participate.ok, true);
+  assert.equal(participate.fields.s2_reason, null);
+  assert.equal(participate.fields.s2_reason_other, null);
 });
 test('post-question likert5 (postq_1): 1-5 valid, out-of-range invalid', () => {
   assert.equal(validatePostQuestion({ postq_importance: 3 }, 'postq_1').ok, true);

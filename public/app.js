@@ -382,62 +382,25 @@
     root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.prompt));
     root.appendChild(el('p', { class: 'text-slate-700 mb-4 font-medium' }, p.instruction));
 
-    const form = el('div', { class: 'space-y-3' });
+    const form = el('div', { class: 'space-y-1' });
     for (const t of p.tiers) {
-      const row = el('div', { class: 'flex items-center justify-between border-b border-slate-100 py-2' }, [
-        el('span', { class: 'text-slate-800' }, t.label),
-        el('div', { class: 'flex gap-4 tier-radios', 'data-key': t.key }, [
-          el('label', { class: 'label-radio' }, [
-            el('input', { type: 'radio', name: t.key, value: 'yes', 'data-tier': '1' }),
-            el('span', {}, 'Yes')
-          ]),
-          el('label', { class: 'label-radio' }, [
-            el('input', { type: 'radio', name: t.key, value: 'no', 'data-tier': '1' }),
-            el('span', {}, 'No')
-          ])
-        ])
-      ]);
-      form.appendChild(row);
+      form.appendChild(el('label', { class: 'label-radio' }, [
+        el('input', { type: 'radio', name: 's1_min_share', value: t.value }),
+        el('span', {}, t.label)
+      ]));
     }
-    // Standalone none option
-    const noneRow = el('label', { class: 'flex items-center gap-3 pt-3 cursor-pointer' }, [
-      el('input', { type: 'checkbox', name: 's1_none', id: 's1_none' }),
-      el('span', { class: 'text-slate-800' }, p.none_label)
-    ]);
-    form.appendChild(noneRow);
+    form.appendChild(el('label', { class: 'label-radio' }, [
+      el('input', { type: 'radio', name: 's1_min_share', value: 'none' }),
+      el('span', {}, p.none_label)
+    ]));
     root.appendChild(form);
 
-    const noneBox = form.querySelector('#s1_none');
-    const tierInputs = form.querySelectorAll('input[data-tier]');
-    noneBox.addEventListener('change', () => {
-      tierInputs.forEach(inp => {
-        inp.disabled = noneBox.checked;
-        if (noneBox.checked) inp.checked = false;
-      });
-      refresh();
-    });
-    tierInputs.forEach(inp => inp.addEventListener('change', () => { if (inp.checked) { /* tier selected */ } refresh(); }));
-
     const btn = continueBtn(() => {
-      const body = {};
-      if (noneBox.checked) {
-        body.s1_none = true;
-      } else {
-        body.s1_none = false;
-        for (const t of p.tiers) {
-          const sel = form.querySelector(`input[name="${t.key}"]:checked`);
-          body[t.key] = sel ? (sel.value === 'yes') : null;
-        }
-      }
-      submit('scenario_1', body);
+      const sel = form.querySelector('input[name="s1_min_share"]:checked');
+      submit('scenario_1', { s1_min_share: sel ? sel.value : null });
     }, 'Continue');
     root.appendChild(btn);
-
-    function refresh() {
-      const complete = noneBox.checked || p.tiers.every(t => !!form.querySelector(`input[name="${t.key}"]:checked`));
-      btn.disabled = !complete;
-    }
-    refresh();
+    watchForCompletion(form, () => !!form.querySelector('input[name="s1_min_share"]:checked'));
   };
 
   RENDERERS.scenario_2 = function (p) {
@@ -448,29 +411,20 @@
     root.appendChild(setupList);
     root.appendChild(el('p', { class: 'text-slate-800 font-medium mb-3' }, p.instruction));
 
-    const form = el('div', { class: 'space-y-3' });
+    const form = el('div', { class: 'space-y-1' });
     for (const t of p.tiers) {
-      form.appendChild(el('div', { class: 'flex items-center justify-between border-b border-slate-100 py-2' }, [
-        el('span', { class: 'text-slate-800' }, t.label),
-        el('div', { class: 'flex gap-4' }, [
-          el('label', { class: 'label-radio' }, [
-            el('input', { type: 'radio', name: t.key, value: 'yes', 'data-tier': '1' }),
-            el('span', {}, 'Yes')
-          ]),
-          el('label', { class: 'label-radio' }, [
-            el('input', { type: 'radio', name: t.key, value: 'no', 'data-tier': '1' }),
-            el('span', {}, 'No')
-          ])
-        ])
+      form.appendChild(el('label', { class: 'label-radio' }, [
+        el('input', { type: 'radio', name: 's2_min_share', value: t.value }),
+        el('span', {}, t.label)
       ]));
     }
-    form.appendChild(el('label', { class: 'flex items-center gap-3 pt-3 cursor-pointer' }, [
-      el('input', { type: 'checkbox', name: 's2_none', id: 's2_none' }),
-      el('span', { class: 'text-slate-800' }, p.none_label)
+    form.appendChild(el('label', { class: 'label-radio' }, [
+      el('input', { type: 'radio', name: 's2_min_share', value: 'none' }),
+      el('span', {}, p.none_label)
     ]));
     root.appendChild(form);
 
-    // Follow-up section (hidden until triggered)
+    // Follow-up section (shown when they decline)
     const followup = el('div', { class: 'mt-5 pt-5 border-t border-slate-200 hidden', id: 'followup' });
     followup.appendChild(el('p', { class: 'text-slate-800 font-medium mb-3' }, p.followup_prompt));
     for (const o of p.followup_options) {
@@ -484,16 +438,8 @@
     root.appendChild(followup);
 
     const btn = continueBtn(() => {
-      const body = {};
-      if (noneBox.checked) {
-        body.s2_none = true;
-      } else {
-        body.s2_none = false;
-        for (const t of p.tiers) {
-          const sel = form.querySelector(`input[name="${t.key}"]:checked`);
-          body[t.key] = sel ? (sel.value === 'yes') : null;
-        }
-      }
+      const sel = form.querySelector('input[name="s2_min_share"]:checked');
+      const body = { s2_min_share: sel ? sel.value : null };
       if (followup.classList.contains('hidden') === false) {
         const reasonSel = followup.querySelector('input[name="s2_reason"]:checked');
         body.s2_reason = reasonSel ? reasonSel.value : null;
@@ -505,35 +451,20 @@
     }, 'Continue');
     root.appendChild(btn);
 
-    const noneBox = form.querySelector('#s2_none');
-    const tierInputs = form.querySelectorAll('input[data-tier]');
-    noneBox.addEventListener('change', () => {
-      tierInputs.forEach(inp => {
-        inp.disabled = noneBox.checked;
-        if (noneBox.checked) inp.checked = false;
-      });
-      refresh();
-    });
     form.addEventListener('change', refresh);
     followup.addEventListener('change', refresh);
     followup.addEventListener('input', refresh);
 
     function refresh() {
-      const tiersComplete = p.tiers.every(t => !!form.querySelector(`input[name="${t.key}"]:checked`));
-      const allNo = !noneBox.checked && p.tiers.every(t => {
-        const sel = form.querySelector(`input[name="${t.key}"]:checked`);
-        return sel && sel.value === 'no';
-      });
-      const showFollowup = noneBox.checked || allNo;
-      followup.classList.toggle('hidden', !showFollowup);
-
-      const baseComplete = noneBox.checked || tiersComplete;
+      const sel = form.querySelector('input[name="s2_min_share"]:checked');
+      const declined = !!sel && sel.value === 'none';
+      followup.classList.toggle('hidden', !declined);
       const reasonSel = followup.querySelector('input[name="s2_reason"]:checked');
-      const reasonOk = !showFollowup || (
+      otherInput.classList.toggle('hidden', !reasonSel || reasonSel.value !== 'other');
+      const reasonOk = !declined || (
         !!reasonSel && (reasonSel.value !== 'other' || otherInput.value.trim().length > 0)
       );
-      otherInput.classList.toggle('hidden', !reasonSel || reasonSel.value !== 'other');
-      btn.disabled = !(baseComplete && reasonOk);
+      btn.disabled = !(sel && reasonOk);
     }
     refresh();
   };
@@ -745,34 +676,6 @@
     ]);
   }
 
-  // Inline Yes/No (or Yes/No/Not sure) segmented control. Stores chosen value
-  // on `wrap.dataset.value`; records an input event on each click.
-  function segmented(name, options) {
-    const wrap = el('div', { class: 'settings-segmented', 'data-name': name, role: 'radiogroup' });
-    for (const o of options) {
-      const btn = el('button', { type: 'button', 'data-val': o.value }, o.label);
-      btn.addEventListener('click', () => {
-        if (btn.disabled) return;
-        wrap.querySelectorAll('button').forEach(b => b.classList.remove('is-selected'));
-        btn.classList.add('is-selected');
-        wrap.dataset.value = o.value;
-        recordInput(name, o.value);
-        wrap.dispatchEvent(new CustomEvent('seg-change', { bubbles: true }));
-      });
-      wrap.appendChild(btn);
-    }
-    return wrap;
-  }
-  function segGet(wrap) { return wrap.dataset.value || null; }
-  function segSetDisabled(wrap, disabled) {
-    wrap.classList.toggle('settings-disabled', disabled);
-    wrap.querySelectorAll('button').forEach(b => { b.disabled = disabled; });
-    if (disabled) {
-      wrap.querySelectorAll('button').forEach(b => b.classList.remove('is-selected'));
-      delete wrap.dataset.value;
-    }
-  }
-
   function settingsFooter(saveBtn, noteText) {
     const footer = el('div', { class: 'settings-footer' }, [
       noteText ? el('span', { class: 'settings-footer-note' }, noteText) : null,
@@ -808,51 +711,27 @@
       ])
     ]));
 
-    // Section: discount offers
+    // Section: discount offer (single-select — smallest acceptable discount)
     content.appendChild(el('h3', { class: 'mt-6 text-sm font-semibold uppercase tracking-wide text-slate-500' }, 'Save with data sharing'));
     content.appendChild(el('p', { class: 'settings-section-helper' }, p.prompt));
-    content.appendChild(el('p', { class: 'settings-section-helper mt-1' }, 'Choose the discount offers you would accept:'));
+    content.appendChild(el('p', { class: 'settings-section-helper mt-1' }, p.instruction));
 
-    const rowsBox = el('div', { class: 'mt-3' });
-    const segs = {};
+    const form = el('div', { class: 'mt-3 space-y-1' });
     for (const t of p.tiers) {
-      const seg = segmented(t.key, [
-        { value: 'yes', label: 'Yes' },
-        { value: 'no',  label: 'No'  }
-      ]);
-      segs[t.key] = seg;
-      const row = el('div', { class: 'settings-row' }, [
-        el('div', { class: 'settings-row-text' }, [
-          el('div', { class: 'settings-row-label' }, t.label),
-          el('div', { class: 'settings-row-description' }, 'Share data to receive this discount')
-        ]),
-        seg
-      ]);
-      rowsBox.appendChild(row);
+      form.appendChild(el('label', { class: 'label-radio' }, [
+        el('input', { type: 'radio', name: 's1_min_share', value: t.value }),
+        el('span', {}, t.label)
+      ]));
     }
-    content.appendChild(rowsBox);
-
-    // Decline-all row
-    const declineLabel = el('label', { class: 'settings-decline-row' }, [
-      el('input', { type: 'checkbox', name: 's1_none', id: 's1_none', class: 'h-4 w-4' }),
+    form.appendChild(el('label', { class: 'label-radio' }, [
+      el('input', { type: 'radio', name: 's1_min_share', value: 'none' }),
       el('span', {}, p.none_label)
-    ]);
-    content.appendChild(declineLabel);
+    ]));
+    content.appendChild(form);
 
-    // Save footer
     const btn = settingsSaveBtn(() => {
-      const body = {};
-      const declined = declineLabel.querySelector('#s1_none').checked;
-      if (declined) {
-        body.s1_none = true;
-      } else {
-        body.s1_none = false;
-        for (const t of p.tiers) {
-          const v = segGet(segs[t.key]);
-          body[t.key] = v === 'yes';
-        }
-      }
-      submit('scenario_1', body);
+      const sel = form.querySelector('input[name="s1_min_share"]:checked');
+      submit('scenario_1', { s1_min_share: sel ? sel.value : null });
     });
     content.appendChild(settingsFooter(btn, 'Changes are saved automatically.'));
 
@@ -860,20 +739,9 @@
     frame.appendChild(body);
     root.appendChild(frame);
 
-    // Wire up disable behavior + Continue gating
-    const declineBox = declineLabel.querySelector('#s1_none');
-    function refresh() {
-      const declined = declineBox.checked;
-      for (const t of p.tiers) segSetDisabled(segs[t.key], declined);
-      const allAnswered = declined || p.tiers.every(t => segGet(segs[t.key]) != null);
-      btn.disabled = !allAnswered;
-    }
-    declineBox.addEventListener('change', () => {
-      recordInput('s1_none', declineBox.checked);
-      refresh();
+    form.addEventListener('change', () => {
+      btn.disabled = !form.querySelector('input[name="s1_min_share"]:checked');
     });
-    frame.addEventListener('seg-change', refresh);
-    refresh();
   };
 
   // ===== Scenario 2 (data marketplace, settings mode) =====
@@ -896,32 +764,20 @@
     content.appendChild(el('h3', { class: 'text-sm font-semibold uppercase tracking-wide text-slate-500' }, 'Revenue share'));
     content.appendChild(el('p', { class: 'settings-section-helper' }, p.instruction));
 
-    const segs = {};
-    const rowsBox = el('div', { class: 'mt-3' });
+    const form = el('div', { class: 'mt-3 space-y-1' });
     for (const t of p.tiers) {
-      const seg = segmented(t.key, [
-        { value: 'yes', label: 'Yes' },
-        { value: 'no',  label: 'No'  }
-      ]);
-      segs[t.key] = seg;
-      rowsBox.appendChild(el('div', { class: 'settings-row' }, [
-        el('div', { class: 'settings-row-text' }, [
-          el('div', { class: 'settings-row-label' }, t.label),
-          el('div', { class: 'settings-row-description' }, 'Allow AppX to sell at this revenue share')
-        ]),
-        seg
+      form.appendChild(el('label', { class: 'label-radio' }, [
+        el('input', { type: 'radio', name: 's2_min_share', value: t.value }),
+        el('span', {}, t.label)
       ]));
     }
-    content.appendChild(rowsBox);
-
-    // Decline-all row
-    const declineLabel = el('label', { class: 'settings-decline-row' }, [
-      el('input', { type: 'checkbox', name: 's2_none', id: 's2_none', class: 'h-4 w-4' }),
+    form.appendChild(el('label', { class: 'label-radio' }, [
+      el('input', { type: 'radio', name: 's2_min_share', value: 'none' }),
       el('span', {}, p.none_label)
-    ]);
-    content.appendChild(declineLabel);
+    ]));
+    content.appendChild(form);
 
-    // Follow-up panel (hidden until triggered)
+    // Follow-up panel (shown when they decline)
     const followup = el('div', { class: 'mt-5 pt-4 border-t border-slate-200 hidden', id: 'followup' });
     followup.appendChild(el('p', { class: 'text-slate-800 font-medium mb-2' }, p.followup_prompt));
     for (const o of p.followup_options) {
@@ -935,17 +791,8 @@
     content.appendChild(followup);
 
     const btn = settingsSaveBtn(() => {
-      const out = {};
-      const declined = declineLabel.querySelector('#s2_none').checked;
-      if (declined) {
-        out.s2_none = true;
-      } else {
-        out.s2_none = false;
-        for (const t of p.tiers) {
-          const v = segGet(segs[t.key]);
-          out[t.key] = v === 'yes';
-        }
-      }
+      const sel = form.querySelector('input[name="s2_min_share"]:checked');
+      const out = { s2_min_share: sel ? sel.value : null };
       if (!followup.classList.contains('hidden')) {
         const reasonSel = followup.querySelector('input[name="s2_reason"]:checked');
         out.s2_reason = reasonSel ? reasonSel.value : null;
@@ -961,29 +808,18 @@
     frame.appendChild(body);
     root.appendChild(frame);
 
-    const declineBox = declineLabel.querySelector('#s2_none');
     function refresh() {
-      const declined = declineBox.checked;
-      for (const t of p.tiers) segSetDisabled(segs[t.key], declined);
-
-      const tiersAnswered = p.tiers.every(t => segGet(segs[t.key]) != null);
-      const allNo = !declined && tiersAnswered && p.tiers.every(t => segGet(segs[t.key]) === 'no');
-      const showFollowup = declined || allNo;
-      followup.classList.toggle('hidden', !showFollowup);
-
-      const baseComplete = declined || tiersAnswered;
+      const sel = form.querySelector('input[name="s2_min_share"]:checked');
+      const declined = !!sel && sel.value === 'none';
+      followup.classList.toggle('hidden', !declined);
       const reasonSel = followup.querySelector('input[name="s2_reason"]:checked');
       otherInput.classList.toggle('hidden', !reasonSel || reasonSel.value !== 'other');
-      const reasonOk = !showFollowup || (
+      const reasonOk = !declined || (
         !!reasonSel && (reasonSel.value !== 'other' || otherInput.value.trim().length > 0)
       );
-      btn.disabled = !(baseComplete && reasonOk);
+      btn.disabled = !(sel && reasonOk);
     }
-    declineBox.addEventListener('change', () => {
-      recordInput('s2_none', declineBox.checked);
-      refresh();
-    });
-    frame.addEventListener('seg-change', refresh);
+    form.addEventListener('change', refresh);
     followup.addEventListener('change', refresh);
     followup.addEventListener('input', refresh);
     refresh();

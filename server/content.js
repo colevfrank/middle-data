@@ -86,21 +86,23 @@ const USE_CASES = {
   }
 };
 
-// Scenario 1 discount tiers
+// Scenario 1 discount tiers (single-select: participant picks the least discount
+// they'd accept). `value` is stored in s1_min_share.
 const S1_TIERS = [
-  { key: 's1_share_1off',  label: '$1 off / month ($19/mo)' },
-  { key: 's1_share_3off',  label: '$3 off / month ($17/mo)' },
-  { key: 's1_share_5off',  label: '$5 off / month ($15/mo)' },
-  { key: 's1_share_8off',  label: '$8 off / month ($12/mo)' },
-  { key: 's1_share_12off', label: '$12 off / month ($8/mo)' },
-  { key: 's1_share_20off', label: '$20 off / month (Free)' }
+  { value: '1off',  label: '$1 off / month ($19/mo)' },
+  { value: '3off',  label: '$3 off / month ($17/mo)' },
+  { value: '5off',  label: '$5 off / month ($15/mo)' },
+  { value: '8off',  label: '$8 off / month ($12/mo)' },
+  { value: '12off', label: '$12 off / month ($8/mo)' },
+  { value: '20off', label: '$20 off / month (Free)' }
 ];
 
-// Scenario 2 (data marketplace) revenue share tiers
+// Scenario 2 (data marketplace) revenue-share tiers (single-select: least share
+// they'd accept). `value` is stored in s2_min_share.
 const S2_TIERS = [
-  { key: 's2_share_10', label: 'You receive 10% of the selling price' },
-  { key: 's2_share_50', label: 'You receive 50% of the selling price' },
-  { key: 's2_share_90', label: 'You receive 90% of the selling price' }
+  { value: '10', label: 'You receive 10% of the selling price' },
+  { value: '50', label: 'You receive 50% of the selling price' },
+  { value: '90', label: 'You receive 90% of the selling price' }
 ];
 
 const S2_REASON_OPTIONS = [

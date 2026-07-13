@@ -63,49 +63,26 @@ function validateComprehension(body, dataType, useCase) {
   };
 }
 
+// Scenario 1 = discount valuation. Single-select: the least discount the
+// participant would accept (a tier value) or 'none'.
 function validateScenario1(body) {
   const b = body || {};
-  const fields = {};
-  // s1_none and per-tier are mutually exclusive
-  if (b.s1_none === true) {
-    fields.s1_none = true;
-    for (const t of S1_TIERS) fields[t.key] = null;
-    return { ok: true, fields };
-  }
-  // require all 6 tiers to be boolean
-  for (const t of S1_TIERS) {
-    if (!isBool(b[t.key])) return { ok: false, error: 'scenario1_incomplete' };
-    fields[t.key] = b[t.key];
-  }
-  fields.s1_none = false;
-  return { ok: true, fields };
+  const allowed = S1_TIERS.map(t => t.value).concat('none');
+  if (!inSet(b.s1_min_share, allowed)) return { ok: false, error: 'scenario1_invalid' };
+  return { ok: true, fields: { s1_min_share: b.s1_min_share } };
 }
 
-// Scenario 2 = data marketplace (revenue-share tiers + optional decline reason).
+// Scenario 2 = data marketplace. Single-select: the least revenue share the
+// participant would accept (a tier value) or 'none'; declining requires a reason.
 function validateScenario2(body) {
   const b = body || {};
-  const fields = {};
-  let allNo = false;
+  const allowed = S2_TIERS.map(t => t.value).concat('none');
+  if (!inSet(b.s2_min_share, allowed)) return { ok: false, error: 'scenario2_invalid' };
+  const fields = { s2_min_share: b.s2_min_share };
 
-  if (b.s2_none === true) {
-    fields.s2_none = true;
-    for (const t of S2_TIERS) fields[t.key] = null;
-    allNo = true;
-  } else {
-    for (const t of S2_TIERS) {
-      if (!isBool(b[t.key])) return { ok: false, error: 'scenario2_incomplete' };
-      fields[t.key] = b[t.key];
-    }
-    fields.s2_none = false;
-    allNo = S2_TIERS.every(t => b[t.key] === false);
-  }
-
-  // Follow-up reason is required iff allNo is true (or s2_none true).
-  if (allNo) {
-    const allowed = S2_REASON_OPTIONS.map(o => o.value);
-    if (!inSet(b.s2_reason, allowed)) {
-      return { ok: false, error: 'scenario2_reason_required' };
-    }
+  if (b.s2_min_share === 'none') {
+    const reasons = S2_REASON_OPTIONS.map(o => o.value);
+    if (!inSet(b.s2_reason, reasons)) return { ok: false, error: 'scenario2_reason_required' };
     fields.s2_reason = b.s2_reason;
     if (b.s2_reason === 'other') {
       if (!isStr(b.s2_reason_other, MAX_TEXT) || b.s2_reason_other.trim().length === 0) {

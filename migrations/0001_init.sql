@@ -37,20 +37,11 @@ CREATE TABLE IF NOT EXISTS participants (
   consent_read BOOLEAN,
   consent_participate BOOLEAN,
 
-  -- Scenario 1: discount valuation
-  s1_share_1off BOOLEAN,
-  s1_share_3off BOOLEAN,
-  s1_share_5off BOOLEAN,
-  s1_share_8off BOOLEAN,
-  s1_share_12off BOOLEAN,
-  s1_share_20off BOOLEAN,
-  s1_none BOOLEAN,
+  -- Scenario 1: discount valuation (single-select: least acceptable discount)
+  s1_min_share TEXT,   -- tier code ('1off'…'20off') or 'none'
 
-  -- Scenario 2: data marketplace
-  s2_share_10 BOOLEAN,
-  s2_share_50 BOOLEAN,
-  s2_share_90 BOOLEAN,
-  s2_none BOOLEAN,
+  -- Scenario 2: data marketplace (single-select: least acceptable revenue share)
+  s2_min_share TEXT,   -- '10' / '50' / '90' or 'none'
   s2_reason TEXT,
   s2_reason_other TEXT,
 

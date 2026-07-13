@@ -27,7 +27,7 @@ const SCENARIO_COPY = {
   researcher: {
     s1: {
       prompt: (dt, uc) => `AppX offers you a discount on your $20/month subscription if you agree to share your ${dt.inline} to ${uc.verbatim}.`,
-      instruction: 'For each discount amount below, would you share your data?',
+      instruction: 'What is the least you would accept in exchange for sharing your data?',
       none_label: 'I would not share at any price'
     },
     s2: {
@@ -39,7 +39,7 @@ const SCENARIO_COPY = {
         'You will receive a percentage of the selling price back as a discount on your monthly subscription.',
         'You can opt out at any time, but data that has already been sold cannot be taken back.'
       ],
-      instruction: 'For each revenue share below, would you participate?',
+      instruction: 'What is the least revenue share you would accept to sell your data?',
       none_label: 'I would not participate at any revenue share',
       followup_prompt: 'What is the main reason you chose not to participate?'
     }
@@ -47,7 +47,7 @@ const SCENARIO_COPY = {
   appx: {
     s1: {
       prompt: (dt, uc) => `We're considering a new program: users could share their ${dt.inline} with us — we'd use it to ${uc.verbatim} — in exchange for a discount on their $20/month subscription.`,
-      instruction: 'To help us design fair pricing, tell us — for each discount amount below, would you be willing to share?',
+      instruction: 'To help us design fair pricing, tell us — what is the least you would accept in exchange for sharing your data?',
       none_label: 'I would not share at any price'
     },
     s2: {
@@ -59,7 +59,7 @@ const SCENARIO_COPY = {
         'You would receive a percentage of the selling price back as a discount on your monthly subscription.',
         "You could opt out at any time, but data that's already been sold could not be taken back."
       ],
-      instruction: "To help us design fair revenue sharing, tell us — for each revenue share below, would you participate?",
+      instruction: "To help us design fair revenue sharing, tell us — what is the least revenue share you would accept to sell your data?",
       none_label: 'I would not participate at any revenue share',
       followup_prompt: 'What is the main reason you chose not to participate?'
     }
