@@ -36,19 +36,19 @@ Each data type belongs to one of six data categories and has both a short descri
 | --- | --- | --- | --- |
 | Demographic info | Name, age, gender, ZIP code, marital status | Basic identifying and demographic information such as your full name, date of birth, sex or gender, home ZIP code, and marital status. | Demographic/Identity |
 | Social security number | Your 9-digit SSN | Your Social Security number, used for tax reporting, credit checks, and identity verification. | Demographic/Identity |
-| Fingerprints and voice recordings | Biometric data from your body | Your stored fingerprints, such as from unlocking your phone, and recordings of your voice, such as from voice assistants or phone calls. | Demographic/Identity |
+| Fingerprint and voice recording data | Biometric data from your body | Your stored fingerprints, such as from unlocking your phone, and recordings of your voice, such as from voice assistants or phone calls. | Demographic/Identity |
 | Health information | Medical records and prescriptions | Information about your health, including doctor's appointments, lab and test results, diagnosed conditions, and prescription medications. | Sensitive Personal |
 | Financial information | Bank statements, taxes, transactions | Your financial records, including bank and credit card statements, tax documents, and transaction history. | Sensitive Personal |
-| Passwords and login credentials | Passwords, PINs, and security keys | The passwords, PINs, and security credentials you use to log in to websites, apps, and accounts. | Sensitive Personal |
-| Text messages and emails | Content of your private communications | The actual content of your text messages, emails, and direct messages — what you wrote and what you received. | Relational/Communicative |
+| Password and login credential data | Passwords, PINs, and security keys | The passwords, PINs, and security credentials you use to log in to websites, apps, and accounts. | Sensitive Personal |
+| Text message and email content | Content of your private communications | The actual content of your text messages, emails, and direct messages — what you wrote and what you received. | Relational/Communicative |
 | Contact info of friends and family | Names, numbers, and emails of people you know | The names, phone numbers, email addresses, and other contact details of people stored in your phone or email contacts. | Relational/Communicative |
 | Location history | A record of where you've been | A log of your physical locations over time, based on GPS, Wi-Fi, or cell tower data from your phone or other devices. | Behavioral/Preference |
 | Browsing and search history | Websites visited and searches made | A record of the websites you've visited, links you've clicked, and queries you've typed into search engines. | Behavioral/Preference |
 | Shopping and purchase history | What you've bought and where | A record of your purchases — what you bought, when, where, and how much you paid — across online and in-store transactions. | Behavioral/Preference |
-| Documents, notes, and reports | Files you've written for work or school | Documents, notes, essays, reports, and other files you've created for professional or academic purposes. | Expressive |
-| Photos and videos you've taken | Images and recordings from your camera | Photos and videos you've personally captured and stored on your device or uploaded to cloud services. | Expressive |
+| Document, note, and report data | Files you've written for work or school | Documents, notes, essays, reports, and other files you've created for professional or academic purposes. | Expressive |
+| Photo and video data | Images and recordings from your camera | Photos and videos you've personally captured and stored on your device or uploaded to cloud services. | Expressive |
 | Email triage behavior | How you sort, flag, and manage your inbox | Behavioral patterns in how you manage email — the order you open messages, what you archive versus flag versus defer, and how you edit drafts before sending, but not the content of the emails themselves. | Process |
-| Search and decision trajectories | How you research and make decisions online | The sequence of steps you take when researching a decision online, such as the tabs you open, options you compare, filters you apply, and how long you spend before choosing when booking flights, shopping, or comparing services. | Process |
+| Search and decision trajectory data | How you research and make decisions online | The sequence of steps you take when researching a decision online, such as the tabs you open, options you compare, filters you apply, and how long you spend before choosing when booking flights, shopping, or comparing services. | Process |
 | Writing and editing process | How you draft, revise, and re-write | The sequence of keystrokes, deletions, rewrites, and pauses as you compose a document or message, including what you typed and then deleted, how long you paused between sentences, and how many times you revised a paragraph, but not the final version itself. | Process |
 
 ### Use Case Conditions (2)
