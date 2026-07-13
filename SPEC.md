@@ -14,6 +14,8 @@ Store all three parameters with the response data
 On survey completion, redirect to Prolific's completion URL: https://app.prolific.com/submissions/complete?cc={COMPLETION_CODE} (completion code set via env var)
 On consent refusal or failed comprehension checks, redirect to Prolific's "return" URL
 
+**TODO (before go-live): add a Prolific screen-out completion code.** Currently consent refusals and second-attempt comprehension failures are sent to the "return" URL (unpaid return). Instead, create a second Prolific completion code designated as a screen-out, expose it as a new env var (e.g. `PROLIFIC_SCREENOUT_CODE`), and redirect those participants to https://app.prolific.com/submissions/complete?cc={SCREENOUT_CODE} so they are recorded as screened out (and can be paid a small screen-out fee). Implementation is ~10 lines in server/routes/screen.js; make it opt-in — fall back to the current return-URL behavior when the env var is unset.
+
 ### Randomization
 Each participant is randomly assigned to one cell at the start of the session. Two between-subjects factors:
 
