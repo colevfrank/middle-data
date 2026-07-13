@@ -214,11 +214,43 @@
   // ===== Renderers =====
   const RENDERERS = {};
 
+  // Minimal Markdown for the consent form: ATX headings (#..######) become
+  // heading elements; consecutive non-blank lines become one paragraph (line
+  // breaks preserved); blank lines separate paragraphs. CONSENT.md is a trusted
+  // repo file and nodes are built via the DOM (no innerHTML).
+  function consentNodes(text) {
+    const lines = String(text).replace(/\r\n/g, '\n').split('\n');
+    const nodes = [];
+    let para = [];
+    function flushPara() {
+      if (!para.length) return;
+      const children = [];
+      para.forEach((ln, i) => { if (i > 0) children.push(el('br')); children.push(ln); });
+      nodes.push(el('p', { class: 'mb-3' }, children));
+      para = [];
+    }
+    for (const raw of lines) {
+      const line = raw.replace(/\s+$/, '');
+      const h = line.match(/^(#{1,6})\s+(.*)$/);
+      if (h) {
+        flushPara();
+        nodes.push(el('h4', { class: 'font-semibold text-slate-900 mt-4 mb-1' }, h[2]));
+      } else if (line.trim() === '') {
+        flushPara();
+      } else {
+        para.push(line);
+      }
+    }
+    flushPara();
+    return nodes;
+  }
+
   RENDERERS.consent = function (p) {
     root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'Informed Consent'));
     const consentBox = el('div', {
-      class: 'prose prose-sm max-w-none border border-slate-200 rounded p-4 max-h-96 overflow-y-auto whitespace-pre-wrap text-slate-700 text-sm leading-relaxed'
-    }, p.consent_text || '');
+      class: 'max-w-none border border-slate-200 rounded p-4 max-h-96 overflow-y-auto text-slate-700 text-sm leading-relaxed'
+    });
+    consentNodes(p.consent_text || '').forEach(n => consentBox.appendChild(n));
     root.appendChild(consentBox);
 
     const form = el('div', { class: 'mt-6 space-y-3' });

@@ -5,7 +5,8 @@ This study examines how people feel and think about their digital information.
 
 #### Procedures  
 You will be shown a survey of questions. The survey takes approximately 10-12 minutes.
-Participant Requirements  
+
+#### Participant Requirements
 Participation in this study is limited to individuals age 18 and older who are U.S. residents and fluent in English.
 
 #### Risks
