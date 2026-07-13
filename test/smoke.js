@@ -376,7 +376,7 @@ test('voice=appx selects AppX-voice copy for S1/S2; default stays researcher', (
   const r1 = screenPayload(fakeParticipant, 'scenario_1');
   const r2 = screenPayload(fakeParticipant, 'scenario_2');
   assert.ok(r1.prompt.startsWith('AppX offers you a discount'));
-  assert.equal(r2.intro, 'Now imagine a different arrangement.');
+  assert.equal(r2.intro, 'Imagine the following arrangement with AppX.');
 
   const a1 = screenPayload(fakeParticipant, 'scenario_1', { voice: 'appx' });
   const a2 = screenPayload(fakeParticipant, 'scenario_2', { voice: 'appx' });

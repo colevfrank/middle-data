@@ -80,6 +80,7 @@ Screen 4: Comprehension Check
 Two multiple-choice questions (4 options each). One verifies the data type, one verifies the use case. Correct answers depend on the assigned condition.
 If participant fails either question: show the scenario and data type info again, let them retry once. If they fail again on the retry, end the survey and redirect to Prolific return URL. Log the failure.
 Screens 5–6: Scenarios 1 and 2 (order randomized)
+(The "Scenario 1 / Scenario 2" labels below are internal identifiers only. Because the order is randomized, each is shown to participants with a neutral, unnumbered "Scenario" heading — no copy may imply that one comes before another.)
 Scenario 1 — Discount valuation:
 "AppX offers you a discount on your $20/month subscription if you agree to share your [DATA TYPE] to [USE CASE VERBATIM]."
 "For each discount amount below, would you share your data?"
@@ -94,7 +95,7 @@ $20 off / month (Free)
 "I would not share at any price" (standalone option at bottom)
 
 Scenario 2 — Data marketplace:
-"Now imagine a different arrangement."
+"Imagine the following arrangement with AppX."
 "You pay $20 per month for AppX. By default, AppX does not record, store, or sell your [DATA TYPE]."
 "AppX offers you the option to join a data marketplace program. If you opt in:"
 
@@ -113,7 +114,7 @@ If all responses are "No" (or the standalone option is checked), show follow-up:
 ◯ Something else [text field]
 
 Screens 7–20: Post-Scenario Questions
-Fourteen items — the 13 questions below plus one attention check — each shown on its own screen. All 14 are pooled and randomized together into one random screen order. [DATA TYPE] = the assigned data type's label; [DATA USE] = the assigned use case's [DATA USE] form (see Use Case Conditions). Response options appear in the order listed (no within-question option randomization).
+Fourteen items — the 13 questions below plus one attention check — each shown on its own screen. All 14 are pooled and randomized together into one random screen order. [DATA TYPE] = the assigned data type's label; [DATA USE] = the assigned use case's [DATA USE] form (see Use Case Conditions). Response options appear in the order listed (no within-question option randomization). For Likert (1–5) items, each endpoint label is shown prefixed with its scale number — e.g., "1: Not at all" … "5: Extremely".
 
 Block A — about the data type
 

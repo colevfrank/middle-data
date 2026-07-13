@@ -31,7 +31,7 @@ const SCENARIO_COPY = {
       none_label: 'I would not share at any price'
     },
     s2: {
-      intro: 'Now imagine a different arrangement.',
+      intro: 'Imagine the following arrangement with AppX.',
       setup: (dt) => [
         `You pay $20 per month for AppX. By default, AppX does not record, store, or sell your ${dt.inline}.`,
         'AppX offers you the option to join a data marketplace program. If you opt in:',

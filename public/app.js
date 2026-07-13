@@ -180,10 +180,14 @@
     return container;
   }
 
-  function anchorRow(anchors) {
+  // When lowNum/highNum are given, the scale endpoints are prefixed with their
+  // number, e.g. "1: Not at all" … "5: Extremely".
+  function anchorRow(anchors, lowNum, highNum) {
+    const lowText = lowNum != null ? lowNum + ': ' + anchors.low : anchors.low;
+    const highText = highNum != null ? highNum + ': ' + anchors.high : anchors.high;
     return el('div', { class: 'flex justify-between text-xs text-slate-500 mt-1' }, [
-      el('span', {}, anchors.low),
-      el('span', {}, anchors.high)
+      el('span', {}, lowText),
+      el('span', {}, highText)
     ]);
   }
 
@@ -342,7 +346,7 @@
   };
 
   RENDERERS.scenario_1 = function (p) {
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'Scenario 1'));
+    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'Scenario'));
     root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.prompt));
     root.appendChild(el('p', { class: 'text-slate-700 mb-4 font-medium' }, p.instruction));
 
@@ -405,7 +409,7 @@
   };
 
   RENDERERS.scenario_2 = function (p) {
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'Scenario 2'));
+    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'Scenario'));
     root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.intro));
     const setupList = el('ul', { class: 'list-disc list-inside text-slate-700 space-y-1 mb-4' });
     p.setup.forEach(s => setupList.appendChild(el('li', {}, s)));
@@ -516,7 +520,7 @@
 
     if (it.type === 'likert5' || it.type === 'attention') {
       form.appendChild(likert5(it.key));
-      form.appendChild(anchorRow(it.anchors));
+      form.appendChild(anchorRow(it.anchors, 1, 5));
       getValue = () => {
         const sel = form.querySelector(`input[name="${it.key}"]:checked`);
         return sel ? parseInt(sel.value, 10) : null;
