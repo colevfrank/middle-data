@@ -10,15 +10,15 @@
   let inputEvents = [];
 
   // ===== Presentation mode (plain | settings) =====
-  // `?mode=settings` opts a participant into the settings-style scenario UI.
-  // Persisted to sessionStorage so reloads within the tab keep the mode.
+  // The settings-style scenario UI is the DEFAULT; `?mode=plain` opts out to the
+  // plain academic card. Persisted to sessionStorage so reloads keep the mode.
   function detectMode() {
     try {
       const urlMode = new URLSearchParams(location.search).get('mode');
-      if (urlMode === 'settings') sessionStorage.setItem('appx_mode', 'settings');
-      return sessionStorage.getItem('appx_mode') || 'plain';
+      if (urlMode === 'settings' || urlMode === 'plain') sessionStorage.setItem('appx_mode', urlMode);
+      return sessionStorage.getItem('appx_mode') || 'settings';
     } catch (e) {
-      return 'plain';
+      return 'settings';
     }
   }
   const MODE = detectMode();

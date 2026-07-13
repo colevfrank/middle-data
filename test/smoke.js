@@ -580,7 +580,7 @@ test('/start preserves ?mode=settings in redirect (new + resume)', async () => {
     assert.equal(r2.status, 302);
     assert.equal(r2.headers.location, '/screen.html?mode=settings');
 
-    // Resume same PID WITHOUT mode -> falls back to plain
+    // Resume same PID WITHOUT mode -> no mode qs (client now defaults to settings)
     const r3 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=MODE_NEW`);
     assert.equal(r3.status, 302);
     assert.equal(r3.headers.location, '/screen.html');
@@ -594,6 +594,11 @@ test('/start preserves ?mode=settings in redirect (new + resume)', async () => {
     const r5 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=BADMODE_NEW&mode=junk`);
     assert.equal(r5.status, 302);
     assert.equal(r5.headers.location, '/screen.html');
+
+    // Explicit opt-out ?mode=plain is forwarded so the client can override the default
+    const r6 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=PLAIN_NEW&mode=plain`);
+    assert.equal(r6.status, 302);
+    assert.equal(r6.headers.location, '/screen.html?mode=plain');
   } finally {
     server.close();
   }

@@ -14,7 +14,9 @@ router.get('/start', asyncHandler(async (req, res) => {
   const studyId = req.query.STUDY_ID || null;
   const sessionId = req.query.SESSION_ID || null;
   const passthrough = [];
-  if (req.query.mode === 'settings') passthrough.push('mode=settings');
+  // Settings mode is the default; forward an explicit mode (settings or plain)
+  // so the opt-out link (?mode=plain) reaches the client through the redirect.
+  if (req.query.mode === 'settings' || req.query.mode === 'plain') passthrough.push('mode=' + req.query.mode);
   if (req.query.voice === 'appx') passthrough.push('voice=appx');
   const passthroughQs = passthrough.length ? '?' + passthrough.join('&') : '';
 
