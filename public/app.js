@@ -322,7 +322,26 @@
     for (const para of p.body) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
     }
-    const btn = continueBtn(() => submit('data_type_intro', {}), 'Continue');
+
+    let learnMoreClicked = false;
+    let learnMoreClickTs = null;
+    const details = el('details', { class: 'mb-2' });
+    const summary = el('summary', { class: 'cursor-pointer text-slate-700 underline text-sm' }, 'Learn more');
+    details.appendChild(summary);
+    details.appendChild(el('div', { class: 'mt-2 text-sm text-slate-600' }, p.learn_more_text));
+    details.addEventListener('toggle', () => {
+      if (details.open && !learnMoreClicked) {
+        learnMoreClicked = true;
+        learnMoreClickTs = Date.now();
+        recordInput('learn_more_open', true);
+      }
+    });
+    root.appendChild(details);
+
+    const btn = continueBtn(() => submit('data_type_intro', {
+      learn_more_clicked: learnMoreClicked,
+      learn_more_click_ts: learnMoreClickTs
+    }), 'Continue');
     btn.disabled = false;
     root.appendChild(btn);
   };

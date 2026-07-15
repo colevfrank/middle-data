@@ -32,7 +32,7 @@ Target N = 3,200 — block-randomized to 100 participants per cell across the 16
 Store all assignments in the database row for this participant.
 
 ### Data Types (16)
-Each data type belongs to one of six data categories and has both a short description and a longer description (with examples). The longer description is shown inline when the data type is introduced (Screen 4); the short description is used in the comprehension check. The data category is internal and never shown to participants:
+Each data type belongs to one of six data categories and has both a short description and a longer description (with examples). The short description is shown as the data type's definition when it is introduced (Screen 4) and in the comprehension check; the longer description is shown in the "Learn more" expansion on Screen 4. The data category is internal and never shown to participants:
 
 | Data Type | Short Description | Longer Description | Category |
 | --- | --- | --- | --- |
@@ -82,9 +82,9 @@ Screen 3: Scenario Introduction (AppX setup)
 (The use case is NOT shown here — it is introduced on Screen 4 alongside the data type.)
 Screen 4: Data Type Introduction (data type + use case)
 Introduce the assigned data type and use case together, e.g.:
-"Earlier this year, AppX became interested in collecting [DATA TYPE], which is [longer description with examples]."
+"Earlier this year, AppX became interested in collecting [DATA TYPE], which is [short description]."
 "AppX would like to use your [DATA TYPE] for [DATA USE]."
-No "Learn more" expandable (the longer description is shown inline). The learn_more_clicked / learn_more_click_ts columns remain in the schema but are no longer populated.
+Include a "Learn more" expandable/collapsible with the type's longer description (with examples). Track whether the participant clicks this (learn_more_clicked boolean + timestamp).
 Screen 5: Comprehension Check
 Two multiple-choice questions (4 options each). One verifies the data type, one verifies the use case. Correct answers depend on the assigned condition.
 If participant fails either question: show the scenario and data type info again, let them retry once. If they fail again on the retry, end the survey and redirect to Prolific return URL. Log the failure.
@@ -206,7 +206,8 @@ response_latency_ms (difference between shown and submitted)
 
 Additional tracking:
 
-learn_more_clicked / learn_more_click_timestamp (retained in schema but no longer populated — the "Learn more" expandable was removed; the longer description is shown inline on Screen 4)
+learn_more_clicked (boolean, Screen 4)
+learn_more_click_timestamp (if clicked)
 comprehension_check_1_correct (boolean)
 comprehension_check_2_correct (boolean)
 comprehension_retry (boolean — did they need a retry)

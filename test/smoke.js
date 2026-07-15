@@ -335,13 +335,15 @@ test('scenario_intro describes AppX setup (no use case here)', () => {
   assert.ok(text.includes('deletes any data it holds after one year'));
   assert.equal(p.use_case_text, undefined);
 });
-test('data_type_intro narrates the data type + use case', () => {
+test('data_type_intro narrates data type + use case, with Learn more = longer desc', () => {
   const p = screenPayload(fakeParticipant, 'data_type_intro');
   const text = p.body.join(' ');
   assert.equal(p.data_label, dt5.label);
   assert.ok(text.includes(dt5.label));                       // data type introduced
   assert.ok(text.includes(dt5.inline));                      // used later in the sentence
+  assert.ok(text.includes(dt5.definition.slice(1)));         // short definition shown inline
   assert.ok(text.includes(content.USE_CASES.B1.data_use));   // use case shown here now
+  assert.equal(p.learn_more_text, dt5.learn_more);           // longer desc behind "Learn more"
 });
 test('comprehension statements include data def + use case verbatim', () => {
   const p = screenPayload(fakeParticipant, 'comprehension');

@@ -129,16 +129,18 @@ function screenPayload(p, screenId, extra = {}) {
     }
 
     case 'data_type_intro': {
-      // Definition (longer, with examples) lower-cased to read after "…which is".
-      const def = dt.learn_more;
+      // Short definition lower-cased to read after "…which is"; the longer,
+      // example-rich description goes in the "Learn more" expansion.
+      const def = dt.definition;
       const defInline = def.charAt(0).toLowerCase() + def.slice(1);
       return {
         screen: 'data_type_intro',
         data_label: dt.label,
         body: [
-          `Earlier this year, AppX became interested in collecting ${dt.label}, which is ${defInline}`,
+          `Earlier this year, AppX became interested in collecting ${dt.label}, which is ${defInline}.`,
           `AppX would like to use your ${dt.inline} for ${uc.data_use}.`
         ],
+        learn_more_text: dt.learn_more,
         retry: !!extra.retry
       };
     }
