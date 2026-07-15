@@ -2,6 +2,7 @@
 
 const FIXED_ORDER = [
   'consent',
+  'welcome',
   'scenario_intro',
   'data_type_intro',
   'comprehension',
@@ -47,6 +48,7 @@ function nextAfter(participant, currentScreen) {
 
   const linear = [
     'consent',
+    'welcome',
     'scenario_intro',
     'data_type_intro',
     'comprehension'

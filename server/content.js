@@ -254,6 +254,7 @@ const DEMOGRAPHICS = [
 // expanded per participant (in scenario_order / post_question_order).
 const SCREEN_FLOW = [
   'consent',
+  'welcome',
   'scenario_intro',
   'data_type_intro',
   'comprehension',

@@ -293,46 +293,36 @@
     watchForCompletion(form, () => items.every(it => !!form.querySelector(`input[name="${it.key}"]:checked`)));
   };
 
+  RENDERERS.welcome = function (p) {
+    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'Welcome!'));
+    for (const para of p.body) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    }
+    const btn = continueBtn(() => submit('welcome', {}), 'Continue');
+    btn.disabled = false;
+    root.appendChild(btn);
+  };
+
   RENDERERS.scenario_intro = function (p) {
     if (p.retry) {
       root.appendChild(el('div', { class: 'mb-4 p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800' },
-        'Some of your answers on the comprehension check were incorrect. Please review the scenario below carefully — this is your final attempt.'));
+        'Some of your answers on the comprehension check were incorrect. Please review the information below carefully — this is your final attempt.'));
     }
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'Scenario'));
-    root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.intro));
-    root.appendChild(el('p', { class: 'text-slate-800' }, p.use_case_text));
+    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'About AppX'));
+    for (const para of p.body) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    }
     const btn = continueBtn(() => submit('scenario_intro', {}), 'Continue');
     btn.disabled = false;
     root.appendChild(btn);
   };
 
   RENDERERS.data_type_intro = function (p) {
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-1' }, 'Data type'));
-    root.appendChild(el('p', { class: 'text-slate-600 mb-3 text-sm' }, 'The data in this scenario is:'));
-    root.appendChild(el('div', { class: 'p-4 bg-slate-50 border border-slate-200 rounded mb-4' }, [
-      el('div', { class: 'font-semibold text-slate-900 mb-1' }, p.data_label),
-      el('div', { class: 'text-slate-700' }, p.data_definition)
-    ]));
-
-    let learnMoreClicked = false;
-    let learnMoreClickTs = null;
-    const details = el('details', { class: 'mb-2' });
-    const summary = el('summary', { class: 'cursor-pointer text-slate-700 underline text-sm' }, 'Learn more');
-    details.appendChild(summary);
-    details.appendChild(el('div', { class: 'mt-2 text-sm text-slate-600' }, p.learn_more_text));
-    details.addEventListener('toggle', () => {
-      if (details.open && !learnMoreClicked) {
-        learnMoreClicked = true;
-        learnMoreClickTs = Date.now();
-        recordInput('learn_more_open', true);
-      }
-    });
-    root.appendChild(details);
-
-    const btn = continueBtn(() => submit('data_type_intro', {
-      learn_more_clicked: learnMoreClicked,
-      learn_more_click_ts: learnMoreClickTs
-    }), 'Continue');
+    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'Data type'));
+    for (const para of p.body) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    }
+    const btn = continueBtn(() => submit('data_type_intro', {}), 'Continue');
     btn.disabled = false;
     root.appendChild(btn);
   };

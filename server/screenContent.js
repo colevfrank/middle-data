@@ -106,21 +106,39 @@ function screenPayload(p, screenId, extra = {}) {
       return { screen: 'consent', consent_text: consentText };
     }
 
+    case 'welcome': {
+      return {
+        screen: 'welcome',
+        body: [
+          'This survey has multiple-choice and checkbox questions, with one open-ended response question.',
+          'Once you advance, you will not be able to return to previous places, so please consider each question carefully before clicking next.',
+          'Click "Continue" when you are ready to begin.'
+        ]
+      };
+    }
+
     case 'scenario_intro': {
       return {
         screen: 'scenario_intro',
-        intro: 'Imagine you subscribe to AppX, an online service from a technology company. You currently pay $20/month for this service.',
-        use_case_text: uc.intro_text,
+        body: [
+          'You use an online service, called AppX! You currently pay $20 per month to use it.',
+          'By default, AppX does not record, store, or sell any of your information beyond what is strictly necessary to operate the service. AppX also deletes any data it holds after one year.'
+        ],
         retry: !!extra.retry
       };
     }
 
     case 'data_type_intro': {
+      // Definition (longer, with examples) lower-cased to read after "…which is".
+      const def = dt.learn_more;
+      const defInline = def.charAt(0).toLowerCase() + def.slice(1);
       return {
         screen: 'data_type_intro',
         data_label: dt.label,
-        data_definition: dt.definition,
-        learn_more_text: dt.learn_more,
+        body: [
+          `Earlier this year, AppX became interested in collecting ${dt.label}, which is ${defInline}`,
+          `AppX would like to use your ${dt.inline} for ${uc.data_use}.`
+        ],
         retry: !!extra.retry
       };
     }
@@ -207,7 +225,7 @@ function screenPayload(p, screenId, extra = {}) {
 }
 
 function progressFor(screenId, participant) {
-  const order = ['consent', 'scenario_intro', 'data_type_intro', 'comprehension'];
+  const order = ['consent', 'welcome', 'scenario_intro', 'data_type_intro', 'comprehension'];
   for (const n of participant.scenario_order) order.push(`scenario_${n}`);
   for (const qid of participant.post_question_order) order.push(`postq_${qid}`);
   order.push('ai_usage', 'demographics', 'debrief');

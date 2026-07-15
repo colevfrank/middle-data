@@ -27,6 +27,11 @@ function validateConsent(body) {
   };
 }
 
+function validateWelcome(body) {
+  // No inputs beyond clicking Continue.
+  return { ok: true, fields: {} };
+}
+
 function validateScenarioIntro(body) {
   // No inputs beyond clicking Continue.
   return { ok: true, fields: {} };
@@ -174,6 +179,7 @@ function validateDebrief(body) {
 
 const VALIDATORS = {
   consent: validateConsent,
+  welcome: validateWelcome,
   scenario_intro: validateScenarioIntro,
   data_type_intro: validateDataTypeIntro,
   comprehension: validateComprehension,

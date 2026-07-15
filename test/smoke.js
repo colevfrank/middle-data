@@ -297,8 +297,9 @@ const fakeParticipant = {
   data_type: 5, use_case: 'B1',
   post_question_order: [4, 1, 7, 14, 2, 5, 3, 8, 6, 11, 9, 13, 10, 12]
 };
-test('consent → scenario_intro → data_type_intro → comprehension', () => {
-  assert.equal(nextAfter(fakeParticipant, 'consent'), 'scenario_intro');
+test('consent → welcome → scenario_intro → data_type_intro → comprehension', () => {
+  assert.equal(nextAfter(fakeParticipant, 'consent'), 'welcome');
+  assert.equal(nextAfter(fakeParticipant, 'welcome'), 'scenario_intro');
   assert.equal(nextAfter(fakeParticipant, 'scenario_intro'), 'data_type_intro');
   assert.equal(nextAfter(fakeParticipant, 'data_type_intro'), 'comprehension');
 });
@@ -322,15 +323,25 @@ test('post-scenarios sequence', () => {
 
 section('screen content');
 const dt5 = content.DATA_TYPES.find(d => d.id === 5);
-test('scenario_intro uses use_case text', () => {
-  const p = screenPayload(fakeParticipant, 'scenario_intro');
-  assert.ok(p.use_case_text.includes('personalize'));
+test('welcome screen carries intro copy', () => {
+  const p = screenPayload(fakeParticipant, 'welcome');
+  assert.equal(p.screen, 'welcome');
+  assert.ok(p.body.join(' ').includes('open-ended'));
 });
-test('data_type_intro uses label, short definition, and per-type learn-more', () => {
+test('scenario_intro describes AppX setup (no use case here)', () => {
+  const p = screenPayload(fakeParticipant, 'scenario_intro');
+  const text = p.body.join(' ');
+  assert.ok(text.includes('$20 per month'));
+  assert.ok(text.includes('deletes any data it holds after one year'));
+  assert.equal(p.use_case_text, undefined);
+});
+test('data_type_intro narrates the data type + use case', () => {
   const p = screenPayload(fakeParticipant, 'data_type_intro');
+  const text = p.body.join(' ');
   assert.equal(p.data_label, dt5.label);
-  assert.equal(p.data_definition, dt5.definition);
-  assert.equal(p.learn_more_text, dt5.learn_more);
+  assert.ok(text.includes(dt5.label));                       // data type introduced
+  assert.ok(text.includes(dt5.inline));                      // used later in the sentence
+  assert.ok(text.includes(content.USE_CASES.B1.data_use));   // use case shown here now
 });
 test('comprehension statements include data def + use case verbatim', () => {
   const p = screenPayload(fakeParticipant, 'comprehension');
@@ -456,6 +467,10 @@ test('cookie-based session + screen state machine via supertest-style flow', asy
     // 3. POST consent (all yes)
     let body = { consent_age_ok: true, consent_read: true, consent_participate: true, timestamp_shown: Date.now() - 1000, timestamp_submitted: Date.now() };
     let next = await postJson(`http://localhost:${port}/screen/consent`, body, cookieHeader, token);
+    assert.equal(next.screen, 'welcome');
+
+    // 3b. welcome
+    next = await postJson(`http://localhost:${port}/screen/welcome`, { timestamp_shown: 0, timestamp_submitted: 1 }, cookieHeader, token);
     assert.equal(next.screen, 'scenario_intro');
 
     // 4. scenario_intro

@@ -32,7 +32,7 @@ Target N = 3,200 — block-randomized to 100 participants per cell across the 16
 Store all assignments in the database row for this participant.
 
 ### Data Types (16)
-Each data type belongs to one of six data categories and has both a short description and a longer description. The short description is shown as the data type's definition on Screen 3; the longer description is shown in the "Learn more" expansion. The data category is internal and never shown to participants:
+Each data type belongs to one of six data categories and has both a short description and a longer description (with examples). The longer description is shown inline when the data type is introduced (Screen 4); the short description is used in the comprehension check. The data category is internal and never shown to participants:
 
 | Data Type | Short Description | Longer Description | Category |
 | --- | --- | --- | --- |
@@ -72,16 +72,23 @@ Display the consent information (I'll provide the full text separately). Three c
 "I want to participate in this research and continue with the survey"
 
 If any checkbox is No, show a message and redirect to Prolific return URL.
-Screen 2: Scenario Introduction
-"Imagine you subscribe to AppX, an online service from a technology company. You currently pay $20/month for this service."
-Then show the assigned use case condition text (B1 or B2).
-Screen 3: Data Type Introduction
-Show the assigned data type label and short description (its definition).
-Include a "Learn more" expandable/collapsible section with the type's longer description. Track whether the participant clicks this (boolean) and timestamp the click.
-Screen 4: Comprehension Check
+Screen 2: Welcome
+"Welcome!"
+"This survey has multiple-choice and checkbox questions, with one open-ended response question. Once you advance, you will not be able to return to previous places, so please consider each question carefully before clicking next."
+"Click "Continue" when you are ready to begin."
+Screen 3: Scenario Introduction (AppX setup)
+"You use an online service, called AppX! You currently pay $20 per month to use it."
+"By default, AppX does not record, store, or sell any of your information beyond what is strictly necessary to operate the service. AppX also deletes any data it holds after one year."
+(The use case is NOT shown here — it is introduced on Screen 4 alongside the data type.)
+Screen 4: Data Type Introduction (data type + use case)
+Introduce the assigned data type and use case together, e.g.:
+"Earlier this year, AppX became interested in collecting [DATA TYPE], which is [longer description with examples]."
+"AppX would like to use your [DATA TYPE] for [DATA USE]."
+No "Learn more" expandable (the longer description is shown inline). The learn_more_clicked / learn_more_click_ts columns remain in the schema but are no longer populated.
+Screen 5: Comprehension Check
 Two multiple-choice questions (4 options each). One verifies the data type, one verifies the use case. Correct answers depend on the assigned condition.
 If participant fails either question: show the scenario and data type info again, let them retry once. If they fail again on the retry, end the survey and redirect to Prolific return URL. Log the failure.
-Screens 5–6: Scenarios 1 and 2 (order randomized)
+Screens 6–7: Scenarios 1 and 2 (order randomized)
 (The "Scenario 1 / Scenario 2" labels below are internal identifiers only. Because the order is randomized, each is shown to participants with a neutral, unnumbered "Scenario" heading — no copy may imply that one comes before another.)
 Scenario 1 — Discount valuation:
 "AppX offers you a discount on your $20/month subscription if you agree to share your [DATA TYPE] to [USE CASE VERBATIM]."
@@ -120,7 +127,7 @@ If they select "I would not participate," show follow-up: "What is the main reas
 ◯ The data cannot be taken back once sold
 ◯ Something else [text field]
 
-Screens 7–20: Post-Scenario Questions
+Screens 8–21: Post-Scenario Questions
 Fourteen items — the 13 questions below plus one attention check — each shown on its own screen. All 14 are pooled and randomized together into one random screen order. [DATA TYPE] = the assigned data type's label; [DATA USE] = the assigned use case's [DATA USE] form (see Use Case Conditions). Response options appear in the order listed (no within-question option randomization). For Likert (1–5) items, each endpoint label is shown prefixed with its scale number — e.g., "1: Not at all" … "5: Extremely".
 
 Block A — about the data type
@@ -151,7 +158,7 @@ Attention check (pooled and randomized together with A1–B7)
 AC: "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1)." (1–5, labeled "not important to me at all" to "extremely important to me"; correct response = 1)
 Record whether the participant selected the instructed response (attention_check_pass, boolean). Failing is recorded but does not end the survey.
 
-Screen 21: AI Usage & Literacy
+Screen 22: AI Usage & Literacy
 How often do you use AI tools (where AI is the core feature), such as AI chatbots, AI email composition, AI writing assistants, AI schedulers, or AI image generators? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
 
 How often do you use social media apps, like Instagram, Facebook, TikTok, Reddit, Snapchat, Retro, and others? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
@@ -162,14 +169,14 @@ Do you currently work in the technology sector? ◯ Yes ◯ No ◯ Prefer not to
 
 Have you ever worked in the technology sector? ◯ Yes ◯ No ◯ Prefer not to answer
 
-Screen 22: Demographics
+Screen 23: Demographics
 All questions include "Prefer not to answer" as an option.
 
 Age: 18–24 / 25–34 / 35–44 / 45–54 / 55–64 / 65+ / Prefer not to answer
 Gender: Man / Woman / Non-binary / Other [text] / Prefer not to answer
 Education: Less than high school / High school / Some college / Bachelor's degree / Graduate degree / Prefer not to answer
 
-Screen 23: Debrief
+Screen 24: Debrief
 "Thank you for completing this study."
 "The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.
 The "AppX" service in this survey was hypothetical. No company called AppX collected any of your information, and your responses to the scenarios will not be shared with any third party."
@@ -199,8 +206,7 @@ response_latency_ms (difference between shown and submitted)
 
 Additional tracking:
 
-learn_more_clicked (boolean, Screen 3)
-learn_more_click_timestamp (if clicked)
+learn_more_clicked / learn_more_click_timestamp (retained in schema but no longer populated — the "Learn more" expandable was removed; the longer description is shown inline on Screen 4)
 comprehension_check_1_correct (boolean)
 comprehension_check_2_correct (boolean)
 comprehension_retry (boolean — did they need a retry)
@@ -224,7 +230,7 @@ comp_check_1_correct, comp_check_2_correct (boolean)
 comp_check_retry (boolean)
 completed (boolean)
 created_at, completed_at (timestamps)
-All response fields (Scenario 1 least-acceptable discount (s1_min_share); Scenario 2 least-acceptable revenue share (s2_min_share) + follow-up reason; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the Screen 21 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
+All response fields (Scenario 1 least-acceptable discount (s1_min_share); Scenario 2 least-acceptable revenue share (s2_min_share) + follow-up reason; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the Screen 22 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
 
 events — one row per screen view, for latency tracking:
 
