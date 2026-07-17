@@ -8,6 +8,7 @@ const FIXED_ORDER = [
   'comprehension',
   '__scenarios__',      // expanded via scenario_order
   '__post_questions__', // expanded via post_question_order
+  'open_response',
   'ai_usage',
   'demographics',
   'debrief',
@@ -43,7 +44,7 @@ function nextAfter(participant, currentScreen) {
     if (idx < participant.post_question_order.length - 1) {
       return `postq_${participant.post_question_order[idx + 1]}`;
     }
-    return 'ai_usage';
+    return 'open_response';
   }
 
   const linear = [
@@ -62,7 +63,7 @@ function nextAfter(participant, currentScreen) {
   }
 
   // post-questions sequence
-  const post = ['ai_usage', 'demographics', 'debrief', 'complete'];
+  const post = ['open_response', 'ai_usage', 'demographics', 'debrief', 'complete'];
   const postIdx = post.indexOf(currentScreen);
   if (postIdx >= 0 && postIdx < post.length - 1) {
     return post[postIdx + 1];

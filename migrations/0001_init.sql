@@ -66,6 +66,9 @@ CREATE TABLE IF NOT EXISTS participants (
   attention_check_value SMALLINT,
   attention_check_pass BOOLEAN,
 
+  -- Open-ended response (own screen, after the post-scenario battery)
+  open_data_revenue TEXT,
+
   -- Screen 21: AI usage & literacy
   ai_tools_freq TEXT,
   social_media_freq TEXT,

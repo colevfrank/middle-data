@@ -3,7 +3,7 @@
 
 const {
   DATA_TYPES, USE_CASES, S1_TIERS, S2_TIERS, S2_REASON_OPTIONS,
-  POST_QUESTIONS, AI_LITERACY_QUESTIONS, DEMOGRAPHICS
+  POST_QUESTIONS, OPEN_RESPONSE, AI_LITERACY_QUESTIONS, DEMOGRAPHICS
 } = require('./content');
 
 function getDataType(p) {
@@ -191,6 +191,14 @@ function screenPayload(p, screenId, extra = {}) {
       };
     }
 
+    case 'open_response': {
+      return {
+        screen: 'open_response',
+        prompt: OPEN_RESPONSE.prompt,
+        field: OPEN_RESPONSE.key
+      };
+    }
+
     case 'ai_usage': {
       return {
         screen: 'ai_usage',
@@ -230,7 +238,7 @@ function progressFor(screenId, participant) {
   const order = ['consent', 'welcome', 'scenario_intro', 'data_type_intro', 'comprehension'];
   for (const n of participant.scenario_order) order.push(`scenario_${n}`);
   for (const qid of participant.post_question_order) order.push(`postq_${qid}`);
-  order.push('ai_usage', 'demographics', 'debrief');
+  order.push('open_response', 'ai_usage', 'demographics', 'debrief');
   const idx = order.indexOf(screenId);
   if (idx < 0) return 0;
   return Math.round(((idx + 1) / order.length) * 100);

@@ -1,10 +1,11 @@
 const {
-  S1_TIERS, S2_TIERS, S2_REASON_OPTIONS, POST_QUESTIONS,
+  S1_TIERS, S2_TIERS, S2_REASON_OPTIONS, POST_QUESTIONS, OPEN_RESPONSE,
   AI_LITERACY_QUESTIONS, DEMOGRAPHICS
 } = require('./content');
 
 const MAX_TEXT = 500;
 const MAX_SHORT_TEXT = 100;
+const MAX_OPEN_TEXT = 5000;
 
 function isBool(v) { return typeof v === 'boolean'; }
 function isStr(v, max) { return typeof v === 'string' && v.length <= max; }
@@ -143,6 +144,17 @@ function validatePostQuestion(body, screenId) {
   return { ok: true, fields };
 }
 
+// Open-ended response — optional free text (a blank answer is allowed).
+function validateOpenResponse(body) {
+  const b = body || {};
+  const v = b[OPEN_RESPONSE.key];
+  if (v == null || (typeof v === 'string' && v.trim() === '')) {
+    return { ok: true, fields: { [OPEN_RESPONSE.key]: null } };
+  }
+  if (!isStr(v, MAX_OPEN_TEXT)) return { ok: false, error: 'open_response_invalid' };
+  return { ok: true, fields: { [OPEN_RESPONSE.key]: v.trim() } };
+}
+
 function validateAiUsage(body) {
   const b = body || {};
   const fields = {};
@@ -185,6 +197,7 @@ const VALIDATORS = {
   comprehension: validateComprehension,
   scenario_1: validateScenario1,
   scenario_2: validateScenario2,
+  open_response: validateOpenResponse,
   ai_usage: validateAiUsage,
   demographics: validateDemographics,
   debrief: validateDebrief

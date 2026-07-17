@@ -250,6 +250,13 @@ const DEMOGRAPHICS = [
   ]}
 ];
 
+// Open-ended response — its own screen, after the post-scenario battery and
+// before AI usage. `key` doubles as the DB column. Optional free text.
+const OPEN_RESPONSE = {
+  key: 'open_data_revenue',
+  prompt: 'A lot of companies rely on user data. Sometimes, selling user data is a major revenue stream. Or user data may be critical to their main product so that their revenue stream indirectly depends on user data. How do you feel about your online data being a source of revenue for companies? Does your answer change if your data is being used to train AI tools?'
+};
+
 // Ordered list of screen IDs. `__scenarios__` and `__post_questions__` are placeholder slots
 // expanded per participant (in scenario_order / post_question_order).
 const SCREEN_FLOW = [
@@ -260,6 +267,7 @@ const SCREEN_FLOW = [
   'comprehension',
   '__scenarios__',
   '__post_questions__',
+  'open_response',
   'ai_usage',
   'demographics',
   'debrief'
@@ -273,6 +281,7 @@ module.exports = {
   S2_REASON_OPTIONS,
   POST_QUESTIONS,
   ATTENTION_CHECK_EXPECTED,
+  OPEN_RESPONSE,
   AI_LITERACY_QUESTIONS,
   DEMOGRAPHICS,
   SCREEN_FLOW

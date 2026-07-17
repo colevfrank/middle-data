@@ -543,6 +543,20 @@
     watchForCompletion(form, isComplete);
   };
 
+  RENDERERS.open_response = function (p) {
+    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'In your own words'));
+    root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.prompt));
+    const ta = el('textarea', {
+      name: p.field, class: 'input-text', rows: 6, maxlength: 5000,
+      placeholder: 'Type your response here…'
+    });
+    root.appendChild(ta);
+    root.appendChild(el('p', { class: 'text-xs text-slate-500 mt-1' }, 'This question is optional.'));
+    const btn = continueBtn(() => submit('open_response', { [p.field]: ta.value.trim() }), 'Continue');
+    btn.disabled = false; // optional — no gating
+    root.appendChild(btn);
+  };
+
   RENDERERS.ai_usage = function (p) {
     root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'AI & technology use'));
     if (p.intro) root.appendChild(el('p', { class: 'text-slate-700 mb-5 text-sm' }, p.intro));

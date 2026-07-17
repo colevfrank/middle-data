@@ -267,6 +267,18 @@ test('post-question attention (postq_14): pass iff value === expected', () => {
   const fail = validatePostQuestion({ attention_check: 3 }, 'postq_14');
   assert.equal(fail.fields.attention_check_pass, false);
 });
+test('open_response: optional free text; blank ok, long capped', () => {
+  const blank = VALIDATORS.open_response({});
+  assert.equal(blank.ok, true);
+  assert.equal(blank.fields.open_data_revenue, null);
+  const empty = VALIDATORS.open_response({ open_data_revenue: '   ' });
+  assert.equal(empty.fields.open_data_revenue, null);
+  const filled = VALIDATORS.open_response({ open_data_revenue: '  I have thoughts.  ' });
+  assert.equal(filled.ok, true);
+  assert.equal(filled.fields.open_data_revenue, 'I have thoughts.');
+  const tooLong = VALIDATORS.open_response({ open_data_revenue: 'x'.repeat(5001) });
+  assert.equal(tooLong.ok, false);
+});
 test('ai_usage: all 5 fields required', () => {
   assert.equal(VALIDATORS.ai_usage({ ai_tools_freq: 'daily' }).ok, false);
   const complete = VALIDATORS.ai_usage({
@@ -310,12 +322,13 @@ test('scenarios follow scenario_order, then first post-question', () => {
   assert.equal(nextAfter(fakeParticipant, 'scenario_2'), 'scenario_1');
   assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'postq_4');
 });
-test('post-questions follow post_question_order, then ai_usage', () => {
+test('post-questions follow post_question_order, then open_response', () => {
   assert.equal(nextAfter(fakeParticipant, 'postq_4'), 'postq_1');
   assert.equal(nextAfter(fakeParticipant, 'postq_1'), 'postq_7');
-  assert.equal(nextAfter(fakeParticipant, 'postq_12'), 'ai_usage');
+  assert.equal(nextAfter(fakeParticipant, 'postq_12'), 'open_response');
 });
 test('post-scenarios sequence', () => {
+  assert.equal(nextAfter(fakeParticipant, 'open_response'), 'ai_usage');
   assert.equal(nextAfter(fakeParticipant, 'ai_usage'), 'demographics');
   assert.equal(nextAfter(fakeParticipant, 'demographics'), 'debrief');
   assert.equal(nextAfter(fakeParticipant, 'debrief'), 'complete');
@@ -405,6 +418,12 @@ test('attention-check payload (postq_14) renders as a plain item', () => {
   assert.equal(p.item.type, 'attention');
   assert.equal(p.item.key, 'attention_check');
   assert.ok(p.item.anchors);
+});
+test('open_response screen carries the prompt + field key', () => {
+  const p = screenPayload(fakeParticipant, 'open_response');
+  assert.equal(p.screen, 'open_response');
+  assert.equal(p.field, 'open_data_revenue');
+  assert.ok(p.prompt.includes('source of revenue'));
 });
 test('ai_usage lists the 5 literacy questions', () => {
   const p = screenPayload(fakeParticipant, 'ai_usage');
