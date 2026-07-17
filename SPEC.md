@@ -84,7 +84,7 @@ Screen 4: Data Type Introduction (data type + use case)
 Introduce the assigned data type and use case together, e.g.:
 "Earlier this year, AppX became interested in collecting [DATA TYPE], which is [short description]."
 "AppX would like to use your [DATA TYPE] for [DATA USE]."
-Include a "Learn more" expandable/collapsible with the type's longer description (with examples). Track whether the participant clicks this (learn_more_clicked boolean + timestamp).
+Between those two lines, include a "Learn more about the data in question" expandable/collapsible with the type's longer description (with examples). Track whether the participant clicks this (learn_more_clicked boolean + timestamp).
 Screen 5: Comprehension Check
 Two multiple-choice questions (4 options each). One verifies the data type, one verifies the use case. Correct answers depend on the assigned condition.
 If participant fails either question: show the scenario and data type info again, let them retry once. If they fail again on the retry, end the survey and redirect to Prolific return URL. Log the failure.

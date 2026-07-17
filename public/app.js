@@ -319,14 +319,15 @@
 
   RENDERERS.data_type_intro = function (p) {
     root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'Data type'));
-    for (const para of p.body) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
-    }
 
+    // Intro line (introduces the data type)
+    root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.body[0]));
+
+    // "Learn more" sits between the intro line and the use-case line
     let learnMoreClicked = false;
     let learnMoreClickTs = null;
-    const details = el('details', { class: 'mb-2' });
-    const summary = el('summary', { class: 'cursor-pointer text-slate-700 underline text-sm' }, 'Learn more');
+    const details = el('details', { class: 'mb-3' });
+    const summary = el('summary', { class: 'cursor-pointer text-slate-700 underline text-sm' }, 'Learn more about the data in question');
     details.appendChild(summary);
     details.appendChild(el('div', { class: 'mt-2 text-sm text-slate-600' }, p.learn_more_text));
     details.addEventListener('toggle', () => {
@@ -337,6 +338,11 @@
       }
     });
     root.appendChild(details);
+
+    // Remaining line(s) (the use case)
+    for (const para of p.body.slice(1)) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    }
 
     const btn = continueBtn(() => submit('data_type_intro', {
       learn_more_clicked: learnMoreClicked,
