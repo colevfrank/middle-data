@@ -32,9 +32,11 @@ const SCENARIO_COPY = {
     },
     s2: {
       intro: 'Imagine the following arrangement with AppX.',
-      setup: (dt) => [
+      lead: (dt) => [
         `You pay $20 per month for AppX. By default, AppX does not record, store, or sell your ${dt.inline}.`,
-        'AppX offers you the option to join a data marketplace program. If you opt in:',
+        'AppX offers you the option to join a data marketplace program. If you opt in:'
+      ],
+      bullets: (dt) => [
         `AppX will sell your ${dt.inline} to third-party companies on your behalf.`,
         'You will receive a percentage of the selling price back as a discount on your monthly subscription.',
         'You can opt out at any time, but data that has already been sold cannot be taken back.'
@@ -52,9 +54,11 @@ const SCENARIO_COPY = {
     },
     s2: {
       intro: "We're exploring an opt-in data marketplace program for our users.",
-      setup: (dt) => [
+      lead: (dt) => [
         `You currently pay $20 per month for AppX. We don't record, store, or sell your ${dt.inline}.`,
-        "We're considering offering an opt-in marketplace program. If you joined:",
+        "We're considering offering an opt-in marketplace program. If you joined:"
+      ],
+      bullets: (dt) => [
         `We would sell your ${dt.inline} to third-party companies on your behalf.`,
         'You would receive a percentage of the selling price back as a discount on your monthly subscription.',
         "You could opt out at any time, but data that's already been sold could not be taken back."
@@ -182,7 +186,8 @@ function screenPayload(p, screenId, extra = {}) {
       return {
         screen: 'scenario_2',
         intro: c.intro,
-        setup: c.setup(dt),
+        lead: c.lead(dt),
+        bullets: c.bullets(dt),
         instruction: c.instruction,
         tiers: S2_TIERS,
         none_label: c.none_label,

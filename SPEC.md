@@ -104,6 +104,7 @@ $20 off / month (Free)
 "I would not share at any price" (standalone option at bottom)
 
 Scenario 2 — Data marketplace:
+(The intro line and the next two lines are shown as plain paragraphs; the three "if you opt in" lines below are shown as a bulleted list.)
 "Imagine the following arrangement with AppX."
 "You pay $20 per month for AppX. By default, AppX does not record, store, or sell your [DATA TYPE]."
 "AppX offers you the option to join a data marketplace program. If you opt in:"

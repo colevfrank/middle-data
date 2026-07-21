@@ -421,8 +421,11 @@
   RENDERERS.scenario_2 = function (p) {
     root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'Scenario'));
     root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.intro));
+    for (const para of p.lead) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    }
     const setupList = el('ul', { class: 'list-disc list-inside text-slate-700 space-y-1 mb-4' });
-    p.setup.forEach(s => setupList.appendChild(el('li', {}, s)));
+    p.bullets.forEach(s => setupList.appendChild(el('li', {}, s)));
     root.appendChild(setupList);
     root.appendChild(el('p', { class: 'text-slate-800 font-medium mb-3' }, p.instruction));
 
@@ -784,9 +787,12 @@
     const content = el('div', { class: 'settings-content' });
     content.appendChild(el('h2', { class: 'settings-section-title' }, 'Data Marketplace'));
     content.appendChild(el('p', { class: 'settings-section-helper' }, p.intro));
+    for (const para of p.lead) {
+      content.appendChild(el('p', { class: 'settings-section-helper' }, para));
+    }
 
     const bullets = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-slate-600 space-y-1' });
-    p.setup.forEach(s => bullets.appendChild(el('li', {}, s)));
+    p.bullets.forEach(s => bullets.appendChild(el('li', {}, s)));
     content.appendChild(bullets);
 
     content.appendChild(el('div', { class: 'settings-divider' }));
