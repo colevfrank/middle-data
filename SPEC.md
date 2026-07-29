@@ -94,7 +94,7 @@ Use-case sentence (per condition):
 - B2: "App Z would like to use your [DATA TYPE] to improve its generative AI system. Using your [DATA TYPE] would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator)."
 Comprehension check (same screen, below the narrative): "Based on the information above, indicate whether each statement is True or False." Three True/False statements (see COMPREHENSION.md):
 - (data type — TRUE) "The data you would share with App Z is: [assigned data type's short description]."
-- (use case — TRUE) "App Z would use your data to [assigned use case verbatim]."
+- (use case — TRUE) "App Z would use your data to [use-case phrase matching the narrative — B1: 'improve its personalization algorithm'; B2: 'improve its generative AI system']."
 - (FALSE — same for everyone) "App Z guarantees that your data will be permanently deleted after 30 days."
 Continue does not advance until all three are correct (T, T, F); participants may retry unlimited times. Record how many times each item was answered wrong before passing (comp_check_1/2/3_wrong_count). No comprehension screen-out.
 

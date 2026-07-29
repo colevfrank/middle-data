@@ -77,6 +77,8 @@ const USE_CASES = {
     verbatim: 'personalize your experience — showing you better recommendations, more relevant search results, and targeted ads',
     // Noun form used by Block B post-scenario questions ("…was used for <data_use>").
     data_use: 'personalizing your experience — better recommendations, more relevant search results, and targeted ads',
+    // Short "to <…>" phrase matching the intro narrative; used in comprehension statement 2.
+    comp_use: 'improve its personalization algorithm',
     // Two-sentence framing shown on the intro screen (dt = assigned data type).
     intro_sentences: (dt) => `App Z would like to use your ${dt.inline} to improve its personalization algorithm. Using your ${dt.inline} would allow it to provide content that is more targeted to you.`
   },
@@ -84,6 +86,7 @@ const USE_CASES = {
     code: 'B2',
     verbatim: 'train and improve a generative AI system (like a chatbot, writing assistant, or image generator)',
     data_use: 'training and improving a generative AI system (like a chatbot, writing assistant, or image generator)',
+    comp_use: 'improve its generative AI system',
     intro_sentences: (dt) => `App Z would like to use your ${dt.inline} to improve its generative AI system. Using your ${dt.inline} would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator).`
   }
 };

@@ -368,7 +368,7 @@ test('intro screen: App Z setup + data type (longer def inline) + use case + com
   // Comprehension bundled on the same screen
   assert.equal(p.comprehension.statements.length, 3);
   assert.ok(p.comprehension.statements[0].text.includes(dt5.definition)); // SHORT def in check
-  assert.ok(p.comprehension.statements[1].text.includes('personalize'));  // verbatim
+  assert.ok(p.comprehension.statements[1].text.includes('improve its personalization algorithm')); // matches narrative
   assert.ok(p.comprehension.statements[2].text.includes('permanently deleted after 30 days'));
   assert.ok(p.comprehension.statements[0].text.startsWith('The data you would share with App Z'));
 });

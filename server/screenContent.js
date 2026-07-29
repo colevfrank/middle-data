@@ -145,7 +145,7 @@ function screenPayload(p, screenId, extra = {}) {
           instruction: 'Based on the information above, indicate whether each statement is True or False.',
           statements: [
             { id: 1, text: `The data you would share with App Z is: ${dt.definition}.` },
-            { id: 2, text: `App Z would use your data to ${uc.verbatim}.` },
+            { id: 2, text: `App Z would use your data to ${uc.comp_use}.` },
             { id: 3, text: 'App Z guarantees that your data will be permanently deleted after 30 days.' }
           ]
         }
