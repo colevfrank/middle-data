@@ -141,6 +141,16 @@ function screenPayload(p, screenId, extra = {}) {
           `By ${dt.label}, we mean ${defInline}`,
           uc.intro_sentences(dt)
         ],
+        // Phrases the client bolds + underlines inline within the setup/change paragraphs.
+        emphasis: [
+          '$20 per month',
+          'does not record or store',
+          'does not sell',
+          'deletes',
+          'after one year',
+          dt.label,
+          `to ${uc.comp_use}`
+        ],
         comprehension: {
           instruction: 'Based on the information above, indicate whether each statement is True or False.',
           statements: [

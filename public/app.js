@@ -211,6 +211,25 @@
     handler();
   }
 
+  // Split `text` into DOM nodes, wrapping any occurrence of a phrase in `phrases`
+  // in a bold + underlined <strong>. Returns an array suitable as el() children.
+  function emphasize(text, phrases) {
+    const list = (phrases || []).filter(Boolean);
+    if (!list.length) return [text];
+    const escaped = list.slice().sort((a, b) => b.length - a.length)
+      .map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const re = new RegExp('(' + escaped.join('|') + ')', 'g');
+    const nodes = [];
+    let last = 0, m;
+    while ((m = re.exec(text)) !== null) {
+      if (m.index > last) nodes.push(text.slice(last, m.index));
+      nodes.push(el('strong', { class: 'font-bold underline' }, m[0]));
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) nodes.push(text.slice(last));
+    return nodes.length ? nodes : [text];
+  }
+
   // ===== Renderers =====
   const RENDERERS = {};
 
@@ -307,17 +326,19 @@
   // → comprehension check. The comprehension gates Continue until all three items
   // are correct, counting wrong submissions per item.
   RENDERERS.intro = function (p) {
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'App Z'));
-    for (const para of p.setup) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    const em = p.emphasis || [];
+    // First setup line is a larger, bold opener; the rest are body paragraphs.
+    root.appendChild(el('h2', { class: 'text-xl font-bold text-slate-900 mb-4' }, p.setup[0]));
+    for (const para of p.setup.slice(1)) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(para, em)));
     }
-    root.appendChild(el('p', { class: 'text-slate-900 font-semibold mt-4 mb-2' }, p.change_heading));
+    root.appendChild(el('h3', { class: 'text-xl font-bold text-slate-900 mt-5 mb-2' }, p.change_heading));
     for (const para of p.change) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(para, em)));
     }
 
     root.appendChild(el('div', { class: 'border-t border-slate-200 mt-5 mb-5' }));
-    root.appendChild(el('h3', { class: 'text-lg font-semibold mb-2' }, 'Comprehension check'));
+    root.appendChild(el('h3', { class: 'text-xl font-bold text-slate-900 mb-2' }, 'Comprehension check'));
     root.appendChild(el('p', { class: 'text-slate-700 mb-4' }, p.comprehension.instruction));
 
     const statements = p.comprehension.statements;

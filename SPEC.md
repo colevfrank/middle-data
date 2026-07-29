@@ -79,6 +79,7 @@ Screen 2: Welcome
 "Click "Continue" when you are ready to begin."
 
 Screen 3: Intro (App Z setup + data type + use case + comprehension) — one screen
+Formatting: the opener ("Imagine you're a frequent user of App Z!"), "But there's been a recent change.", and "Comprehension check" are shown as larger bold headings. These phrases are bold + underlined inline: "$20 per month", "does not record or store", "does not sell", "deletes", "after one year", the [DATA TYPE] label, and the "to improve its …" use-case phrase.
 Setup (paragraphs):
 "Imagine you're a frequent user of App Z!"
 "App Z is an online service that you use often."
