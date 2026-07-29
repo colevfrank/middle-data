@@ -20,24 +20,24 @@ function pickVoice(extra) {
 
 // Scenario copy bundles, keyed by voice. `researcher` is the original
 // experimenter-narrated wording; `appx` is the pilot variant written as if
-// AppX's product team is consulting the participant. Selected per request via
+// App Z's product team is consulting the participant. Selected per request via
 // ?voice=appx (orthogonal to ?mode=settings).
 // s1 = discount valuation; s2 = data marketplace.
 const SCENARIO_COPY = {
   researcher: {
     s1: {
-      prompt: (dt, uc) => `AppX offers you a discount on your $20/month subscription if you agree to share your ${dt.inline} to ${uc.verbatim}.`,
+      prompt: (dt, uc) => `App Z offers you a discount on your $20/month subscription if you agree to share your ${dt.inline} to ${uc.verbatim}.`,
       instruction: 'What is the least you would accept in exchange for sharing your data?',
       none_label: 'I would not share at any price'
     },
     s2: {
-      intro: 'Imagine the following arrangement with AppX.',
+      intro: 'Imagine the following arrangement with App Z.',
       lead: (dt) => [
-        `You pay $20 per month for AppX. By default, AppX does not record, store, or sell your ${dt.inline}.`,
-        'AppX offers you the option to join a data marketplace program. If you opt in:'
+        `You pay $20 per month for App Z. By default, App Z does not record, store, or sell your ${dt.inline}.`,
+        'App Z offers you the option to join a data marketplace program. If you opt in:'
       ],
       bullets: (dt) => [
-        `AppX will sell your ${dt.inline} to third-party companies on your behalf.`,
+        `App Z will sell your ${dt.inline} to third-party companies on your behalf.`,
         'You will receive a percentage of the selling price back as a discount on your monthly subscription.',
         'You can opt out at any time, but data that has already been sold cannot be taken back.'
       ],
@@ -55,7 +55,7 @@ const SCENARIO_COPY = {
     s2: {
       intro: "We're exploring an opt-in data marketplace program for our users.",
       lead: (dt) => [
-        `You currently pay $20 per month for AppX. We don't record, store, or sell your ${dt.inline}.`,
+        `You currently pay $20 per month for App Z. We don't record, store, or sell your ${dt.inline}.`,
         "We're considering offering an opt-in marketplace program. If you joined:"
       ],
       bullets: (dt) => [
@@ -121,52 +121,34 @@ function screenPayload(p, screenId, extra = {}) {
       };
     }
 
-    case 'scenario_intro': {
+    case 'intro': {
+      // Single screen: App Z setup → the "recent change" (data type + longer
+      // definition inline + per-condition use case) → comprehension check.
+      const longDef = dt.learn_more;
+      const defInline = longDef.charAt(0).toLowerCase() + longDef.slice(1);
       return {
-        screen: 'scenario_intro',
-        body: [
-          'You use an online service, called AppX! You currently pay $20 per month to use it.',
-          'By default, AppX does not record, store, or sell any of your information beyond what is strictly necessary to operate the service. AppX also deletes any data it holds after one year.'
+        screen: 'intro',
+        setup: [
+          "Imagine you're a frequent user of App Z!",
+          'App Z is an online service that you use often.',
+          'You currently pay $20 per month for App Z.',
+          'By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service.',
+          'App Z does not sell your information, and App Z also deletes any data it holds after one year.'
         ],
-        retry: !!extra.retry
-      };
-    }
-
-    case 'data_type_intro': {
-      // Short definition lower-cased to read after "…which is"; the longer,
-      // example-rich description goes in the "Learn more" expansion.
-      const def = dt.definition;
-      const defInline = def.charAt(0).toLowerCase() + def.slice(1);
-      return {
-        screen: 'data_type_intro',
-        data_label: dt.label,
-        body: [
-          `Earlier this year, AppX became interested in collecting ${dt.label}, which is ${defInline}.`,
-          `AppX would like to use your ${dt.inline} for ${uc.data_use}.`
+        change_heading: "But there's been a recent change.",
+        change: [
+          `Earlier this year, App Z became interested in collecting the ${dt.label} of its users.`,
+          `By ${dt.label}, we mean ${defInline}`,
+          uc.intro_sentences(dt)
         ],
-        learn_more_text: dt.learn_more,
-        retry: !!extra.retry
-      };
-    }
-
-    case 'comprehension': {
-      return {
-        screen: 'comprehension',
-        retry: !!extra.retry,
-        statements: [
-          {
-            id: 1,
-            text: `The data you would share with AppX is: ${dt.definition}`
-          },
-          {
-            id: 2,
-            text: `AppX would use your data to ${uc.verbatim}.`
-          },
-          {
-            id: 3,
-            text: 'AppX guarantees that your data will be permanently deleted after 30 days.'
-          }
-        ]
+        comprehension: {
+          instruction: 'Based on the information above, indicate whether each statement is True or False.',
+          statements: [
+            { id: 1, text: `The data you would share with App Z is: ${dt.definition}.` },
+            { id: 2, text: `App Z would use your data to ${uc.verbatim}.` },
+            { id: 3, text: 'App Z guarantees that your data will be permanently deleted after 30 days.' }
+          ]
+        }
       };
     }
 
@@ -227,7 +209,7 @@ function screenPayload(p, screenId, extra = {}) {
         body: [
           'Thank you for completing this study.',
           'The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.',
-          'The "AppX" service in this survey was hypothetical. No company called AppX collected any of your information, and your responses to the scenarios will not be shared with any third party.',
+          'The "App Z" service in this survey was hypothetical. No company called App Z collected any of your information, and your responses to the scenarios will not be shared with any third party.',
           'Your responses will help inform policy discussions about data governance in the age of AI. If you have questions, please contact Sarah Cen at sarah.cen@gmail.com.',
           'IRB Protocol: STUDY2026_00000225 — Carnegie Mellon University'
         ]
@@ -240,7 +222,7 @@ function screenPayload(p, screenId, extra = {}) {
 }
 
 function progressFor(screenId, participant) {
-  const order = ['consent', 'welcome', 'scenario_intro', 'data_type_intro', 'comprehension'];
+  const order = ['consent', 'welcome', 'intro'];
   for (const n of participant.scenario_order) order.push(`scenario_${n}`);
   for (const qid of participant.post_question_order) order.push(`postq_${qid}`);
   order.push('open_response', 'ai_usage', 'demographics', 'debrief');

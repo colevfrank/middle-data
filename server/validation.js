@@ -33,40 +33,26 @@ function validateWelcome(body) {
   return { ok: true, fields: {} };
 }
 
-function validateScenarioIntro(body) {
-  // No inputs beyond clicking Continue.
-  return { ok: true, fields: {} };
-}
-
-function validateDataTypeIntro(body) {
-  const fields = {};
-  if (body && body.learn_more_clicked === true) {
-    fields.learn_more_clicked = true;
-    if (typeof body.learn_more_click_ts === 'number') {
-      fields.learn_more_click_ts = new Date(body.learn_more_click_ts);
-    }
-  }
-  return { ok: true, fields };
-}
-
-function validateComprehension(body, dataType, useCase) {
-  const { answer_1, answer_2, answer_3 } = body || {};
+// Merged intro screen: App Z setup + data type + comprehension. The client gates
+// Continue until all three T/F items are correct (T,T,F), so a valid submit always
+// carries the correct answers plus a per-question wrong-attempt count. We re-verify
+// the answers server-side as a safety net.
+function validateIntro(body) {
+  const b = body || {};
+  const { answer_1, answer_2, answer_3 } = b;
   if (![answer_1, answer_2, answer_3].every(v => v === true || v === false)) {
     return { ok: false, error: 'comprehension_fields_required' };
   }
-  // Correct answers: T, T, F
-  const c1 = answer_1 === true;
-  const c2 = answer_2 === true;
-  const c3 = answer_3 === false;
-  return {
-    ok: true,
-    fields: {
-      comp_check_1_correct: c1,
-      comp_check_2_correct: c2,
-      comp_check_3_correct: c3
-    },
-    passed: c1 && c2 && c3
-  };
+  if (!(answer_1 === true && answer_2 === true && answer_3 === false)) {
+    return { ok: false, error: 'comprehension_not_passed' };
+  }
+  const fields = {};
+  for (const i of [1, 2, 3]) {
+    const w = b[`comp_check_${i}_wrong_count`];
+    if (!isInt(w, 0, 1000)) return { ok: false, error: 'wrong_count_invalid' };
+    fields[`comp_check_${i}_wrong_count`] = w;
+  }
+  return { ok: true, fields };
 }
 
 // Scenario 1 = discount valuation. Single-select: the least discount the
@@ -192,9 +178,7 @@ function validateDebrief(body) {
 const VALIDATORS = {
   consent: validateConsent,
   welcome: validateWelcome,
-  scenario_intro: validateScenarioIntro,
-  data_type_intro: validateDataTypeIntro,
-  comprehension: validateComprehension,
+  intro: validateIntro,
   scenario_1: validateScenario1,
   scenario_2: validateScenario2,
   open_response: validateOpenResponse,

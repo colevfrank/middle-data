@@ -3,9 +3,7 @@
 const FIXED_ORDER = [
   'consent',
   'welcome',
-  'scenario_intro',
-  'data_type_intro',
-  'comprehension',
+  'intro',
   '__scenarios__',      // expanded via scenario_order
   '__post_questions__', // expanded via post_question_order
   'open_response',
@@ -50,15 +48,13 @@ function nextAfter(participant, currentScreen) {
   const linear = [
     'consent',
     'welcome',
-    'scenario_intro',
-    'data_type_intro',
-    'comprehension'
+    'intro'
   ];
   const idx = linear.indexOf(currentScreen);
   if (idx >= 0 && idx < linear.length - 1) {
     return linear[idx + 1];
   }
-  if (currentScreen === 'comprehension') {
+  if (currentScreen === 'intro') {
     return `scenario_${participant.scenario_order[0]}`;
   }
 

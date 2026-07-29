@@ -51,11 +51,7 @@ router.post('/screen/:id', authenticate, asyncHandler(async (req, res) => {
     if (!validator) {
       return res.status(400).json({ error: 'unknown_screen' });
     }
-    if (submittedScreen === 'comprehension') {
-      result = validator(req.body, p.data_type, p.use_case);
-    } else {
-      result = validator(req.body);
-    }
+    result = validator(req.body);
   }
 
   if (!result.ok) {
@@ -67,19 +63,6 @@ router.post('/screen/:id', authenticate, asyncHandler(async (req, res) => {
 
   if (submittedScreen === 'consent' && !result.consented) {
     nextScreen = 'returned';
-  }
-
-  if (submittedScreen === 'comprehension') {
-    if (!result.passed) {
-      if (p.comp_check_retry) {
-        // Already retried once → return URL
-        nextScreen = 'returned';
-      } else {
-        // First failure → mark retry, send them back to scenario_intro
-        result.fields.comp_check_retry = true;
-        nextScreen = 'scenario_intro';
-      }
-    }
   }
 
   // Build dynamic UPDATE
@@ -135,9 +118,6 @@ router.post('/screen/:id', authenticate, asyncHandler(async (req, res) => {
   const np = refreshed.rows[0];
 
   const extra = { voice: req.query.voice };
-  if (nextScreen === 'scenario_intro' && submittedScreen === 'comprehension' && !result.passed) {
-    extra.retry = true;
-  }
   const payload = screenPayload(np, nextScreen, extra);
   payload.progress = progressFor(nextScreen, np);
   return res.json(payload);

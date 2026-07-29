@@ -153,10 +153,10 @@ test('16 data types each with label, inline, definition, learn_more', () => {
     assert.ok(d.label && d.inline && d.definition && d.learn_more && d.category);
   }
 });
-test('2 use cases B1 and B2 with data_use noun form', () => {
+test('2 use cases B1 and B2 with data_use + intro_sentences', () => {
   assert.ok(content.USE_CASES.B1 && content.USE_CASES.B2);
-  assert.ok(content.USE_CASES.B1.intro_text && content.USE_CASES.B1.data_use);
-  assert.ok(content.USE_CASES.B2.data_use);
+  assert.ok(content.USE_CASES.B1.data_use && typeof content.USE_CASES.B1.intro_sentences === 'function');
+  assert.ok(content.USE_CASES.B2.data_use && typeof content.USE_CASES.B2.intro_sentences === 'function');
 });
 test('14 post-scenario questions (13 + attention check)', () => {
   assert.equal(content.POST_QUESTIONS.length, 14);
@@ -206,14 +206,28 @@ test('consent: missing field → ok false', () => {
   const r = VALIDATORS.consent({ consent_age_ok: true });
   assert.equal(r.ok, false);
 });
-test('comprehension: T,T,F → passed', () => {
-  const r = VALIDATORS.comprehension({ answer_1: true, answer_2: true, answer_3: false });
-  assert.equal(r.passed, true);
+test('intro: T,T,F + wrong counts → ok; stores counts', () => {
+  const r = VALIDATORS.intro({
+    answer_1: true, answer_2: true, answer_3: false,
+    comp_check_1_wrong_count: 0, comp_check_2_wrong_count: 2, comp_check_3_wrong_count: 1
+  });
+  assert.equal(r.ok, true);
+  assert.equal(r.fields.comp_check_2_wrong_count, 2);
 });
-test('comprehension: T,T,T → not passed', () => {
-  const r = VALIDATORS.comprehension({ answer_1: true, answer_2: true, answer_3: true });
-  assert.equal(r.passed, false);
-  assert.equal(r.fields.comp_check_3_correct, false);
+test('intro: wrong answers rejected (gate is client-side, server verifies)', () => {
+  const bad = VALIDATORS.intro({
+    answer_1: true, answer_2: true, answer_3: true,
+    comp_check_1_wrong_count: 0, comp_check_2_wrong_count: 0, comp_check_3_wrong_count: 0
+  });
+  assert.equal(bad.ok, false);
+  assert.equal(bad.error, 'comprehension_not_passed');
+});
+test('intro: missing/invalid wrong count rejected', () => {
+  assert.equal(VALIDATORS.intro({ answer_1: true, answer_2: true, answer_3: false }).ok, false);
+  assert.equal(VALIDATORS.intro({
+    answer_1: true, answer_2: true, answer_3: false,
+    comp_check_1_wrong_count: -1, comp_check_2_wrong_count: 0, comp_check_3_wrong_count: 0
+  }).ok, false);
 });
 test('scenario_1: single-select tier or none valid; bad/missing rejected', () => {
   assert.equal(VALIDATORS.scenario_1({ s1_min_share: '5off' }).ok, true);
@@ -309,14 +323,12 @@ const fakeParticipant = {
   data_type: 5, use_case: 'B1',
   post_question_order: [4, 1, 7, 14, 2, 5, 3, 8, 6, 11, 9, 13, 10, 12]
 };
-test('consent → welcome → scenario_intro → data_type_intro → comprehension', () => {
+test('consent → welcome → intro', () => {
   assert.equal(nextAfter(fakeParticipant, 'consent'), 'welcome');
-  assert.equal(nextAfter(fakeParticipant, 'welcome'), 'scenario_intro');
-  assert.equal(nextAfter(fakeParticipant, 'scenario_intro'), 'data_type_intro');
-  assert.equal(nextAfter(fakeParticipant, 'data_type_intro'), 'comprehension');
+  assert.equal(nextAfter(fakeParticipant, 'welcome'), 'intro');
 });
-test('comprehension → first scenario per scenario_order', () => {
-  assert.equal(nextAfter(fakeParticipant, 'comprehension'), 'scenario_2');
+test('intro → first scenario per scenario_order', () => {
+  assert.equal(nextAfter(fakeParticipant, 'intro'), 'scenario_2');
 });
 test('scenarios follow scenario_order, then first post-question', () => {
   assert.equal(nextAfter(fakeParticipant, 'scenario_2'), 'scenario_1');
@@ -341,40 +353,39 @@ test('welcome screen carries intro copy', () => {
   assert.equal(p.screen, 'welcome');
   assert.ok(p.body.join(' ').includes('open-ended'));
 });
-test('scenario_intro describes AppX setup (no use case here)', () => {
-  const p = screenPayload(fakeParticipant, 'scenario_intro');
-  const text = p.body.join(' ');
-  assert.ok(text.includes('$20 per month'));
-  assert.ok(text.includes('deletes any data it holds after one year'));
-  assert.equal(p.use_case_text, undefined);
+test('intro screen: App Z setup + data type (longer def inline) + use case + comprehension', () => {
+  const p = screenPayload(fakeParticipant, 'intro');
+  assert.equal(p.screen, 'intro');
+  const setup = p.setup.join(' ');
+  assert.ok(setup.includes('App Z'));
+  assert.ok(setup.includes('$20 per month'));
+  assert.ok(setup.includes('deletes any data it holds after one year'));
+  const change = p.change.join(' ');
+  assert.ok(change.includes(dt5.label));                       // data type named
+  assert.ok(change.includes(dt5.learn_more.slice(1)));         // longer (example) def shown inline
+  assert.ok(change.includes(dt5.inline));                      // use-case sentence uses inline
+  assert.ok(change.includes('personalization algorithm'));     // B1 use-case wording
+  // Comprehension bundled on the same screen
+  assert.equal(p.comprehension.statements.length, 3);
+  assert.ok(p.comprehension.statements[0].text.includes(dt5.definition)); // SHORT def in check
+  assert.ok(p.comprehension.statements[1].text.includes('personalize'));  // verbatim
+  assert.ok(p.comprehension.statements[2].text.includes('permanently deleted after 30 days'));
+  assert.ok(p.comprehension.statements[0].text.startsWith('The data you would share with App Z'));
 });
-test('data_type_intro narrates data type + use case, with Learn more = longer desc', () => {
-  const p = screenPayload(fakeParticipant, 'data_type_intro');
-  const text = p.body.join(' ');
-  assert.equal(p.data_label, dt5.label);
-  assert.ok(text.includes(dt5.label));                       // data type introduced
-  assert.ok(text.includes(dt5.inline));                      // used later in the sentence
-  assert.ok(text.includes(dt5.definition.slice(1)));         // short definition shown inline
-  assert.ok(text.includes(content.USE_CASES.B1.data_use));   // use case shown here now
-  assert.equal(p.learn_more_text, dt5.learn_more);           // longer desc behind "Learn more"
-});
-test('comprehension statements include data def + use case verbatim', () => {
-  const p = screenPayload(fakeParticipant, 'comprehension');
-  assert.equal(p.statements.length, 3);
-  assert.ok(p.statements[0].text.includes(dt5.definition));
-  assert.ok(p.statements[1].text.includes('personalize'));
-  assert.ok(p.statements[2].text.includes('permanently deleted after 30 days'));
+test('intro screen B2 uses the AI-training use-case wording', () => {
+  const p = screenPayload({ ...fakeParticipant, use_case: 'B2' }, 'intro');
+  assert.ok(p.change.join(' ').includes('generative AI system'));
 });
 test('scenario_1 prompt embeds inline data type + use case verbatim', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1');
   assert.ok(p.prompt.includes(dt5.inline));
   assert.ok(p.prompt.includes('personalize'));
 });
-test('voice=appx selects AppX-voice copy for S1/S2; default stays researcher', () => {
+test('voice=appx selects product-team-voice copy for S1/S2; default stays researcher', () => {
   const r1 = screenPayload(fakeParticipant, 'scenario_1');
   const r2 = screenPayload(fakeParticipant, 'scenario_2');
-  assert.ok(r1.prompt.startsWith('AppX offers you a discount'));
-  assert.equal(r2.intro, 'Imagine the following arrangement with AppX.');
+  assert.ok(r1.prompt.startsWith('App Z offers you a discount'));
+  assert.equal(r2.intro, 'Imagine the following arrangement with App Z.');
 
   const a1 = screenPayload(fakeParticipant, 'scenario_1', { voice: 'appx' });
   const a2 = screenPayload(fakeParticipant, 'scenario_2', { voice: 'appx' });
@@ -398,7 +409,7 @@ test('voice=appx selects AppX-voice copy for S1/S2; default stays researcher', (
 });
 test('unknown voice value falls back to researcher copy', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1', { voice: 'junk' });
-  assert.ok(p.prompt.startsWith('AppX offers you a discount'));
+  assert.ok(p.prompt.startsWith('App Z offers you a discount'));
 });
 test('post-question payload carries the item + substituted prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_1');
@@ -492,18 +503,13 @@ test('cookie-based session + screen state machine via supertest-style flow', asy
 
     // 3b. welcome
     next = await postJson(`http://localhost:${port}/screen/welcome`, { timestamp_shown: 0, timestamp_submitted: 1 }, cookieHeader, token);
-    assert.equal(next.screen, 'scenario_intro');
+    assert.equal(next.screen, 'intro');
 
-    // 4. scenario_intro
-    next = await postJson(`http://localhost:${port}/screen/scenario_intro`, { timestamp_shown: 0, timestamp_submitted: 1 }, cookieHeader, token);
-    assert.equal(next.screen, 'data_type_intro');
-
-    // 5. data_type_intro
-    next = await postJson(`http://localhost:${port}/screen/data_type_intro`, {}, cookieHeader, token);
-    assert.equal(next.screen, 'comprehension');
-
-    // 6. comprehension correct
-    next = await postJson(`http://localhost:${port}/screen/comprehension`, { answer_1: true, answer_2: true, answer_3: false }, cookieHeader, token);
+    // 4. intro (merged setup + data type + comprehension) — pass with wrong counts
+    next = await postJson(`http://localhost:${port}/screen/intro`, {
+      answer_1: true, answer_2: true, answer_3: false,
+      comp_check_1_wrong_count: 0, comp_check_2_wrong_count: 1, comp_check_3_wrong_count: 0
+    }, cookieHeader, token);
     assert.ok(/^scenario_/.test(next.screen));
 
     // 7. CSRF check: wrong token rejected

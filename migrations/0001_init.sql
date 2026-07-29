@@ -22,15 +22,11 @@ CREATE TABLE IF NOT EXISTS participants (
   -- State machine
   current_screen TEXT NOT NULL DEFAULT 'consent',
 
-  -- Screen 4: Learn more (data-type screen)
-  learn_more_clicked BOOLEAN DEFAULT FALSE,
-  learn_more_click_ts TIMESTAMPTZ,
-
-  -- Screen 5: Comprehension (3 T/F items per COMPREHENSION.md)
-  comp_check_1_correct BOOLEAN,
-  comp_check_2_correct BOOLEAN,
-  comp_check_3_correct BOOLEAN,
-  comp_check_retry BOOLEAN DEFAULT FALSE,
+  -- Screen 3 (intro): comprehension check — unlimited retries until all correct;
+  -- we record how many times each T/F item was answered wrong before passing.
+  comp_check_1_wrong_count SMALLINT,
+  comp_check_2_wrong_count SMALLINT,
+  comp_check_3_wrong_count SMALLINT,
 
   -- Consent
   consent_age_ok BOOLEAN,

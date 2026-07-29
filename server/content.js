@@ -1,8 +1,9 @@
 // All content shown to participants. Server-side only — clients never see codes.
 
 // `inline` is the lowercase-friendly form for mid-sentence references like "share your <inline>".
-// `definition` is the short description shown on Screen 3; `learn_more` is the longer description
-// shown in the "Learn more" expansion. `category` is an internal grouping — never sent to clients.
+// `definition` is the short description (used in the comprehension check); `learn_more` is the
+// longer, example-rich description shown inline on the intro screen (Screen 3). `category` is an
+// internal grouping — never sent to clients.
 const DATA_TYPES = [
   { id: 1,  label: 'Demographic info', inline: 'demographic information',
     definition: 'Name, age, gender, ZIP code, marital status',
@@ -73,16 +74,17 @@ const DATA_TYPES = [
 const USE_CASES = {
   B1: {
     code: 'B1',
-    intro_text: 'AppX uses this data to personalize your experience — showing you better recommendations, more relevant search results, and targeted ads.',
     verbatim: 'personalize your experience — showing you better recommendations, more relevant search results, and targeted ads',
     // Noun form used by Block B post-scenario questions ("…was used for <data_use>").
-    data_use: 'personalizing your experience — better recommendations, more relevant search results, and targeted ads'
+    data_use: 'personalizing your experience — better recommendations, more relevant search results, and targeted ads',
+    // Two-sentence framing shown on the intro screen (dt = assigned data type).
+    intro_sentences: (dt) => `App Z would like to use your ${dt.inline} to improve its personalization algorithm. Using your ${dt.inline} would allow it to provide content that is more targeted to you.`
   },
   B2: {
     code: 'B2',
-    intro_text: 'AppX uses this data to train and improve a generative AI system (like a chatbot, writing assistant, or image generator).',
     verbatim: 'train and improve a generative AI system (like a chatbot, writing assistant, or image generator)',
-    data_use: 'training and improving a generative AI system (like a chatbot, writing assistant, or image generator)'
+    data_use: 'training and improving a generative AI system (like a chatbot, writing assistant, or image generator)',
+    intro_sentences: (dt) => `App Z would like to use your ${dt.inline} to improve its generative AI system. Using your ${dt.inline} would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator).`
   }
 };
 
@@ -107,7 +109,7 @@ const S2_TIERS = [
 
 const S2_REASON_OPTIONS = [
   { value: 'no_price',      label: "I don't want my data sold at any price" },
-  { value: 'no_trust',      label: "I don't trust AppX to handle this correctly" },
+  { value: 'no_trust',      label: "I don't trust App Z to handle this correctly" },
   { value: 'uncomfortable', label: "I'm uncomfortable with third-party buyers" },
   { value: 'irreversible',  label: 'The data cannot be taken back once sold' },
   { value: 'other',         label: 'Something else' }
@@ -262,9 +264,7 @@ const OPEN_RESPONSE = {
 const SCREEN_FLOW = [
   'consent',
   'welcome',
-  'scenario_intro',
-  'data_type_intro',
-  'comprehension',
+  'intro',
   '__scenarios__',
   '__post_questions__',
   'open_response',

@@ -24,7 +24,7 @@
   const MODE = detectMode();
 
   // ===== Scenario voice (researcher | appx) =====
-  // `?voice=appx` opts into the AppX-product-team-voice scenario copy. The
+  // `?voice=appx` opts into the App-Z product-team voice scenario copy. The
   // server selects which copy bundle to send, so the client just needs to
   // forward the param on every /screen request. Orthogonal to MODE.
   function detectVoice() {
@@ -303,67 +303,27 @@
     root.appendChild(btn);
   };
 
-  RENDERERS.scenario_intro = function (p) {
-    if (p.retry) {
-      root.appendChild(el('div', { class: 'mb-4 p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800' },
-        'Some of your answers on the comprehension check were incorrect. Please review the information below carefully — this is your final attempt.'));
-    }
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'About AppX'));
-    for (const para of p.body) {
+  // Merged intro screen: App Z setup → the "recent change" (data type + use case)
+  // → comprehension check. The comprehension gates Continue until all three items
+  // are correct, counting wrong submissions per item.
+  RENDERERS.intro = function (p) {
+    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'App Z'));
+    for (const para of p.setup) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
     }
-    const btn = continueBtn(() => submit('scenario_intro', {}), 'Continue');
-    btn.disabled = false;
-    root.appendChild(btn);
-  };
-
-  RENDERERS.data_type_intro = function (p) {
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'Data type'));
-
-    // Intro line (introduces the data type)
-    root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.body[0]));
-
-    // "Learn more" sits between the intro line and the use-case line
-    let learnMoreClicked = false;
-    let learnMoreClickTs = null;
-    const details = el('details', { class: 'mb-3' });
-    const summary = el('summary', { class: 'cursor-pointer text-slate-700 underline text-sm' }, 'Learn more about the data in question');
-    details.appendChild(summary);
-    details.appendChild(el('div', { class: 'mt-2 text-sm text-slate-600' }, p.learn_more_text));
-    details.addEventListener('toggle', () => {
-      if (details.open && !learnMoreClicked) {
-        learnMoreClicked = true;
-        learnMoreClickTs = Date.now();
-        recordInput('learn_more_open', true);
-      }
-    });
-    root.appendChild(details);
-
-    // Remaining line(s) (the use case)
-    for (const para of p.body.slice(1)) {
+    root.appendChild(el('p', { class: 'text-slate-900 font-semibold mt-4 mb-2' }, p.change_heading));
+    for (const para of p.change) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
     }
 
-    const btn = continueBtn(() => submit('data_type_intro', {
-      learn_more_clicked: learnMoreClicked,
-      learn_more_click_ts: learnMoreClickTs
-    }), 'Continue');
-    btn.disabled = false;
-    root.appendChild(btn);
-  };
+    root.appendChild(el('div', { class: 'border-t border-slate-200 mt-5 mb-5' }));
+    root.appendChild(el('h3', { class: 'text-lg font-semibold mb-2' }, 'Comprehension check'));
+    root.appendChild(el('p', { class: 'text-slate-700 mb-4' }, p.comprehension.instruction));
 
-  RENDERERS.comprehension = function (p) {
-    if (p.retry) {
-      root.appendChild(el('div', { class: 'mb-4 p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-800' },
-        'Please answer carefully — if you miss any items, you will be unable to continue.'));
-    }
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-2' }, 'Comprehension check'));
-    root.appendChild(el('p', { class: 'text-slate-700 mb-4' },
-      'Based on the scenario you just read, indicate whether each statement is True or False.'));
-
+    const statements = p.comprehension.statements;
     const form = el('div', { class: 'space-y-5' });
-    for (const s of p.statements) {
-      const row = el('div', {}, [
+    for (const s of statements) {
+      form.appendChild(el('div', {}, [
         el('p', { class: 'text-slate-800 mb-2' }, s.text),
         el('div', { class: 'flex gap-6' }, [
           el('label', { class: 'label-radio' }, [
@@ -375,21 +335,42 @@
             el('span', {}, 'False')
           ])
         ])
-      ]);
-      form.appendChild(row);
+      ]));
     }
     root.appendChild(form);
 
+    const errMsg = el('p', { class: 'text-sm text-red-600 mt-3 hidden' },
+      'One or more answers are incorrect. Please review the information above and try again.');
+    root.appendChild(errMsg);
+
+    // Correct answers: 1 = True, 2 = True, 3 = False
+    const correct = { 1: true, 2: true, 3: false };
+    const wrong = { 1: 0, 2: 0, 3: 0 };
+
     const btn = continueBtn(() => {
-      const body = {};
-      for (const s of p.statements) {
+      const chosen = {};
+      for (const s of statements) {
         const sel = form.querySelector(`input[name="answer_${s.id}"]:checked`);
-        body['answer_' + s.id] = sel ? (sel.value === 'true') : null;
+        chosen[s.id] = sel ? (sel.value === 'true') : null;
       }
-      submit('comprehension', body);
+      let allCorrect = true;
+      for (const s of statements) {
+        if (chosen[s.id] !== correct[s.id]) { wrong[s.id] += 1; allCorrect = false; }
+      }
+      if (!allCorrect) {
+        errMsg.classList.remove('hidden');
+        return; // stay on the screen — unlimited retries
+      }
+      errMsg.classList.add('hidden');
+      submit('intro', {
+        answer_1: chosen[1], answer_2: chosen[2], answer_3: chosen[3],
+        comp_check_1_wrong_count: wrong[1],
+        comp_check_2_wrong_count: wrong[2],
+        comp_check_3_wrong_count: wrong[3]
+      });
     }, 'Continue');
     root.appendChild(btn);
-    watchForCompletion(form, () => p.statements.every(s => !!form.querySelector(`input[name="answer_${s.id}"]:checked`)));
+    watchForCompletion(form, () => statements.every(s => !!form.querySelector(`input[name="answer_${s.id}"]:checked`)));
   };
 
   RENDERERS.scenario_1 = function (p) {
@@ -703,7 +684,7 @@
       nav.appendChild(el('div', { class: cls }, it.label));
     }
     return el('div', { class: 'settings-sidebar' }, [
-      el('div', { class: 'settings-brand' }, 'AppX'),
+      el('div', { class: 'settings-brand' }, 'App Z'),
       nav
     ]);
   }
@@ -725,21 +706,21 @@
   // ===== Scenario 1 (subscription discount, settings mode) =====
   SETTINGS_RENDERERS.scenario_1 = function (p) {
     const frame = el('div', { class: 'browser-frame' });
-    frame.appendChild(browserChrome('appx.com/settings/subscription'));
+    frame.appendChild(browserChrome('appz.com/settings/subscription'));
 
     const body = el('div', { class: 'browser-body' });
     body.appendChild(settingsSidebar('subscription'));
 
     const content = el('div', { class: 'settings-content' });
     content.appendChild(el('h2', { class: 'settings-section-title' }, 'Subscription'));
-    content.appendChild(el('p', { class: 'settings-section-helper' }, 'Manage your AppX plan and data-sharing preferences.'));
+    content.appendChild(el('p', { class: 'settings-section-helper' }, 'Manage your App Z plan and data-sharing preferences.'));
     content.appendChild(el('div', { class: 'settings-divider' }));
 
     // Current plan info row (read-only)
     content.appendChild(el('div', { class: 'settings-row' }, [
       el('div', { class: 'settings-row-text' }, [
         el('div', { class: 'settings-row-label' }, 'Current plan'),
-        el('div', { class: 'settings-row-description' }, 'AppX Premium — $20 / month')
+        el('div', { class: 'settings-row-description' }, 'App Z Premium — $20 / month')
       ])
     ]));
 
@@ -779,7 +760,7 @@
   // ===== Scenario 2 (data marketplace, settings mode) =====
   SETTINGS_RENDERERS.scenario_2 = function (p) {
     const frame = el('div', { class: 'browser-frame' });
-    frame.appendChild(browserChrome('appx.com/settings/marketplace'));
+    frame.appendChild(browserChrome('appz.com/settings/marketplace'));
 
     const body = el('div', { class: 'browser-body' });
     body.appendChild(settingsSidebar('marketplace'));
