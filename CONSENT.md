@@ -25,7 +25,7 @@ In the future, once we have removed all identifiable information from your data,
 Your responses are anonymous. We collect only your Prolific ID for the purpose of issuing payment and preventing duplicate participation; this ID will be removed before any data analysis. We do not collect any actual personal data of yours (e.g., we do not collect your real browsing history or your real messages); we only ask about your preferences regarding hypothetical data-sharing arrangements. De-identified data may be shared with other researchers or made publicly available.
 
 #### Right to Ask Questions & Contact Information
-If you have any questions about this study, you should feel free to ask them by contacting the Principal Investigator now at:
+If you have any questions about this study, you should feel free to ask them by contacting the Principal Investigator at:
 Dr. Sarah Cen
 Engineering and Public Policy
 5215 Wean Hall, Carnegie Mellon University
