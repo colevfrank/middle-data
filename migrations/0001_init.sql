@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS participants (
   -- State machine
   current_screen TEXT NOT NULL DEFAULT 'consent',
 
-  -- Screen 3: Learn more
+  -- Screen 4: Learn more (data-type screen)
   learn_more_clicked BOOLEAN DEFAULT FALSE,
   learn_more_click_ts TIMESTAMPTZ,
 
-  -- Screen 4: Comprehension (3 T/F items per COMPREHENSION.md)
+  -- Screen 5: Comprehension (3 T/F items per COMPREHENSION.md)
   comp_check_1_correct BOOLEAN,
   comp_check_2_correct BOOLEAN,
   comp_check_3_correct BOOLEAN,
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS participants (
   -- Open-ended response (own screen, after the post-scenario battery)
   open_data_revenue TEXT,
 
-  -- Screen 21: AI usage & literacy
+  -- Screen 23: AI usage & literacy
   ai_tools_freq TEXT,
   social_media_freq TEXT,
   search_engine_freq TEXT,

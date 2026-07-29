@@ -86,8 +86,11 @@ Introduce the assigned data type and use case together, e.g.:
 "AppX would like to use your [DATA TYPE] for [DATA USE]."
 Between those two lines, include a "Learn more about the data in question" expandable/collapsible with the type's longer description (with examples). Track whether the participant clicks this (learn_more_clicked boolean + timestamp).
 Screen 5: Comprehension Check
-Two multiple-choice questions (4 options each). One verifies the data type, one verifies the use case. Correct answers depend on the assigned condition.
-If participant fails either question: show the scenario and data type info again, let them retry once. If they fail again on the retry, end the survey and redirect to Prolific return URL. Log the failure.
+"Based on the scenario you just read, indicate whether each statement is True or False." Three True/False statements (see COMPREHENSION.md):
+- (data type — TRUE) "The data you would share with AppX is: [assigned data type's short description]."
+- (use case — TRUE) "AppX would use your data to [assigned use case verbatim]."
+- (FALSE — same for everyone) "AppX guarantees that your data will be permanently deleted after 30 days."
+Recorded as comp_check_1/2/3_correct. If the participant misses any statement: show the AppX setup and data-type info again, let them retry once. If they fail again on the retry, end the survey and redirect to Prolific return URL. Log the failure (comp_check_retry).
 Screens 6–7: Scenarios 1 and 2 (order randomized)
 (The "Scenario 1 / Scenario 2" labels below are internal identifiers only. Because the order is randomized, each is shown to participants with a neutral, unnumbered "Scenario" heading — no copy may imply that one comes before another.)
 Scenario 1 — Discount valuation:
@@ -199,7 +202,7 @@ The "AppX" service in this survey was hypothetical. No company called AppX colle
   server-side only. The client never receives or transmits 
   condition identifiers.
 - Reject duplicate PROLIFIC_PIDs.
-- Rate limit: max 1 submission per IP per hour.
+- Rate limit: per-PID deduplication plus a soft IP throttle (max 15 new sessions per IP per hour). IPs are never persisted (hashed with a daily salt).
 
 ### Data Tracking Requirements
 For every screen/question, record:
@@ -214,8 +217,7 @@ Additional tracking:
 
 learn_more_clicked (boolean, Screen 4)
 learn_more_click_timestamp (if clicked)
-comprehension_check_1_correct (boolean)
-comprehension_check_2_correct (boolean)
+comprehension_check_1_correct, comprehension_check_2_correct, comprehension_check_3_correct (boolean)
 comprehension_retry (boolean — did they need a retry)
 scenario_order (array, e.g., [2,1])
 post_question_order (array giving the randomized order of the 14 post-scenario items: the 13 questions + attention check)
@@ -229,11 +231,11 @@ id (primary key)
 prolific_pid, study_id, session_id
 data_type (1–16)
 use_case (B1 or B2)
-scenario_order (JSON array)
-post_question_order (JSON array)
+scenario_order (Postgres integer array, INT[])
+post_question_order (Postgres integer array, INT[])
 learn_more_clicked (boolean)
 learn_more_click_ts (timestamp)
-comp_check_1_correct, comp_check_2_correct (boolean)
+comp_check_1_correct, comp_check_2_correct, comp_check_3_correct (boolean)
 comp_check_retry (boolean)
 completed (boolean)
 created_at, completed_at (timestamps)
