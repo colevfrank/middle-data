@@ -74,9 +74,9 @@ const DATA_TYPES = [
 const USE_CASES = {
   B1: {
     code: 'B1',
-    verbatim: 'personalize your experience — showing you better recommendations, more relevant search results, and targeted ads',
+    verbatim: 'personalize your experience',
     // Noun form used by Block B post-scenario questions ("…was used for <data_use>").
-    data_use: 'personalizing your experience — better recommendations, more relevant search results, and targeted ads',
+    data_use: 'personalizing your experience',
     // Short "to <…>" phrase matching the intro narrative; used in comprehension statement 2.
     comp_use: 'improve its personalization algorithm',
     // Two-sentence framing shown on the intro screen (dt = assigned data type).

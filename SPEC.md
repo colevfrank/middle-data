@@ -55,12 +55,12 @@ Each data type belongs to one of six data categories and has both a short descri
 
 ### Use Case Conditions (2)
 
-B1 (Personalization): "App Z uses this data to personalize your experience — showing you better recommendations, more relevant search results, and targeted ads."
+B1 (Personalization): "App Z uses this data to personalize your experience."
 B2 (GenAI Training): "App Z uses this data to train and improve a generative AI system (like a chatbot, writing assistant, or image generator)."
 
 Each use case also has a `[DATA USE]` noun form, used by the post-scenario questions (Block B) that read "…was used for [DATA USE]":
 
-B1 [DATA USE]: "personalizing your experience — better recommendations, more relevant search results, and targeted ads"
+B1 [DATA USE]: "personalizing your experience"
 B2 [DATA USE]: "training and improving a generative AI system (like a chatbot, writing assistant, or image generator)"
 
 ### Survey Flow
