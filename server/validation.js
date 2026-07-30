@@ -1,5 +1,5 @@
 const {
-  S1_TIERS, S2_TIERS, S2_REASON_OPTIONS, POST_QUESTIONS, OPEN_RESPONSE,
+  S1_TIERS, S2_TIERS, POST_QUESTIONS, OPEN_RESPONSE,
   AI_LITERACY_QUESTIONS, DEMOGRAPHICS
 } = require('./content');
 
@@ -55,40 +55,32 @@ function validateIntro(body) {
   return { ok: true, fields };
 }
 
-// Scenario 1 = discount valuation. Single-select: the least discount the
-// participant would accept (a tier value) or 'none'.
-function validateScenario1(body) {
+// Multi-select scenario: participant checks all acceptable tier values, or the
+// mutually-exclusive "none" (declined). Stored as an array + a boolean.
+function validateMultiSelect(body, tiers, acceptedKey, noneKey) {
   const b = body || {};
-  const allowed = S1_TIERS.map(t => t.value).concat('none');
-  if (!inSet(b.s1_min_share, allowed)) return { ok: false, error: 'scenario1_invalid' };
-  return { ok: true, fields: { s1_min_share: b.s1_min_share } };
+  const declined = b[noneKey] === true;
+  const accepted = Array.isArray(b[acceptedKey]) ? b[acceptedKey] : null;
+  if (accepted === null) return { ok: false, error: `${acceptedKey}_missing` };
+  if (declined) {
+    if (accepted.length) return { ok: false, error: `${acceptedKey}_conflict` };
+    return { ok: true, fields: { [acceptedKey]: [], [noneKey]: true } };
+  }
+  if (accepted.length === 0) return { ok: false, error: `${acceptedKey}_empty` };
+  if (new Set(accepted).size !== accepted.length) return { ok: false, error: `${acceptedKey}_dup` };
+  const allowed = tiers.map(t => t.value);
+  if (!accepted.every(v => allowed.includes(v))) return { ok: false, error: `${acceptedKey}_invalid` };
+  return { ok: true, fields: { [acceptedKey]: accepted, [noneKey]: false } };
 }
 
-// Scenario 2 = data marketplace. Single-select: the least revenue share the
-// participant would accept (a tier value) or 'none'; declining requires a reason.
-function validateScenario2(body) {
-  const b = body || {};
-  const allowed = S2_TIERS.map(t => t.value).concat('none');
-  if (!inSet(b.s2_min_share, allowed)) return { ok: false, error: 'scenario2_invalid' };
-  const fields = { s2_min_share: b.s2_min_share };
+// Scenario 1 = Subscription Discount (multi-select: which discounts they'd accept).
+function validateScenario1(body) {
+  return validateMultiSelect(body, S1_TIERS, 's1_accepted_discounts', 's1_none');
+}
 
-  if (b.s2_min_share === 'none') {
-    const reasons = S2_REASON_OPTIONS.map(o => o.value);
-    if (!inSet(b.s2_reason, reasons)) return { ok: false, error: 'scenario2_reason_required' };
-    fields.s2_reason = b.s2_reason;
-    if (b.s2_reason === 'other') {
-      if (!isStr(b.s2_reason_other, MAX_TEXT) || b.s2_reason_other.trim().length === 0) {
-        return { ok: false, error: 'scenario2_reason_other_required' };
-      }
-      fields.s2_reason_other = b.s2_reason_other.trim();
-    } else {
-      fields.s2_reason_other = null;
-    }
-  } else {
-    fields.s2_reason = null;
-    fields.s2_reason_other = null;
-  }
-  return { ok: true, fields };
+// Scenario 2 = Data Sharing Program (multi-select: which revenue shares they'd accept).
+function validateScenario2(body) {
+  return validateMultiSelect(body, S2_TIERS, 's2_accepted_shares', 's2_none');
 }
 
 // Validate a single post-scenario question screen (postq_<id>).

@@ -229,28 +229,29 @@ test('intro: missing/invalid wrong count rejected', () => {
     comp_check_1_wrong_count: -1, comp_check_2_wrong_count: 0, comp_check_3_wrong_count: 0
   }).ok, false);
 });
-test('scenario_1: single-select tier or none valid; bad/missing rejected', () => {
-  assert.equal(VALIDATORS.scenario_1({ s1_min_share: '5off' }).ok, true);
-  assert.equal(VALIDATORS.scenario_1({ s1_min_share: '5off' }).fields.s1_min_share, '5off');
-  assert.equal(VALIDATORS.scenario_1({ s1_min_share: 'none' }).ok, true);
-  assert.equal(VALIDATORS.scenario_1({ s1_min_share: 'bogus' }).ok, false);
-  assert.equal(VALIDATORS.scenario_1({}).ok, false);
+test('scenario_1: multi-select accepted set + mutually-exclusive none', () => {
+  const ok = VALIDATORS.scenario_1({ s1_accepted_discounts: ['5off', '8off'], s1_none: false });
+  assert.equal(ok.ok, true);
+  assert.deepEqual(ok.fields.s1_accepted_discounts, ['5off', '8off']);
+  assert.equal(ok.fields.s1_none, false);
+  const declined = VALIDATORS.scenario_1({ s1_accepted_discounts: [], s1_none: true });
+  assert.equal(declined.ok, true);
+  assert.equal(declined.fields.s1_none, true);
+  // empty + not declined → invalid; bad value → invalid; none + selections → conflict
+  assert.equal(VALIDATORS.scenario_1({ s1_accepted_discounts: [], s1_none: false }).ok, false);
+  assert.equal(VALIDATORS.scenario_1({ s1_accepted_discounts: ['bogus'], s1_none: false }).ok, false);
+  assert.equal(VALIDATORS.scenario_1({ s1_accepted_discounts: ['5off'], s1_none: true }).ok, false);
 });
-test('scenario_2 (marketplace): tier valid; decline requires a reason', () => {
-  assert.equal(VALIDATORS.scenario_2({ s2_min_share: '50' }).ok, true);
-  const declineNoReason = VALIDATORS.scenario_2({ s2_min_share: 'none' });
-  assert.equal(declineNoReason.ok, false);
-  assert.equal(declineNoReason.error, 'scenario2_reason_required');
-  const declineReason = VALIDATORS.scenario_2({ s2_min_share: 'none', s2_reason: 'no_trust' });
-  assert.equal(declineReason.ok, true);
-});
-test('scenario_2 (marketplace): other reason needs text; participating clears reason', () => {
-  assert.equal(VALIDATORS.scenario_2({ s2_min_share: 'none', s2_reason: 'other' }).ok, false);
-  assert.equal(VALIDATORS.scenario_2({ s2_min_share: 'none', s2_reason: 'other', s2_reason_other: 'x' }).ok, true);
-  const participate = VALIDATORS.scenario_2({ s2_min_share: '10' });
-  assert.equal(participate.ok, true);
-  assert.equal(participate.fields.s2_reason, null);
-  assert.equal(participate.fields.s2_reason_other, null);
+test('scenario_2: multi-select accepted set + mutually-exclusive none', () => {
+  const ok = VALIDATORS.scenario_2({ s2_accepted_shares: ['50', '75', '99'], s2_none: false });
+  assert.equal(ok.ok, true);
+  assert.deepEqual(ok.fields.s2_accepted_shares, ['50', '75', '99']);
+  const declined = VALIDATORS.scenario_2({ s2_accepted_shares: [], s2_none: true });
+  assert.equal(declined.ok, true);
+  assert.equal(declined.fields.s2_none, true);
+  assert.equal(VALIDATORS.scenario_2({ s2_accepted_shares: [], s2_none: false }).ok, false);
+  assert.equal(VALIDATORS.scenario_2({ s2_accepted_shares: ['90'], s2_none: false }).ok, false); // 90 no longer a tier
+  assert.equal(VALIDATORS.scenario_2({ s2_accepted_shares: ['50', '50'], s2_none: false }).ok, false); // dup
 });
 test('post-question likert5 (postq_1): 1-5 valid, out-of-range invalid', () => {
   assert.equal(validatePostQuestion({ postq_importance: 3 }, 'postq_1').ok, true);
@@ -376,40 +377,32 @@ test('intro screen B2 uses the AI-training use-case wording', () => {
   const p = screenPayload({ ...fakeParticipant, use_case: 'B2' }, 'intro');
   assert.ok(p.change.join(' ').includes('generative AI system'));
 });
-test('scenario_1 prompt embeds inline data type + use case verbatim', () => {
+test('scenario_1 (Subscription Discount): settings-frame payload + first-person use', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1');
-  assert.ok(p.prompt.includes(dt5.inline));
-  assert.ok(p.prompt.includes('personalize'));
+  assert.equal(p.heading, 'Subscription');
+  assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
+  assert.equal(p.collect_line, `We will collect your ${dt5.inline}`);
+  assert.deepEqual(p.collect_emphasis, [dt5.inline]);
+  assert.ok(p.use_line.includes('improve our personalization algorithm')); // first-person "our"
+  assert.deepEqual(p.tiers, content.S1_TIERS);
+  assert.equal(p.none_label, 'I would not accept any discount');
+  assert.deepEqual(p.submit, { accepted: 's1_accepted_discounts', none: 's1_none' });
+  // Generic "your information" in the by-default line (not the data type)
+  assert.ok(p.intro.join(' ').includes('we do not sell your information'));
 });
-test('voice=appx selects product-team-voice copy for S1/S2; default stays researcher', () => {
-  const r1 = screenPayload(fakeParticipant, 'scenario_1');
-  const r2 = screenPayload(fakeParticipant, 'scenario_2');
-  assert.ok(r1.prompt.startsWith('App Z offers you a discount'));
-  assert.equal(r2.intro, 'Imagine the following arrangement with App Z.');
-
-  const a1 = screenPayload(fakeParticipant, 'scenario_1', { voice: 'appx' });
-  const a2 = screenPayload(fakeParticipant, 'scenario_2', { voice: 'appx' });
-  assert.ok(a1.prompt.startsWith("We're considering"));
-  assert.ok(a1.instruction.includes('To help us design fair pricing'));
-  assert.ok(a2.intro.startsWith("We're exploring an opt-in data marketplace"));
-  assert.ok(a2.instruction.includes('To help us design fair revenue sharing'));
-
-  // Manipulation preserved.
-  assert.ok(a1.prompt.includes(dt5.inline));
-  assert.ok(a1.prompt.includes('personalize'));
-
-  // Payload shape unchanged between voices.
-  assert.deepEqual(Object.keys(r1).sort(), Object.keys(a1).sort());
-  assert.deepEqual(Object.keys(r2).sort(), Object.keys(a2).sort());
-
-  // Tiers/reason options are voice-neutral.
-  assert.deepEqual(a1.tiers, content.S1_TIERS);
-  assert.deepEqual(a2.tiers, content.S2_TIERS);
-  assert.deepEqual(a2.followup_options, content.S2_REASON_OPTIONS);
+test('scenario_2 (Data Sharing Program): renamed + multi-select payload', () => {
+  const p = screenPayload(fakeParticipant, 'scenario_2');
+  assert.equal(p.heading, 'Data Sharing Program');
+  assert.ok(p.frame_url.includes('data-sharing'));
+  assert.ok(p.offer_line.includes('percentage of the revenue'));
+  assert.deepEqual(p.tiers.map(t => t.value), ['1', '10', '25', '50', '75', '99']);
+  assert.equal(p.none_label, 'I would not agree to this program');
+  assert.deepEqual(p.submit, { accepted: 's2_accepted_shares', none: 's2_none' });
 });
-test('unknown voice value falls back to researcher copy', () => {
-  const p = screenPayload(fakeParticipant, 'scenario_1', { voice: 'junk' });
-  assert.ok(p.prompt.startsWith('App Z offers you a discount'));
+test('scenario copy is voice-neutral (voice=appx unchanged)', () => {
+  const r = screenPayload(fakeParticipant, 'scenario_1');
+  const a = screenPayload(fakeParticipant, 'scenario_1', { voice: 'appx' });
+  assert.deepEqual(r, a);
 });
 test('post-question payload carries the item + substituted prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_1');

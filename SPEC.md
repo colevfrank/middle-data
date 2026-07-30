@@ -60,13 +60,13 @@ Two between-subjects conditions — B1 (Personalization) and B2 (GenAI Training)
 B1 — Personalization
 - Intro screen (Screen 3), the primary framing: "App Z would like to use your [DATA TYPE] to improve its personalization algorithm. Using your [DATA TYPE] would allow it to provide content that is more targeted to you."
 - Comprehension statement 2: "App Z would use your data to improve its personalization algorithm."
-- Scenario prompts — [USE CASE VERBATIM] in "…share your [DATA TYPE] to [USE CASE VERBATIM]": "personalize your experience"
-- Block B questions — [DATA USE] in "…was used for [DATA USE]": "personalizing your experience"
+- Scenario frame ("We will use this information to [USE]", first person): "improve our personalization algorithm"
+- Block B questions — [DATA USE] in "…was used for [DATA USE]": "improving a personalization algorithm"
 
 B2 — GenAI Training
 - Intro screen (Screen 3), the primary framing: "App Z would like to use your [DATA TYPE] to improve its generative AI system. Using your [DATA TYPE] would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator)."
 - Comprehension statement 2: "App Z would use your data to improve its generative AI system."
-- Scenario prompts — [USE CASE VERBATIM]: "train and improve a generative AI system (like a chatbot, writing assistant, or image generator)"
+- Scenario frame ("We will use this information to [USE]", first person): "improve our generative AI system"
 - Block B questions — [DATA USE]: "training and improving a generative AI system (like a chatbot, writing assistant, or image generator)"
 
 ### Survey Flow
@@ -107,43 +107,36 @@ Continue does not advance until all three are correct (T, T, F); participants ma
 
 Screens 4–5: Scenarios 1 and 2 (order randomized)
 (The "Scenario 1 / Scenario 2" labels below are internal identifiers only. Because the order is randomized, each is shown to participants with a neutral, unnumbered "Scenario" heading — no copy may imply that one comes before another.)
-Scenario 1 — Discount valuation:
-"App Z offers you a discount on your $20/month subscription if you agree to share your [DATA TYPE] to [USE CASE VERBATIM]."
-"What is the least you would accept in exchange for sharing your data?"
-Single-select — the participant picks ONE radio (the least discount they would accept), or the standalone "would not share" option. Stored in s1_min_share as the tier code ('1off'…'20off') or 'none'.
 
-$1 off / month ($19/mo)
-$3 off / month ($17/mo)
-$5 off / month ($15/mo)
-$8 off / month ($12/mo)
-$12 off / month ($8/mo)
-$20 off / month (Free)
-"I would not share at any price" (standalone option at bottom)
+Shared layout (both scenarios): a bold lead-in line at the top, then a settings-page frame (browser chrome + side panel, as in the settings-mode UI), then a bold question below the frame with multi-select checkboxes ("select all that apply"). Within the frame: the section heading is bold; "We will collect your [DATA TYPE]" is bold + underlined; the offer line is highlighted/prominent. The "By default…" line describes information as a whole (generic "your information"), NOT the assigned data type. The use line is per-condition, first person ("our"): B1 → "improve our personalization algorithm", B2 → "improve our generative AI system".
 
-Scenario 2 — Data marketplace:
-(The intro line and the next two lines are shown as plain paragraphs; the three "if you opt in" lines below are shown as a bulleted list.)
-"Imagine the following arrangement with App Z."
-"You pay $20 per month for App Z. By default, App Z does not record, store, or sell your [DATA TYPE]."
-"App Z offers you the option to join a data marketplace program. If you opt in:"
+Scenario 1 — Subscription Discount:
+Lead-in (bold): "Imagine App Z offers you the option to receive a Subscription Discount:"
+Settings frame — heading (bold): "Subscription"
+- "You currently pay $20 per month for our app."
+- "By default, we do not record or store your information; we do not sell your information; and we delete all information after one year."
+- "We are now offering you the option to receive a Subscription Discount. If you agree:"
+  - "We will collect your [DATA TYPE]" (bold + underlined)
+  - "We will use this information to [USE — B1: improve our personalization algorithm / B2: improve our generative AI system]"
+  - (highlighted) "We would like to offer you a monthly discount on your subscription for sharing this data."
+Below the frame (bold): "Please select what discount you would be willing to accept (select all that apply):"
+Multi-select checkboxes: $1 off / month ($19/mo) · $3 off ($17/mo) · $5 off ($15/mo) · $8 off ($12/mo) · $12 off ($8/mo) · $20 off (Free) · "I would not accept any discount" (mutually exclusive — clears the others).
+Stored: s1_accepted_discounts (TEXT[] of accepted tier codes '1off'…'20off') + s1_none (boolean, declined).
 
-"App Z will sell your [DATA TYPE] to third-party companies on your behalf."
-"You will receive a percentage of the selling price back as a discount on your monthly subscription."
-"You can opt out at any time, but data that has already been sold cannot be taken back."
+Scenario 2 — Data Sharing Program:
+Lead-in (bold): "We'd like you to imagine… … One day, you open App Z and it offers you the option to join a Data Sharing Program:"
+Settings frame — heading (bold): "Data Sharing Program"
+- "You currently pay $20 per month for our app."
+- "By default, we do not record or store your information; we do not sell your information; and we delete all information after one year."
+- "We are now offering you the option to join a Data Sharing Program. If you opt in:"
+  - "We will collect your [DATA TYPE]" (bold + underlined)
+  - "We will use this information to [USE — B1: improve our personalization algorithm / B2: improve our generative AI system]"
+  - (highlighted) "Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data."
+Below the frame (bold): "Please select what percentages you would be willing to accept (select all that apply):"
+Multi-select checkboxes: 1% · 10% · 25% · 50% · 75% · 99% · "I would not agree to this program" (mutually exclusive — clears the others).
+Stored: s2_accepted_shares (TEXT[] of accepted percentages '1'/'10'/'25'/'50'/'75'/'99') + s2_none (boolean, declined). No decline follow-up.
 
-"What is the least revenue share you would accept to sell your data?"
-Single-select — the participant picks ONE radio (the least revenue share they would accept), or "I would not participate at any revenue share." Stored in s2_min_share as '10' / '50' / '90' or 'none'.
-
-◯ You receive 10% of the selling price
-◯ You receive 50% of the selling price
-◯ You receive 90% of the selling price
-◯ I would not participate at any revenue share (standalone option)
-If they select "I would not participate," show follow-up: "What is the main reason you chose not to participate?"
-
-◯ I don't want my data sold at any price
-◯ I don't trust App Z to handle this correctly
-◯ I'm uncomfortable with third-party buyers
-◯ The data cannot be taken back once sold
-◯ Something else [text field]
+Both scenarios render in one voice-neutral, first-person design (no researcher/AppX-voice split). ?mode=plain shows the same content without the browser frame; ?voice=appx no longer changes scenario copy.
 
 Screens 6–19: Post-Scenario Questions
 Fourteen items — the 13 questions below plus one attention check — each shown on its own screen. All 14 are pooled and randomized together into one random screen order. [DATA TYPE] = the assigned data type's label; [DATA USE] = the assigned use case's [DATA USE] form (see Use Case Conditions). Response options appear in the order listed (no within-question option randomization). For Likert (1–5) items, each endpoint label is shown prefixed with its scale number — e.g., "1: Not at all" … "5: Extremely".

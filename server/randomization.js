@@ -78,7 +78,7 @@ function randomOrderArray(items) {
 
 function generateAllOrderings() {
   return {
-    // Two scenarios: 1 = discount valuation, 2 = data marketplace
+    // Two scenarios: 1 = subscription discount, 2 = data sharing program
     scenario_order: shuffle([1, 2]),
     // All 14 post-scenario items (Block A + Block B + attention check) randomized together
     post_question_order: randomOrderArray(POST_QUESTIONS)

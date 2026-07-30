@@ -394,100 +394,72 @@
     watchForCompletion(form, () => statements.every(s => !!form.querySelector(`input[name="answer_${s.id}"]:checked`)));
   };
 
-  RENDERERS.scenario_1 = function (p) {
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'Scenario'));
-    root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.prompt));
-    root.appendChild(el('p', { class: 'text-slate-700 mb-4 font-medium' }, p.instruction));
+  // ===== Scenarios (voice-neutral, first person; shared by scenario_1 & _2) =====
+  // The "settings page" body: bold heading, program description, collect/use bullets
+  // (collect line bold+underlines the data type), and the highlighted offer line.
+  function scenarioContentBox(p) {
+    const box = el('div', {});
+    box.appendChild(el('h2', { class: 'settings-section-title' }, p.heading));
+    for (const para of p.intro) box.appendChild(el('p', { class: 'settings-section-helper' }, para));
+    const list = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-slate-700 space-y-1' });
+    list.appendChild(el('li', {}, emphasize(p.collect_line, p.collect_emphasis)));
+    list.appendChild(el('li', {}, p.use_line));
+    box.appendChild(list);
+    box.appendChild(el('div', { class: 'settings-callout mt-3' }, p.offer_line));
+    return box;
+  }
 
+  // Bold question below the frame + multi-select checkboxes ("select all that apply")
+  // with a mutually-exclusive "none". Continue enabled once ≥1 box or "none" is checked.
+  function renderScenarioQuestion(p) {
+    root.appendChild(el('p', { class: 'font-bold text-slate-900 mt-4 mb-2' }, p.question));
     const form = el('div', { class: 'space-y-1' });
     for (const t of p.tiers) {
       form.appendChild(el('label', { class: 'label-radio' }, [
-        el('input', { type: 'radio', name: 's1_min_share', value: t.value }),
+        el('input', { type: 'checkbox', name: 'tier_' + t.value, value: t.value, 'data-tier': '1' }),
         el('span', {}, t.label)
       ]));
     }
     form.appendChild(el('label', { class: 'label-radio' }, [
-      el('input', { type: 'radio', name: 's1_min_share', value: 'none' }),
+      el('input', { type: 'checkbox', name: 'scn_none', id: 'scn_none' }),
       el('span', {}, p.none_label)
     ]));
     root.appendChild(form);
 
-    const btn = continueBtn(() => {
-      const sel = form.querySelector('input[name="s1_min_share"]:checked');
-      submit('scenario_1', { s1_min_share: sel ? sel.value : null });
-    }, 'Continue');
-    root.appendChild(btn);
-    watchForCompletion(form, () => !!form.querySelector('input[name="s1_min_share"]:checked'));
-  };
-
-  RENDERERS.scenario_2 = function (p) {
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'Scenario'));
-    root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.intro));
-    for (const para of p.lead) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
-    }
-    const setupList = el('ul', { class: 'list-disc list-inside text-slate-700 space-y-1 mb-4' });
-    p.bullets.forEach(s => setupList.appendChild(el('li', {}, s)));
-    root.appendChild(setupList);
-    root.appendChild(el('p', { class: 'text-slate-800 font-medium mb-3' }, p.instruction));
-
-    const form = el('div', { class: 'space-y-1' });
-    for (const t of p.tiers) {
-      form.appendChild(el('label', { class: 'label-radio' }, [
-        el('input', { type: 'radio', name: 's2_min_share', value: t.value }),
-        el('span', {}, t.label)
-      ]));
-    }
-    form.appendChild(el('label', { class: 'label-radio' }, [
-      el('input', { type: 'radio', name: 's2_min_share', value: 'none' }),
-      el('span', {}, p.none_label)
-    ]));
-    root.appendChild(form);
-
-    // Follow-up section (shown when they decline)
-    const followup = el('div', { class: 'mt-5 pt-5 border-t border-slate-200 hidden', id: 'followup' });
-    followup.appendChild(el('p', { class: 'text-slate-800 font-medium mb-3' }, p.followup_prompt));
-    for (const o of p.followup_options) {
-      followup.appendChild(el('label', { class: 'label-radio' }, [
-        el('input', { type: 'radio', name: 's2_reason', value: o.value }),
-        el('span', {}, o.label)
-      ]));
-    }
-    const otherInput = el('input', { type: 'text', name: 's2_reason_other', placeholder: 'Please describe', class: 'input-text mt-2 hidden', maxlength: 500 });
-    followup.appendChild(otherInput);
-    root.appendChild(followup);
+    const noneBox = form.querySelector('#scn_none');
+    const tierBoxes = Array.from(form.querySelectorAll('input[data-tier]'));
 
     const btn = continueBtn(() => {
-      const sel = form.querySelector('input[name="s2_min_share"]:checked');
-      const body = { s2_min_share: sel ? sel.value : null };
-      if (followup.classList.contains('hidden') === false) {
-        const reasonSel = followup.querySelector('input[name="s2_reason"]:checked');
-        body.s2_reason = reasonSel ? reasonSel.value : null;
-        if (body.s2_reason === 'other') {
-          body.s2_reason_other = otherInput.value.trim();
-        }
-      }
-      submit('scenario_2', body);
+      const accepted = tierBoxes.filter(b => b.checked).map(b => b.value);
+      const body = {};
+      body[p.submit.accepted] = noneBox.checked ? [] : accepted;
+      body[p.submit.none] = noneBox.checked;
+      submit(p.screen, body);
     }, 'Continue');
     root.appendChild(btn);
-
-    form.addEventListener('change', refresh);
-    followup.addEventListener('change', refresh);
-    followup.addEventListener('input', refresh);
 
     function refresh() {
-      const sel = form.querySelector('input[name="s2_min_share"]:checked');
-      const declined = !!sel && sel.value === 'none';
-      followup.classList.toggle('hidden', !declined);
-      const reasonSel = followup.querySelector('input[name="s2_reason"]:checked');
-      otherInput.classList.toggle('hidden', !reasonSel || reasonSel.value !== 'other');
-      const reasonOk = !declined || (
-        !!reasonSel && (reasonSel.value !== 'other' || otherInput.value.trim().length > 0)
-      );
-      btn.disabled = !(sel && reasonOk);
+      tierBoxes.forEach(b => {
+        if (noneBox.checked) { b.checked = false; b.disabled = true; }
+        else { b.disabled = false; }
+      });
+      const anyTier = tierBoxes.some(b => b.checked);
+      btn.disabled = !(noneBox.checked || anyTier);
     }
+    noneBox.addEventListener('change', refresh);
+    tierBoxes.forEach(b => b.addEventListener('change', () => { if (b.checked) noneBox.checked = false; refresh(); }));
     refresh();
-  };
+  }
+
+  function renderScenarioPlain(p) {
+    for (const line of p.lead_in) root.appendChild(el('p', { class: 'font-bold text-slate-900 mb-3' }, line));
+    const box = scenarioContentBox(p);
+    box.className = 'border border-slate-200 rounded p-4 mb-4';
+    root.appendChild(box);
+    renderScenarioQuestion(p);
+  }
+  RENDERERS.scenario_1 = renderScenarioPlain;
+  RENDERERS.scenario_2 = renderScenarioPlain;
 
   // One post-scenario question per screen. `p.item` carries the question; the
   // screen id (postq_<n>) in p.screen is the submit target. The attention check
@@ -695,7 +667,7 @@
       { key: 'subscription', label: 'Subscription' },
       { key: 'premium',      label: 'Premium features' },
       { key: 'privacy',      label: 'Privacy' },
-      { key: 'marketplace',  label: 'Data Marketplace' },
+      { key: 'data_sharing', label: 'Data Sharing Program' },
       { key: 'notifications',label: 'Notifications' },
       { key: 'billing',      label: 'Billing' }
     ];
@@ -710,157 +682,22 @@
     ]);
   }
 
-  function settingsFooter(saveBtn, noteText) {
-    const footer = el('div', { class: 'settings-footer' }, [
-      noteText ? el('span', { class: 'settings-footer-note' }, noteText) : null,
-      saveBtn
-    ]);
-    return footer;
-  }
-
-  function settingsSaveBtn(onClick, label) {
-    const btn = el('button', { type: 'button', class: 'settings-save-btn', disabled: true, id: 'continue-btn' }, label || 'Save changes');
-    btn.addEventListener('click', onClick);
-    return btn;
-  }
-
-  // ===== Scenario 1 (subscription discount, settings mode) =====
-  SETTINGS_RENDERERS.scenario_1 = function (p) {
+  // ===== Scenarios (settings mode) — shared browser frame for scenario_1 & _2 =====
+  function renderScenarioSettings(p) {
+    for (const line of p.lead_in) root.appendChild(el('p', { class: 'font-bold text-slate-900 mb-3' }, line));
     const frame = el('div', { class: 'browser-frame' });
-    frame.appendChild(browserChrome('appz.com/settings/subscription'));
-
+    frame.appendChild(browserChrome(p.frame_url));
     const body = el('div', { class: 'browser-body' });
-    body.appendChild(settingsSidebar('subscription'));
-
-    const content = el('div', { class: 'settings-content' });
-    content.appendChild(el('h2', { class: 'settings-section-title' }, 'Subscription'));
-    content.appendChild(el('p', { class: 'settings-section-helper' }, 'Manage your App Z plan and data-sharing preferences.'));
-    content.appendChild(el('div', { class: 'settings-divider' }));
-
-    // Current plan info row (read-only)
-    content.appendChild(el('div', { class: 'settings-row' }, [
-      el('div', { class: 'settings-row-text' }, [
-        el('div', { class: 'settings-row-label' }, 'Current plan'),
-        el('div', { class: 'settings-row-description' }, 'App Z Premium — $20 / month')
-      ])
-    ]));
-
-    // Section: discount offer (single-select — smallest acceptable discount)
-    content.appendChild(el('h3', { class: 'mt-6 text-sm font-semibold uppercase tracking-wide text-slate-500' }, 'Save with data sharing'));
-    content.appendChild(el('p', { class: 'settings-section-helper' }, p.prompt));
-    content.appendChild(el('p', { class: 'settings-section-helper mt-1' }, p.instruction));
-
-    const form = el('div', { class: 'mt-3 space-y-1' });
-    for (const t of p.tiers) {
-      form.appendChild(el('label', { class: 'label-radio' }, [
-        el('input', { type: 'radio', name: 's1_min_share', value: t.value }),
-        el('span', {}, t.label)
-      ]));
-    }
-    form.appendChild(el('label', { class: 'label-radio' }, [
-      el('input', { type: 'radio', name: 's1_min_share', value: 'none' }),
-      el('span', {}, p.none_label)
-    ]));
-    content.appendChild(form);
-
-    const btn = settingsSaveBtn(() => {
-      const sel = form.querySelector('input[name="s1_min_share"]:checked');
-      submit('scenario_1', { s1_min_share: sel ? sel.value : null });
-    });
-    content.appendChild(settingsFooter(btn, 'Changes are saved automatically.'));
-
+    body.appendChild(settingsSidebar(p.sidebar_active));
+    const content = scenarioContentBox(p);
+    content.className = 'settings-content';
     body.appendChild(content);
     frame.appendChild(body);
     root.appendChild(frame);
-
-    form.addEventListener('change', () => {
-      btn.disabled = !form.querySelector('input[name="s1_min_share"]:checked');
-    });
-  };
-
-  // ===== Scenario 2 (data marketplace, settings mode) =====
-  SETTINGS_RENDERERS.scenario_2 = function (p) {
-    const frame = el('div', { class: 'browser-frame' });
-    frame.appendChild(browserChrome('appz.com/settings/marketplace'));
-
-    const body = el('div', { class: 'browser-body' });
-    body.appendChild(settingsSidebar('marketplace'));
-
-    const content = el('div', { class: 'settings-content' });
-    content.appendChild(el('h2', { class: 'settings-section-title' }, 'Data Marketplace'));
-    content.appendChild(el('p', { class: 'settings-section-helper' }, p.intro));
-    for (const para of p.lead) {
-      content.appendChild(el('p', { class: 'settings-section-helper' }, para));
-    }
-
-    const bullets = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-slate-600 space-y-1' });
-    p.bullets.forEach(s => bullets.appendChild(el('li', {}, s)));
-    content.appendChild(bullets);
-
-    content.appendChild(el('div', { class: 'settings-divider' }));
-    content.appendChild(el('h3', { class: 'text-sm font-semibold uppercase tracking-wide text-slate-500' }, 'Revenue share'));
-    content.appendChild(el('p', { class: 'settings-section-helper' }, p.instruction));
-
-    const form = el('div', { class: 'mt-3 space-y-1' });
-    for (const t of p.tiers) {
-      form.appendChild(el('label', { class: 'label-radio' }, [
-        el('input', { type: 'radio', name: 's2_min_share', value: t.value }),
-        el('span', {}, t.label)
-      ]));
-    }
-    form.appendChild(el('label', { class: 'label-radio' }, [
-      el('input', { type: 'radio', name: 's2_min_share', value: 'none' }),
-      el('span', {}, p.none_label)
-    ]));
-    content.appendChild(form);
-
-    // Follow-up panel (shown when they decline)
-    const followup = el('div', { class: 'mt-5 pt-4 border-t border-slate-200 hidden', id: 'followup' });
-    followup.appendChild(el('p', { class: 'text-slate-800 font-medium mb-2' }, p.followup_prompt));
-    for (const o of p.followup_options) {
-      followup.appendChild(el('label', { class: 'flex items-center gap-3 py-1 cursor-pointer text-slate-800' }, [
-        el('input', { type: 'radio', name: 's2_reason', value: o.value, class: 'h-4 w-4' }),
-        el('span', {}, o.label)
-      ]));
-    }
-    const otherInput = el('input', { type: 'text', name: 's2_reason_other', placeholder: 'Please describe', class: 'input-text mt-2 hidden', maxlength: 500 });
-    followup.appendChild(otherInput);
-    content.appendChild(followup);
-
-    const btn = settingsSaveBtn(() => {
-      const sel = form.querySelector('input[name="s2_min_share"]:checked');
-      const out = { s2_min_share: sel ? sel.value : null };
-      if (!followup.classList.contains('hidden')) {
-        const reasonSel = followup.querySelector('input[name="s2_reason"]:checked');
-        out.s2_reason = reasonSel ? reasonSel.value : null;
-        if (out.s2_reason === 'other') {
-          out.s2_reason_other = otherInput.value.trim();
-        }
-      }
-      submit('scenario_2', out);
-    });
-    content.appendChild(settingsFooter(btn));
-
-    body.appendChild(content);
-    frame.appendChild(body);
-    root.appendChild(frame);
-
-    function refresh() {
-      const sel = form.querySelector('input[name="s2_min_share"]:checked');
-      const declined = !!sel && sel.value === 'none';
-      followup.classList.toggle('hidden', !declined);
-      const reasonSel = followup.querySelector('input[name="s2_reason"]:checked');
-      otherInput.classList.toggle('hidden', !reasonSel || reasonSel.value !== 'other');
-      const reasonOk = !declined || (
-        !!reasonSel && (reasonSel.value !== 'other' || otherInput.value.trim().length > 0)
-      );
-      btn.disabled = !(sel && reasonOk);
-    }
-    form.addEventListener('change', refresh);
-    followup.addEventListener('change', refresh);
-    followup.addEventListener('input', refresh);
-    refresh();
-  };
+    renderScenarioQuestion(p);
+  }
+  SETTINGS_RENDERERS.scenario_1 = renderScenarioSettings;
+  SETTINGS_RENDERERS.scenario_2 = renderScenarioSettings;
 
   // ===== Boot =====
   async function boot() {

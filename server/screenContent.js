@@ -2,7 +2,7 @@
 // CRITICAL: never send raw condition codes (data_type number, use_case code) — only rendered strings.
 
 const {
-  DATA_TYPES, USE_CASES, S1_TIERS, S2_TIERS, S2_REASON_OPTIONS,
+  DATA_TYPES, USE_CASES, S1_TIERS, S2_TIERS,
   POST_QUESTIONS, OPEN_RESPONSE, AI_LITERACY_QUESTIONS, DEMOGRAPHICS
 } = require('./content');
 
@@ -14,61 +14,56 @@ function getUseCase(p) {
   return USE_CASES[p.use_case];
 }
 
-function pickVoice(extra) {
-  return extra && extra.voice === 'appx' ? 'appx' : 'researcher';
-}
-
-// Scenario copy bundles, keyed by voice. `researcher` is the original
-// experimenter-narrated wording; `appx` is the pilot variant written as if
-// App Z's product team is consulting the participant. Selected per request via
-// ?voice=appx (orthogonal to ?mode=settings).
-// s1 = discount valuation; s2 = data marketplace.
-const SCENARIO_COPY = {
-  researcher: {
-    s1: {
-      prompt: (dt, uc) => `App Z offers you a discount on your $20/month subscription if you agree to share your ${dt.inline} to ${uc.verbatim}.`,
-      instruction: 'What is the least you would accept in exchange for sharing your data?',
-      none_label: 'I would not share at any price'
-    },
-    s2: {
-      intro: 'Imagine the following arrangement with App Z.',
-      lead: (dt) => [
-        `You pay $20 per month for App Z. By default, App Z does not record, store, or sell your ${dt.inline}.`,
-        'App Z offers you the option to join a data marketplace program. If you opt in:'
+// The two scenarios share one voice-neutral, first-person design: a bold lead-in,
+// a settings-page frame (heading + program description), and a multi-select
+// question below the frame. `collect_emphasis` marks the data type for bold+underline;
+// the offer line is highlighted client-side. Voice (?voice=appx) no longer changes copy.
+function scenarioPayload(p, screenId) {
+  const dt = getDataType(p);
+  const uc = getUseCase(p);
+  const common = {
+    intro_default: 'By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.',
+    collect_line: `We will collect your ${dt.inline}`,
+    collect_emphasis: [dt.inline],
+    use_line: `We will use this information to ${uc.scenario_use}`
+  };
+  if (screenId === 'scenario_1') {
+    return Object.assign({
+      screen: 'scenario_1',
+      lead_in: ['Imagine App Z offers you the option to receive a Subscription Discount:'],
+      frame_url: 'appz.com/settings/subscription',
+      sidebar_active: 'subscription',
+      heading: 'Subscription',
+      intro: [
+        'You currently pay $20 per month for our app.',
+        common.intro_default,
+        'We are now offering you the option to receive a Subscription Discount. If you agree:'
       ],
-      bullets: (dt) => [
-        `App Z will sell your ${dt.inline} to third-party companies on your behalf.`,
-        'You will receive a percentage of the selling price back as a discount on your monthly subscription.',
-        'You can opt out at any time, but data that has already been sold cannot be taken back.'
-      ],
-      instruction: 'What is the least revenue share you would accept to sell your data?',
-      none_label: 'I would not participate at any revenue share',
-      followup_prompt: 'What is the main reason you chose not to participate?'
-    }
-  },
-  appx: {
-    s1: {
-      prompt: (dt, uc) => `We're considering a new program: users could share their ${dt.inline} with us — we'd use it to ${uc.verbatim} — in exchange for a discount on their $20/month subscription.`,
-      instruction: 'To help us design fair pricing, tell us — what is the least you would accept in exchange for sharing your data?',
-      none_label: 'I would not share at any price'
-    },
-    s2: {
-      intro: "We're exploring an opt-in data marketplace program for our users.",
-      lead: (dt) => [
-        `You currently pay $20 per month for App Z. We don't record, store, or sell your ${dt.inline}.`,
-        "We're considering offering an opt-in marketplace program. If you joined:"
-      ],
-      bullets: (dt) => [
-        `We would sell your ${dt.inline} to third-party companies on your behalf.`,
-        'You would receive a percentage of the selling price back as a discount on your monthly subscription.',
-        "You could opt out at any time, but data that's already been sold could not be taken back."
-      ],
-      instruction: "To help us design fair revenue sharing, tell us — what is the least revenue share you would accept to sell your data?",
-      none_label: 'I would not participate at any revenue share',
-      followup_prompt: 'What is the main reason you chose not to participate?'
-    }
+      offer_line: 'We would like to offer you a monthly discount on your subscription for sharing this data.',
+      question: 'Please select what discount you would be willing to accept (select all that apply):',
+      tiers: S1_TIERS,
+      none_label: 'I would not accept any discount',
+      submit: { accepted: 's1_accepted_discounts', none: 's1_none' }
+    }, common);
   }
-};
+  return Object.assign({
+    screen: 'scenario_2',
+    lead_in: ["We'd like you to imagine…", '… One day, you open App Z and it offers you the option to join a Data Sharing Program:'],
+    frame_url: 'appz.com/settings/data-sharing',
+    sidebar_active: 'data_sharing',
+    heading: 'Data Sharing Program',
+    intro: [
+      'You currently pay $20 per month for our app.',
+      common.intro_default,
+      'We are now offering you the option to join a Data Sharing Program. If you opt in:'
+    ],
+    offer_line: 'Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.',
+    question: 'Please select what percentages you would be willing to accept (select all that apply):',
+    tiers: S2_TIERS,
+    none_label: 'I would not agree to this program',
+    submit: { accepted: 's2_accepted_shares', none: 's2_none' }
+  }, common);
+}
 
 // Payload for a single post-scenario question screen (postq_<id>). The attention
 // check renders exactly like a likert5 item — its instruction lives in the prompt.
@@ -162,31 +157,9 @@ function screenPayload(p, screenId, extra = {}) {
       };
     }
 
-    case 'scenario_1': {
-      const c = SCENARIO_COPY[pickVoice(extra)].s1;
-      return {
-        screen: 'scenario_1',
-        prompt: c.prompt(dt, uc),
-        instruction: c.instruction,
-        tiers: S1_TIERS,
-        none_label: c.none_label
-      };
-    }
-
-    case 'scenario_2': {
-      const c = SCENARIO_COPY[pickVoice(extra)].s2;
-      return {
-        screen: 'scenario_2',
-        intro: c.intro,
-        lead: c.lead(dt),
-        bullets: c.bullets(dt),
-        instruction: c.instruction,
-        tiers: S2_TIERS,
-        none_label: c.none_label,
-        followup_prompt: c.followup_prompt,
-        followup_options: S2_REASON_OPTIONS
-      };
-    }
+    case 'scenario_1':
+    case 'scenario_2':
+      return scenarioPayload(p, screenId);
 
     case 'open_response': {
       return {

@@ -74,25 +74,26 @@ const DATA_TYPES = [
 const USE_CASES = {
   B1: {
     code: 'B1',
-    verbatim: 'personalize your experience',
-    // Noun form used by Block B post-scenario questions ("…was used for <data_use>").
-    data_use: 'personalizing your experience',
-    // Short "to <…>" phrase matching the intro narrative; used in comprehension statement 2.
+    // Third person "its" — comprehension statement 2 ("App Z would use your data to <comp_use>").
     comp_use: 'improve its personalization algorithm',
+    // First person "our" — scenario frame ("We will use this information to <scenario_use>").
+    scenario_use: 'improve our personalization algorithm',
+    // Noun form used by Block B post-scenario questions ("…was used for <data_use>").
+    data_use: 'improving a personalization algorithm',
     // Two-sentence framing shown on the intro screen (dt = assigned data type).
     intro_sentences: (dt) => `App Z would like to use your ${dt.inline} to improve its personalization algorithm. Using your ${dt.inline} would allow it to provide content that is more targeted to you.`
   },
   B2: {
     code: 'B2',
-    verbatim: 'train and improve a generative AI system (like a chatbot, writing assistant, or image generator)',
-    data_use: 'training and improving a generative AI system (like a chatbot, writing assistant, or image generator)',
     comp_use: 'improve its generative AI system',
+    scenario_use: 'improve our generative AI system',
+    data_use: 'training and improving a generative AI system (like a chatbot, writing assistant, or image generator)',
     intro_sentences: (dt) => `App Z would like to use your ${dt.inline} to improve its generative AI system. Using your ${dt.inline} would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator).`
   }
 };
 
-// Scenario 1 discount tiers (single-select: participant picks the least discount
-// they'd accept). `value` is stored in s1_min_share.
+// Scenario 1 (Subscription Discount) tiers — multi-select ("select all discounts
+// you'd accept"). Values stored in s1_accepted_discounts (TEXT[]).
 const S1_TIERS = [
   { value: '1off',  label: '$1 off / month ($19/mo)' },
   { value: '3off',  label: '$3 off / month ($17/mo)' },
@@ -102,20 +103,15 @@ const S1_TIERS = [
   { value: '20off', label: '$20 off / month (Free)' }
 ];
 
-// Scenario 2 (data marketplace) revenue-share tiers (single-select: least share
-// they'd accept). `value` is stored in s2_min_share.
+// Scenario 2 (Data Sharing Program) revenue-share tiers — multi-select ("select all
+// percentages you'd accept"). Values stored in s2_accepted_shares (TEXT[]).
 const S2_TIERS = [
-  { value: '10', label: 'You receive 10% of the selling price' },
-  { value: '50', label: 'You receive 50% of the selling price' },
-  { value: '90', label: 'You receive 90% of the selling price' }
-];
-
-const S2_REASON_OPTIONS = [
-  { value: 'no_price',      label: "I don't want my data sold at any price" },
-  { value: 'no_trust',      label: "I don't trust App Z to handle this correctly" },
-  { value: 'uncomfortable', label: "I'm uncomfortable with third-party buyers" },
-  { value: 'irreversible',  label: 'The data cannot be taken back once sold' },
-  { value: 'other',         label: 'Something else' }
+  { value: '1',  label: '1%' },
+  { value: '10', label: '10%' },
+  { value: '25', label: '25%' },
+  { value: '50', label: '50%' },
+  { value: '75', label: '75%' },
+  { value: '99', label: '99%' }
 ];
 
 // Post-scenario questions: Block A (about the data type) + Block B (about compensation for the
@@ -281,7 +277,6 @@ module.exports = {
   USE_CASES,
   S1_TIERS,
   S2_TIERS,
-  S2_REASON_OPTIONS,
   POST_QUESTIONS,
   ATTENTION_CHECK_EXPECTED,
   OPEN_RESPONSE,

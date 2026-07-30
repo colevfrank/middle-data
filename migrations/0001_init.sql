@@ -33,13 +33,13 @@ CREATE TABLE IF NOT EXISTS participants (
   consent_read BOOLEAN,
   consent_participate BOOLEAN,
 
-  -- Scenario 1: discount valuation (single-select: least acceptable discount)
-  s1_min_share TEXT,   -- tier code ('1off'…'20off') or 'none'
+  -- Scenario 1: Subscription Discount (multi-select: which discounts they'd accept)
+  s1_accepted_discounts TEXT[],   -- tier codes ('1off'…'20off')
+  s1_none BOOLEAN,                -- declined
 
-  -- Scenario 2: data marketplace (single-select: least acceptable revenue share)
-  s2_min_share TEXT,   -- '10' / '50' / '90' or 'none'
-  s2_reason TEXT,
-  s2_reason_other TEXT,
+  -- Scenario 2: Data Sharing Program (multi-select: which revenue shares they'd accept)
+  s2_accepted_shares TEXT[],      -- percentages ('1'/'10'/'25'/'50'/'75'/'99')
+  s2_none BOOLEAN,                -- declined
 
   -- Post-scenario questions, Block A (about the data type)
   postq_importance SMALLINT,             -- A1: 1-5
