@@ -55,13 +55,19 @@ Each data type belongs to one of six data categories and has both a short descri
 
 ### Use Case Conditions (2)
 
-B1 (Personalization): "App Z uses this data to personalize your experience."
-B2 (GenAI Training): "App Z uses this data to train and improve a generative AI system (like a chatbot, writing assistant, or image generator)."
+Two between-subjects conditions — B1 (Personalization) and B2 (GenAI Training). Each is expressed in four forms across the survey (all templated with the assigned data type where relevant):
 
-Each use case also has a `[DATA USE]` noun form, used by the post-scenario questions (Block B) that read "…was used for [DATA USE]":
+B1 — Personalization
+- Intro screen (Screen 3), the primary framing: "App Z would like to use your [DATA TYPE] to improve its personalization algorithm. Using your [DATA TYPE] would allow it to provide content that is more targeted to you."
+- Comprehension statement 2: "App Z would use your data to improve its personalization algorithm."
+- Scenario prompts — [USE CASE VERBATIM] in "…share your [DATA TYPE] to [USE CASE VERBATIM]": "personalize your experience"
+- Block B questions — [DATA USE] in "…was used for [DATA USE]": "personalizing your experience"
 
-B1 [DATA USE]: "personalizing your experience"
-B2 [DATA USE]: "training and improving a generative AI system (like a chatbot, writing assistant, or image generator)"
+B2 — GenAI Training
+- Intro screen (Screen 3), the primary framing: "App Z would like to use your [DATA TYPE] to improve its generative AI system. Using your [DATA TYPE] would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator)."
+- Comprehension statement 2: "App Z would use your data to improve its generative AI system."
+- Scenario prompts — [USE CASE VERBATIM]: "train and improve a generative AI system (like a chatbot, writing assistant, or image generator)"
+- Block B questions — [DATA USE]: "training and improving a generative AI system (like a chatbot, writing assistant, or image generator)"
 
 ### Survey Flow
 Screen 1: Consent
