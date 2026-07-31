@@ -73,6 +73,11 @@ function postQuestionPayload(p, screenId) {
   const qid = parseInt(screenId.split('_')[1], 10);
   const q = POST_QUESTIONS.find(x => x.id === qid);
   const item = { id: q.id, key: q.key, type: q.type, prompt: q.prompt(dt, uc) };
+  // Block B screens carry a use-case context header; Block A (and the attention
+  // check) show only the question.
+  if (q.block === 'B') {
+    item.header = `Suppose App Z collects your ${dt.inline} for ${uc.data_use}`;
+  }
   if (q.type === 'likert5' || q.type === 'attention') {
     item.anchors = q.anchors;
   } else {
@@ -81,7 +86,6 @@ function postQuestionPayload(p, screenId) {
   return {
     screen: screenId,
     kind: 'post_question',
-    data_label: dt.label,
     item
   };
 }
@@ -169,6 +173,16 @@ function screenPayload(p, screenId, extra = {}) {
       };
     }
 
+    case 'post_scenario_intro': {
+      return {
+        screen: 'post_scenario_intro',
+        body: [
+          `Now, we'd like to understand how you feel about App Z collecting your ${dt.inline} for ${uc.data_use}.`,
+          "On the following pages, we'll ask you a series of questions."
+        ]
+      };
+    }
+
     case 'open_response': {
       return {
         screen: 'open_response',
@@ -215,7 +229,9 @@ function screenPayload(p, screenId, extra = {}) {
 function progressFor(screenId, participant) {
   const order = ['consent', 'welcome', 'intro'];
   order.push(`scenario_${participant.scenario_order[0]}`, 'scenario_transition', `scenario_${participant.scenario_order[1]}`);
-  for (const qid of participant.post_question_order) order.push(`postq_${qid}`);
+  order.push('post_scenario_intro');
+  for (const qid of participant.block_b_order) order.push(`postq_${qid}`);
+  for (const qid of participant.block_a_order) order.push(`postq_${qid}`);
   order.push('open_response', 'ai_usage', 'demographics', 'debrief');
   const idx = order.indexOf(screenId);
   if (idx < 0) return 0;

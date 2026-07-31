@@ -72,16 +72,16 @@ async function assignCell() {
   });
 }
 
-function randomOrderArray(items) {
-  return shuffle(items.map(x => x.id));
-}
-
 function generateAllOrderings() {
+  const blockB = POST_QUESTIONS.filter(q => q.block === 'B').map(q => q.id);
+  const blockA = POST_QUESTIONS.filter(q => q.block === 'A' || q.block === 'AC').map(q => q.id);
   return {
     // Two scenarios: 1 = subscription discount, 2 = data sharing program
     scenario_order: shuffle([1, 2]),
-    // All 14 post-scenario items (Block A + Block B + attention check) randomized together
-    post_question_order: randomOrderArray(POST_QUESTIONS)
+    // Block B shown first (7 questions), then Block A (6 questions + attention check),
+    // each randomized within its block.
+    block_b_order: shuffle(blockB),
+    block_a_order: shuffle(blockA)
   };
 }
 

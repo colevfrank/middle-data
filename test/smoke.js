@@ -47,14 +47,13 @@ function makeMockPool() {
       return { rows: [], rowCount: 0 };
     }
     if (/^INSERT INTO participants/i.test(text)) {
-      const [pid, studyId, sessionId, token, dt, uc, so, pqo] = params;
+      const [pid, studyId, sessionId, token, dt, uc, so, bbo, bao] = params;
       const row = {
         id: mockState.nextId++,
         prolific_pid: pid, study_id: studyId, session_id: sessionId, session_token: token,
         data_type: dt, use_case: uc,
-        scenario_order: so, post_question_order: pqo,
-        current_screen: 'consent', completed: false,
-        learn_more_clicked: false, comp_check_retry: false
+        scenario_order: so, block_b_order: bbo, block_a_order: bao,
+        current_screen: 'consent', completed: false
       };
       mockState.participants.set(token, row);
       mockState.byPid.set(pid, row);
@@ -180,8 +179,9 @@ test('shuffle preserves length and contents', () => {
 test('generateAllOrderings returns valid permutations', () => {
   const o = generateAllOrderings();
   assert.deepEqual([...o.scenario_order].sort(), [1, 2]);
-  assert.deepEqual([...o.post_question_order].sort((a, b) => a - b),
-    Array.from({ length: 14 }, (_, i) => i + 1));
+  // Block B = ids 7-13 (7 questions); Block A = ids 1-6 + attention check 14 (7 items)
+  assert.deepEqual([...o.block_b_order].sort((a, b) => a - b), [7, 8, 9, 10, 11, 12, 13]);
+  assert.deepEqual([...o.block_a_order].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 14]);
 });
 test('assignCell yields a valid cell (dt 1..16, uc B1/B2)', async () => {
   mockState.participants.clear();
@@ -329,7 +329,8 @@ const fakeParticipant = {
   scenario_order: [2, 1],
   current_screen: 'consent',
   data_type: 5, use_case: 'B1',
-  post_question_order: [4, 1, 7, 14, 2, 5, 3, 8, 6, 11, 9, 13, 10, 12]
+  block_b_order: [9, 7, 13, 11, 8, 12, 10],   // Block B ids (7-13)
+  block_a_order: [4, 1, 14, 2, 5, 3, 6]        // Block A ids (1-6) + attention check (14)
 };
 test('consent → welcome → intro', () => {
   assert.equal(nextAfter(fakeParticipant, 'consent'), 'welcome');
@@ -338,10 +339,10 @@ test('consent → welcome → intro', () => {
 test('intro → first scenario per scenario_order', () => {
   assert.equal(nextAfter(fakeParticipant, 'intro'), 'scenario_2');
 });
-test('scenarios: first → transition → second → first post-question', () => {
+test('scenarios: first → transition → second → post-scenario intro', () => {
   assert.equal(nextAfter(fakeParticipant, 'scenario_2'), 'scenario_transition');   // first → transition
   assert.equal(nextAfter(fakeParticipant, 'scenario_transition'), 'scenario_1');    // transition → second
-  assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'postq_4');                // second → first postq
+  assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'post_scenario_intro');    // second → intro
 });
 test('scenario_transition screen carries the button label', () => {
   const p = screenPayload(fakeParticipant, 'scenario_transition');
@@ -349,10 +350,12 @@ test('scenario_transition screen carries the button label', () => {
   assert.equal(p.button, 'See this approach on the next page');
   assert.ok(p.body.join(' ').includes('a different approach'));
 });
-test('post-questions follow post_question_order, then open_response', () => {
-  assert.equal(nextAfter(fakeParticipant, 'postq_4'), 'postq_1');
-  assert.equal(nextAfter(fakeParticipant, 'postq_1'), 'postq_7');
-  assert.equal(nextAfter(fakeParticipant, 'postq_12'), 'open_response');
+test('post-scenario intro → Block B → Block A → open_response', () => {
+  assert.equal(nextAfter(fakeParticipant, 'post_scenario_intro'), 'postq_9'); // first Block B
+  assert.equal(nextAfter(fakeParticipant, 'postq_9'), 'postq_7');             // next Block B
+  assert.equal(nextAfter(fakeParticipant, 'postq_10'), 'postq_4');            // last Block B → first Block A
+  assert.equal(nextAfter(fakeParticipant, 'postq_4'), 'postq_1');             // next Block A
+  assert.equal(nextAfter(fakeParticipant, 'postq_6'), 'open_response');       // last Block A → open
 });
 test('post-scenarios sequence', () => {
   assert.equal(nextAfter(fakeParticipant, 'open_response'), 'ai_usage');
@@ -418,24 +421,35 @@ test('scenario copy is voice-neutral (voice=appx unchanged)', () => {
   const a = screenPayload(fakeParticipant, 'scenario_1', { voice: 'appx' });
   assert.deepEqual(r, a);
 });
-test('post-question payload carries the item + substituted prompt', () => {
+test('post-question Block A payload: data-type prompt, no header, no About label', () => {
   const p = screenPayload(fakeParticipant, 'postq_1');
   assert.equal(p.kind, 'post_question');
   assert.equal(p.screen, 'postq_1');
   assert.equal(p.item.key, 'postq_importance');
   assert.equal(p.item.type, 'likert5');
   assert.ok(p.item.prompt.includes(dt5.label));
+  assert.equal(p.item.header, undefined);   // Block A → no use-case header
+  assert.equal(p.data_label, undefined);    // "About:" label removed
 });
-test('post-question B-block substitutes the use case data_use form', () => {
+test('post-question Block B payload: use-case header + trimmed prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_7');
   assert.equal(p.item.key, 'postq_comp_by_amount');
-  assert.ok(p.item.prompt.includes(content.USE_CASES.B1.data_use));
+  assert.ok(p.item.header.includes(dt5.inline));                        // "Suppose App Z collects your <data>…"
+  assert.ok(p.item.header.includes(content.USE_CASES.B1.data_use));     // "…for <use>"
+  assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
 });
-test('attention-check payload (postq_14) renders as a plain item', () => {
+test('attention-check payload (postq_14): plain Block-A item (no header)', () => {
   const p = screenPayload(fakeParticipant, 'postq_14');
   assert.equal(p.item.type, 'attention');
   assert.equal(p.item.key, 'attention_check');
   assert.ok(p.item.anchors);
+  assert.equal(p.item.header, undefined);
+});
+test('post_scenario_intro screen mentions data type + use case', () => {
+  const p = screenPayload(fakeParticipant, 'post_scenario_intro');
+  const text = p.body.join(' ');
+  assert.ok(text.includes(dt5.inline));
+  assert.ok(text.includes(content.USE_CASES.B1.data_use));
 });
 test('open_response screen carries the prompt + field key', () => {
   const p = screenPayload(fakeParticipant, 'open_response');

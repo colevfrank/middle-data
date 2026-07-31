@@ -38,6 +38,11 @@ function validateScenarioTransition(body) {
   return { ok: true, fields: {} };
 }
 
+function validatePostScenarioIntro(body) {
+  // No inputs beyond clicking Continue.
+  return { ok: true, fields: {} };
+}
+
 // Merged intro screen: App Z setup + data type + comprehension. The client gates
 // Continue until all three T/F items are correct (T,T,F), so a valid submit always
 // carries the correct answers plus a per-question wrong-attempt count. We re-verify
@@ -182,6 +187,7 @@ const VALIDATORS = {
   scenario_1: validateScenario1,
   scenario_2: validateScenario2,
   scenario_transition: validateScenarioTransition,
+  post_scenario_intro: validatePostScenarioIntro,
   open_response: validateOpenResponse,
   ai_usage: validateAiUsage,
   demographics: validateDemographics,

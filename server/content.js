@@ -114,9 +114,10 @@ const S2_TIERS = [
   { value: '99', label: '99%' }
 ];
 
-// Post-scenario questions: Block A (about the data type) + Block B (about compensation for the
-// use case) + one attention check. All 14 are pooled and randomized together (post_question_order),
-// each shown on its own screen. `key` doubles as the DB column name. `prompt(dt, uc)` builds the
+// Post-scenario questions: Block B (about compensation for the use case, shown first) + Block A
+// (about the data type) + one attention check (randomized into Block A). Block B is randomized
+// within itself (block_b_order), then Block A (block_a_order); each shown on its own screen.
+// `key` doubles as the DB column name. `prompt(dt, uc)` builds the
 // text with the assigned data type / use case substituted in.
 //   type: 'likert5'    → 1-5 radio with anchors, stored SMALLINT
 //         'choice'     → radio list of {value,label}, stored TEXT
@@ -155,17 +156,19 @@ const POST_QUESTIONS = [
     prompt: (dt) => `If you found out your ${dt.label} had been released publicly without your knowledge, how upset would you be?`,
     anchors: { low: 'not at all', high: 'Extremely' } },
 
-  // ----- Block B: about compensation for the use case -----
+  // ----- Block B: about compensation for the use case. The use-case context
+  // ("Suppose App Z collects your <data> for <use>") is shown as a per-screen
+  // header, so these prompts are trimmed to just the question. -----
   { id: 7, key: 'postq_comp_by_amount', block: 'B', type: 'choice', options: YESNO_UNSURE,
-    prompt: (dt, uc) => `Assuming your ${dt.label} was used for ${uc.data_use}, should you be compensated based on how much of your data was used?` },
+    prompt: () => 'Should you be compensated based on how much of your data was used?' },
   { id: 8, key: 'postq_comp_per_use', block: 'B', type: 'choice', options: YESNO_UNSURE,
-    prompt: (dt, uc) => `Assuming your ${dt.label} was used for ${uc.data_use}, should you be compensated each time it's used?` },
+    prompt: () => 'Should you be compensated each time your data is used?' },
   { id: 9, key: 'postq_comp_by_effort', block: 'B', type: 'choice', options: YESNO_UNSURE,
-    prompt: (dt, uc) => `Assuming your ${dt.label} was used for ${uc.data_use}, should you be compensated based on how hard it was to generate the data?` },
+    prompt: () => 'Should you be compensated based on how hard it was to generate this data?' },
   { id: 10, key: 'postq_comp_by_originality', block: 'B', type: 'choice', options: YESNO_UNSURE,
-    prompt: (dt, uc) => `Assuming your ${dt.label} was used for ${uc.data_use}, should you be compensated for how original your data is relative to others'?` },
+    prompt: () => "Should you be compensated for how original your data is relative to others'?" },
   { id: 11, key: 'postq_coworker_sells_feel', block: 'B', type: 'choice',
-    prompt: (dt, uc) => `Assuming a coworker got a hold of your ${dt.label} and managed to sell it to a company using it for ${uc.data_use}, how would you feel?`,
+    prompt: () => 'Suppose a coworker got hold of this data and sold it to another company for the same use. How would you feel?',
     options: [
       { value: 'very_upset',   label: 'Very upset' },
       { value: 'little_upset', label: 'A little upset' },
@@ -174,10 +177,10 @@ const POST_QUESTIONS = [
       { value: 'happy',        label: 'Happy for them' }
     ] },
   { id: 12, key: 'postq_credit_ack', block: 'B', type: 'likert5',
-    prompt: (dt, uc) => `Should you receive credit or acknowledgement for ${dt.label} when your data is used for ${uc.data_use}?`,
+    prompt: () => 'Should you receive credit or acknowledgement for this data when it is used?',
     anchors: { low: 'Not at all', high: 'Completely' } },
   { id: 13, key: 'postq_concerns', block: 'B', type: 'multiselect',
-    prompt: (dt, uc) => `What is/are your main concern(s) about sharing your ${dt.label} for ${uc.data_use}? (Please check all that apply)`,
+    prompt: () => 'What is/are your main concern(s) about sharing this data? (Please check all that apply)',
     options: [
       { value: 'not_concerned', label: "I'm not concerned" },
       { value: 'too_personal',  label: "It's too personal or sensitive" },
@@ -258,14 +261,16 @@ const OPEN_RESPONSE = {
   prompt: 'A lot of companies rely on user data. Sometimes, selling user data is a major revenue stream. Or user data may be critical to their main product so that their revenue stream indirectly depends on user data. How do you feel about your online data being a source of revenue for companies? Does your answer change if your data is being used to train AI tools?'
 };
 
-// Ordered list of screen IDs. `__scenarios__` and `__post_questions__` are placeholder slots
-// expanded per participant (in scenario_order / post_question_order).
+// Ordered list of screen IDs. `__scenarios__` expands per participant (scenario_order, with a
+// scenario_transition between); `__block_b__` / `__block_a__` expand via block_b_order / block_a_order.
 const SCREEN_FLOW = [
   'consent',
   'welcome',
   'intro',
   '__scenarios__',
-  '__post_questions__',
+  'post_scenario_intro',
+  '__block_b__',
+  '__block_a__',
   'open_response',
   'ai_usage',
   'demographics',

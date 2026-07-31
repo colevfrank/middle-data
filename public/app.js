@@ -332,6 +332,16 @@
     root.appendChild(btn);
   };
 
+  // Intro before the post-scenario questions (Block B then Block A).
+  RENDERERS.post_scenario_intro = function (p) {
+    for (const para of p.body) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    }
+    const btn = continueBtn(() => submit('post_scenario_intro', {}), 'Continue');
+    btn.disabled = false;
+    root.appendChild(btn);
+  };
+
   // Merged intro screen: App Z setup → the "recent change" (data type + use case)
   // → comprehension check. The comprehension gates Continue until all three items
   // are correct, counting wrong submissions per item.
@@ -479,8 +489,11 @@
   // is just an item of type 'attention' and renders like a likert5.
   RENDERERS.post_question = function (p) {
     const it = p.item;
-    root.appendChild(el('p', { class: 'text-slate-500 text-xs mb-3' }, 'About: ' + p.data_label));
-    root.appendChild(el('p', { class: 'text-slate-800 font-medium mb-1' }, it.prompt));
+    // Block B items carry an unbolded use-case context header above the question.
+    if (it.header) {
+      root.appendChild(el('p', { class: 'text-slate-700 mb-2' }, it.header));
+    }
+    root.appendChild(el('p', { class: 'text-slate-900 font-semibold mb-1' }, it.prompt));
 
     const form = el('div', {});
     let getValue;

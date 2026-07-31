@@ -4,8 +4,10 @@ const FIXED_ORDER = [
   'consent',
   'welcome',
   'intro',
-  '__scenarios__',      // expanded via scenario_order
-  '__post_questions__', // expanded via post_question_order
+  '__scenarios__',        // expanded via scenario_order (+ scenario_transition between)
+  'post_scenario_intro',
+  '__block_b__',          // expanded via block_b_order
+  '__block_a__',          // expanded via block_a_order
   'open_response',
   'ai_usage',
   'demographics',
@@ -21,10 +23,6 @@ function isPostQuestion(screenId) {
   return /^postq_\d+$/.test(screenId);
 }
 
-function firstPostQuestion(participant) {
-  return `postq_${participant.post_question_order[0]}`;
-}
-
 // After a successful submit of `currentScreen`, what's next?
 function nextAfter(participant, currentScreen) {
   if (isScenario(currentScreen)) {
@@ -33,7 +31,7 @@ function nextAfter(participant, currentScreen) {
     if (idx < participant.scenario_order.length - 1) {
       return 'scenario_transition'; // beat between the two scenarios
     }
-    return firstPostQuestion(participant);
+    return 'post_scenario_intro';
   }
 
   // The transition follows the first scenario; go to the second.
@@ -41,13 +39,25 @@ function nextAfter(participant, currentScreen) {
     return `scenario_${participant.scenario_order[1]}`;
   }
 
+  // Post-scenario intro → first Block B question.
+  if (currentScreen === 'post_scenario_intro') {
+    return `postq_${participant.block_b_order[0]}`;
+  }
+
   if (isPostQuestion(currentScreen)) {
     const qid = parseInt(currentScreen.split('_')[1], 10);
-    const idx = participant.post_question_order.indexOf(qid);
-    if (idx < participant.post_question_order.length - 1) {
-      return `postq_${participant.post_question_order[idx + 1]}`;
+    const bIdx = participant.block_b_order.indexOf(qid);
+    if (bIdx >= 0) {
+      if (bIdx < participant.block_b_order.length - 1) {
+        return `postq_${participant.block_b_order[bIdx + 1]}`;
+      }
+      return `postq_${participant.block_a_order[0]}`; // Block B done → first Block A
     }
-    return 'open_response';
+    const aIdx = participant.block_a_order.indexOf(qid);
+    if (aIdx >= 0 && aIdx < participant.block_a_order.length - 1) {
+      return `postq_${participant.block_a_order[aIdx + 1]}`;
+    }
+    return 'open_response'; // Block A done
   }
 
   const linear = [

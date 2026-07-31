@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS participants (
 
   -- Randomized orderings
   scenario_order INT[] NOT NULL,        -- permutation of [1,2]
-  post_question_order INT[] NOT NULL,   -- permutation of [1..14] (13 questions + attention check)
+  block_b_order INT[] NOT NULL,         -- Block B question ids (7-13), shown first
+  block_a_order INT[] NOT NULL,         -- Block A question ids (1-6) + attention check (14), shown after B
 
   -- State machine
   current_screen TEXT NOT NULL DEFAULT 'consent',

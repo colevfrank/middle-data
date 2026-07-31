@@ -25,7 +25,7 @@ Use case (2 levels — assign one per participant)
 Also randomize:
 
 Order of Scenarios 1 and 2
-Order of the 14 post-scenario items (Block A + Block B + one attention check), randomized together; each shown on its own screen
+Order of the Block B questions (7) and, separately, the Block A questions (6 + attention check); Block B is shown first, then Block A, each randomized within its own block; each question on its own screen
 
 Target N = 3,200 — block-randomized to 100 participants per cell across the 16 × 2 = 32 cells.
 
@@ -61,13 +61,13 @@ B1 — Personalization
 - Intro screen (Screen 3), the primary framing: "App Z would like to use your [DATA TYPE] to improve its personalization algorithm. Using your [DATA TYPE] would allow it to provide content that is more targeted to you."
 - Comprehension statement 2: "App Z would use your data to improve its personalization algorithm."
 - Scenario frame ("We will use this information to [USE]", first person): "improve our personalization algorithm"
-- Block B questions — [DATA USE] in "…was used for [DATA USE]": "improving a personalization algorithm"
+- Block B header + post-scenario intro (data_use form, "…for [DATA USE]"): "improving a personalization algorithm"
 
 B2 — GenAI Training
 - Intro screen (Screen 3), the primary framing: "App Z would like to use your [DATA TYPE] to improve its generative AI system. Using your [DATA TYPE] would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator)."
 - Comprehension statement 2: "App Z would use your data to improve its generative AI system."
 - Scenario frame ("We will use this information to [USE]", first person): "improve our generative AI system"
-- Block B questions — [DATA USE]: "training and improving a generative AI system (like a chatbot, writing assistant, or image generator)"
+- Block B header + post-scenario intro (data_use form): "training and improving a generative AI system (like a chatbot, writing assistant, or image generator)"
 
 ### Survey Flow
 Screen 1: Consent
@@ -139,11 +139,26 @@ Stored: s2_accepted_shares (TEXT[] of accepted percentages '1'/'10'/'25'/'50'/'7
 
 Both scenarios render in one voice-neutral, first-person design (no researcher/AppX-voice split). ?mode=plain shows the same content without the browser frame; ?voice=appx no longer changes scenario copy.
 
-Screens 7–20: Post-Scenario Questions
-Fourteen items — the 13 questions below plus one attention check — each shown on its own screen. All 14 are pooled and randomized together into one random screen order. [DATA TYPE] = the assigned data type's label; [DATA USE] = the assigned use case's [DATA USE] form (see Use Case Conditions). Response options appear in the order listed (no within-question option randomization). For Likert (1–5) items, each endpoint label is shown prefixed with its scale number — e.g., "1: Not at all" … "5: Extremely".
+Screen 7: Post-Scenario Intro
+"Now, we'd like to understand how you feel about App Z collecting your [DATA TYPE] for [USE CASE]." ([DATA TYPE] = inline; [USE CASE] = the data_use form)
+"On the following pages, we'll ask you a series of questions."
+[ Continue ]
 
-Block A — about the data type
+Screens 8–21: Post-Scenario Questions — Block B first (Screens 8–14), then Block A (Screens 15–21)
+Each question on its own screen. Block B (7 questions) is shown first, randomized within the block (block_b_order); then Block A (6 questions + the attention check = 7 items), randomized within the block (block_a_order). No "About:" label on any screen. For Likert (1–5) items, each endpoint label is prefixed with its scale number (e.g., "1: Not at all" … "5: Extremely"). Response options appear in the order listed (no within-question option randomization).
 
+Block B — about compensation for the use case (Screens 8–14)
+Each Block B screen shows an unbolded header — "Suppose App Z collects your [DATA TYPE] for [USE CASE]" ([DATA TYPE] = inline, [USE CASE] = data_use) — with the bolded question below. The questions are trimmed (the use-case context lives in the header):
+B1: "Should you be compensated based on how much of your data was used?" (Yes / No / Unsure)
+B2: "Should you be compensated each time your data is used?" (Yes / No / Unsure)
+B3: "Should you be compensated based on how hard it was to generate this data?" (Yes / No / Unsure)
+B4: "Should you be compensated for how original your data is relative to others'?" (Yes / No / Unsure)
+B5: "Suppose a coworker got hold of this data and sold it to another company for the same use. How would you feel?" (Very upset / A little upset / Confused / Don't care at all / Happy for them)
+B6: "Should you receive credit or acknowledgement for this data when it is used?" (1–5, labeled "Not at all" to "Completely")
+B7: "What is/are your main concern(s) about sharing this data? (Please check all that apply)" (checkboxes, multi-select): I'm not concerned / It's too personal or sensitive / It could be used to manipulate me / It could be used to impersonate or represent me / I don't trust the company to protect it / I'm not sure
+
+Block A — about the data type (Screens 15–21; no use case mentioned)
+Just the bolded question (no header). The attention check is randomized in among A1–A6.
 A1: "Is [DATA TYPE] important to you?" (1–5, labeled "not important to me at all" to "extremely important to me")
 A2: "Do you consider [DATA TYPE] sensitive data?" (1–5, labeled "not sensitive at all" to "extremely sensitive")
 A3: "Do you feel ownership over [DATA TYPE]?" (1–5, labeled "I do not feel ownership over this type of data" to "I feel strong ownership over it")
@@ -154,28 +169,14 @@ A4: "Would you ever share your [DATA TYPE] publicly – for example with a room 
   - Yes, including with my name attached. (3)
 A5: "Is it appropriate to buy and sell your [DATA TYPE]?" (1–5, labeled "Completely inappropriate" to "Completely appropriate")
 A6: "If you found out your [DATA TYPE] had been released publicly without your knowledge, how upset would you be?" (1–5, labeled "not at all" to "Extremely")
+AC (attention check): "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1)." (1–5, labeled "not important to me at all" to "extremely important to me"; correct response = 1). Records attention_check_pass (boolean); failing is recorded but does not end the survey.
 
-Block B — about compensation for the use case
-
-B1: "Assuming your [DATA TYPE] was used for [DATA USE], should you be compensated based on how much of your data was used?" (Yes / No / Unsure)
-B2: "Assuming your [DATA TYPE] was used for [DATA USE], should you be compensated each time it's used?" (Yes / No / Unsure)
-B3: "Assuming your [DATA TYPE] was used for [DATA USE], should you be compensated based on how hard it was to generate the data?" (Yes / No / Unsure)
-B4: "Assuming your [DATA TYPE] was used for [DATA USE], should you be compensated for how original your data is relative to others'?" (Yes / No / Unsure)
-B5: "Assuming a coworker got a hold of your [DATA TYPE] and managed to sell it to a company using it for [DATA USE], how would you feel?" (Very upset / A little upset / Confused / Don't care at all / Happy for them)
-B6: "Should you receive credit or acknowledgement for [DATA TYPE] when your data is used for [DATA USE]?" (1–5, labeled "Not at all" to "Completely")
-B7: "What is/are your main concern(s) about sharing your [DATA TYPE] for [DATA USE]? (Please check all that apply)" (checkboxes, multi-select): I'm not concerned / It's too personal or sensitive / It could be used to manipulate me / It could be used to impersonate or represent me / I don't trust the company to protect it / I'm not sure
-
-Attention check (pooled and randomized together with A1–B7)
-
-AC: "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1)." (1–5, labeled "not important to me at all" to "extremely important to me"; correct response = 1)
-Record whether the participant selected the instructed response (attention_check_pass, boolean). Failing is recorded but does not end the survey.
-
-Screen 21: Open-Ended Response
+Screen 22: Open-Ended Response
 Its own screen, after the post-scenario battery and before AI usage. Optional free-text box (stored in open_data_revenue; blank allowed).
 "A lot of companies rely on user data. Sometimes, selling user data is a major revenue stream. Or user data may be critical to their main product so that their revenue stream indirectly depends on user data. How do you feel about your online data being a source of revenue for companies? Does your answer change if your data is being used to train AI tools?"
 [Open-ended response text box]
 
-Screen 22: AI Usage & Literacy
+Screen 23: AI Usage & Literacy
 How often do you use AI tools (where AI is the core feature), such as AI chatbots, AI email composition, AI writing assistants, AI schedulers, or AI image generators? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
 
 How often do you use social media apps, like Instagram, Facebook, TikTok, Reddit, Snapchat, Retro, and others? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
@@ -186,14 +187,14 @@ Do you currently work in the technology sector? ◯ Yes ◯ No ◯ Prefer not to
 
 Have you ever worked in the technology sector? ◯ Yes ◯ No ◯ Prefer not to answer
 
-Screen 23: Demographics
+Screen 24: Demographics
 All questions include "Prefer not to answer" as an option.
 
 Age: 18–24 / 25–34 / 35–44 / 45–54 / 55–64 / 65+ / Prefer not to answer
 Gender: Man / Woman / Non-binary / Other [text] / Prefer not to answer
 Education: Less than high school / High school / Some college / Bachelor's degree / Graduate degree / Prefer not to answer
 
-Screen 24: Debrief
+Screen 25: Debrief
 "Thank you for completing this study."
 "The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.
 The "App Z" service in this survey was hypothetical. No company called App Z collected any of your information, and your responses to the scenarios will not be shared with any third party."
@@ -226,7 +227,7 @@ Additional tracking:
 comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count (integer — wrong attempts per T/F item before passing; comprehension requires passing, so everyone ends correct)
 comp_check_fail_count (integer — overall failed attempts before passing)
 scenario_order (array, e.g., [2,1])
-post_question_order (array giving the randomized order of the 14 post-scenario items: the 13 questions + attention check)
+block_b_order (randomized order of the 7 Block B questions); block_a_order (randomized order of the 6 Block A questions + attention check)
 attention_check_pass (boolean — did they select the instructed response)
 
 ### Database Schema
@@ -238,11 +239,11 @@ prolific_pid, study_id, session_id
 data_type (1–16)
 use_case (B1 or B2)
 scenario_order (Postgres integer array, INT[])
-post_question_order (Postgres integer array, INT[])
+block_b_order, block_a_order (Postgres integer arrays, INT[])
 comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count, comp_check_fail_count (SMALLINT)
 completed (boolean)
 created_at, completed_at (timestamps)
-All response fields (Scenario 1 accepted discounts (s1_accepted_discounts) + s1_none; Scenario 2 accepted revenue shares (s2_accepted_shares) + s2_none; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the open-ended response (open_data_revenue); the Screen 22 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
+All response fields (Scenario 1 accepted discounts (s1_accepted_discounts) + s1_none; Scenario 2 accepted revenue shares (s2_accepted_shares) + s2_none; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the open-ended response (open_data_revenue); the Screen 23 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
 
 events — one row per screen view, for latency tracking:
 
