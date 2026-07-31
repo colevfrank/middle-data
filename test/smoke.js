@@ -338,9 +338,16 @@ test('consent → welcome → intro', () => {
 test('intro → first scenario per scenario_order', () => {
   assert.equal(nextAfter(fakeParticipant, 'intro'), 'scenario_2');
 });
-test('scenarios follow scenario_order, then first post-question', () => {
-  assert.equal(nextAfter(fakeParticipant, 'scenario_2'), 'scenario_1');
-  assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'postq_4');
+test('scenarios: first → transition → second → first post-question', () => {
+  assert.equal(nextAfter(fakeParticipant, 'scenario_2'), 'scenario_transition');   // first → transition
+  assert.equal(nextAfter(fakeParticipant, 'scenario_transition'), 'scenario_1');    // transition → second
+  assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'postq_4');                // second → first postq
+});
+test('scenario_transition screen carries the button label', () => {
+  const p = screenPayload(fakeParticipant, 'scenario_transition');
+  assert.equal(p.screen, 'scenario_transition');
+  assert.equal(p.button, 'See this approach on the next page');
+  assert.ok(p.body.join(' ').includes('a different approach'));
 });
 test('post-questions follow post_question_order, then open_response', () => {
   assert.equal(nextAfter(fakeParticipant, 'postq_4'), 'postq_1');

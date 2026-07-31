@@ -161,6 +161,14 @@ function screenPayload(p, screenId, extra = {}) {
     case 'scenario_2':
       return scenarioPayload(p, screenId);
 
+    case 'scenario_transition': {
+      return {
+        screen: 'scenario_transition',
+        body: ["Now we'd like you to imagine that App Z took a different approach."],
+        button: 'See this approach on the next page'
+      };
+    }
+
     case 'open_response': {
       return {
         screen: 'open_response',
@@ -206,7 +214,7 @@ function screenPayload(p, screenId, extra = {}) {
 
 function progressFor(screenId, participant) {
   const order = ['consent', 'welcome', 'intro'];
-  for (const n of participant.scenario_order) order.push(`scenario_${n}`);
+  order.push(`scenario_${participant.scenario_order[0]}`, 'scenario_transition', `scenario_${participant.scenario_order[1]}`);
   for (const qid of participant.post_question_order) order.push(`postq_${qid}`);
   order.push('open_response', 'ai_usage', 'demographics', 'debrief');
   const idx = order.indexOf(screenId);

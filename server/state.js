@@ -31,9 +31,14 @@ function nextAfter(participant, currentScreen) {
     const num = parseInt(currentScreen.split('_')[1], 10);
     const idx = participant.scenario_order.indexOf(num);
     if (idx < participant.scenario_order.length - 1) {
-      return `scenario_${participant.scenario_order[idx + 1]}`;
+      return 'scenario_transition'; // beat between the two scenarios
     }
     return firstPostQuestion(participant);
+  }
+
+  // The transition follows the first scenario; go to the second.
+  if (currentScreen === 'scenario_transition') {
+    return `scenario_${participant.scenario_order[1]}`;
   }
 
   if (isPostQuestion(currentScreen)) {

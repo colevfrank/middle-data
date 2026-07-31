@@ -105,8 +105,9 @@ Comprehension check (same screen, below the narrative): "Based on the informatio
 - (FALSE — same for everyone) "App Z guarantees that your data will be permanently deleted after 30 days."
 Continue does not advance until all three are correct (T, T, F); participants may retry unlimited times. Record how many times each item was answered wrong before passing (comp_check_1/2/3_wrong_count) and the overall number of failed attempts (comp_check_fail_count — incremented once per Continue click with any wrong answer). No comprehension screen-out.
 
-Screens 4–5: Scenarios 1 and 2 (order randomized)
+Screens 4–6: Scenarios 1 and 2 (order randomized), with a transition screen between them
 (The "Scenario 1 / Scenario 2" labels below are internal identifiers only. Because the order is randomized, each is shown to participants with a neutral, unnumbered "Scenario" heading — no copy may imply that one comes before another.)
+Transition screen (Screen 5, shown after the first scenario and before the second): "Now we'd like you to imagine that App Z took a different approach." with a button labeled "See this approach on the next page". No data recorded.
 
 Shared layout (both scenarios): a bold lead-in line at the top, then a settings-page frame (browser chrome + side panel, as in the settings-mode UI), then a bold question below the frame with multi-select checkboxes ("select all that apply"). Within the frame: the section heading is bold; "We will collect your [DATA TYPE]" is bold + underlined; the offer line is highlighted/prominent. The "By default…" line describes information as a whole (generic "your information"), NOT the assigned data type. The use line is per-condition, first person ("our"): B1 → "improve our personalization algorithm", B2 → "improve our generative AI system".
 
@@ -138,7 +139,7 @@ Stored: s2_accepted_shares (TEXT[] of accepted percentages '1'/'10'/'25'/'50'/'7
 
 Both scenarios render in one voice-neutral, first-person design (no researcher/AppX-voice split). ?mode=plain shows the same content without the browser frame; ?voice=appx no longer changes scenario copy.
 
-Screens 6–19: Post-Scenario Questions
+Screens 7–20: Post-Scenario Questions
 Fourteen items — the 13 questions below plus one attention check — each shown on its own screen. All 14 are pooled and randomized together into one random screen order. [DATA TYPE] = the assigned data type's label; [DATA USE] = the assigned use case's [DATA USE] form (see Use Case Conditions). Response options appear in the order listed (no within-question option randomization). For Likert (1–5) items, each endpoint label is shown prefixed with its scale number — e.g., "1: Not at all" … "5: Extremely".
 
 Block A — about the data type
@@ -169,12 +170,12 @@ Attention check (pooled and randomized together with A1–B7)
 AC: "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1)." (1–5, labeled "not important to me at all" to "extremely important to me"; correct response = 1)
 Record whether the participant selected the instructed response (attention_check_pass, boolean). Failing is recorded but does not end the survey.
 
-Screen 20: Open-Ended Response
+Screen 21: Open-Ended Response
 Its own screen, after the post-scenario battery and before AI usage. Optional free-text box (stored in open_data_revenue; blank allowed).
 "A lot of companies rely on user data. Sometimes, selling user data is a major revenue stream. Or user data may be critical to their main product so that their revenue stream indirectly depends on user data. How do you feel about your online data being a source of revenue for companies? Does your answer change if your data is being used to train AI tools?"
 [Open-ended response text box]
 
-Screen 21: AI Usage & Literacy
+Screen 22: AI Usage & Literacy
 How often do you use AI tools (where AI is the core feature), such as AI chatbots, AI email composition, AI writing assistants, AI schedulers, or AI image generators? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
 
 How often do you use social media apps, like Instagram, Facebook, TikTok, Reddit, Snapchat, Retro, and others? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
@@ -185,14 +186,14 @@ Do you currently work in the technology sector? ◯ Yes ◯ No ◯ Prefer not to
 
 Have you ever worked in the technology sector? ◯ Yes ◯ No ◯ Prefer not to answer
 
-Screen 22: Demographics
+Screen 23: Demographics
 All questions include "Prefer not to answer" as an option.
 
 Age: 18–24 / 25–34 / 35–44 / 45–54 / 55–64 / 65+ / Prefer not to answer
 Gender: Man / Woman / Non-binary / Other [text] / Prefer not to answer
 Education: Less than high school / High school / Some college / Bachelor's degree / Graduate degree / Prefer not to answer
 
-Screen 23: Debrief
+Screen 24: Debrief
 "Thank you for completing this study."
 "The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.
 The "App Z" service in this survey was hypothetical. No company called App Z collected any of your information, and your responses to the scenarios will not be shared with any third party."
@@ -241,7 +242,7 @@ post_question_order (Postgres integer array, INT[])
 comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count, comp_check_fail_count (SMALLINT)
 completed (boolean)
 created_at, completed_at (timestamps)
-All response fields (Scenario 1 least-acceptable discount (s1_min_share); Scenario 2 least-acceptable revenue share (s2_min_share) + follow-up reason; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the open-ended response (open_data_revenue); the Screen 21 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
+All response fields (Scenario 1 accepted discounts (s1_accepted_discounts) + s1_none; Scenario 2 accepted revenue shares (s2_accepted_shares) + s2_none; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the open-ended response (open_data_revenue); the Screen 22 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
 
 events — one row per screen view, for latency tracking:
 
