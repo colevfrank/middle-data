@@ -170,7 +170,9 @@
 
   // ===== Helpers for question UI =====
   function likert5(name) {
-    const container = el('div', { class: 'flex flex-wrap items-center gap-2 sm:gap-4 mt-2' });
+    // Spread the 5 options edge-to-edge so they line up with the anchorRow's
+    // justify-between endpoints (low under option 1, high under option 5).
+    const container = el('div', { class: 'flex items-center justify-between mt-2' });
     for (let i = 1; i <= 5; i++) {
       container.appendChild(el('label', { class: 'label-radio' }, [
         el('input', { type: 'radio', name, value: i }),
