@@ -30,7 +30,7 @@ Dr. Sarah Cen
 Engineering and Public Policy
 5215 Wean Hall, Carnegie Mellon University
 5000 Forbes Ave., Pittsburgh, PA 15213
-sarah.cen@gmail.com
+sarahcen@andrew.cmu.edu
 If you have questions later, desire additional information, or wish to withdraw your participation please contact the Principal Investigator by mail, phone or e-mail in accordance with the contact information listed above.  
 
 If you have questions pertaining to your rights as a research participant; or to report concerns to this study, you should contact the Office of Research integrity and Compliance at Carnegie Mellon University.  Email: irb-review@andrew.cmu.edu . Phone: 412-268-4721.

@@ -223,7 +223,7 @@ function screenPayload(p, screenId, extra = {}) {
           'Thank you for completing this study.',
           'The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.',
           'The "App Z" service in this survey was hypothetical. No company called App Z collected any of your information, and your responses to the scenarios will not be shared with any third party.',
-          'Your responses will help inform policy discussions about data governance in the age of AI. If you have questions, please contact Sarah Cen at sarah.cen@gmail.com.',
+          'Your responses will help inform policy discussions about data governance in the age of AI. If you have questions, please contact Sarah Cen at sarahcen@andrew.cmu.edu.',
           'IRB Protocol: STUDY2026_00000225 — Carnegie Mellon University'
         ]
       };
