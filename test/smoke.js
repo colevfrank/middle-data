@@ -358,7 +358,8 @@ test('post-scenario intro → Block B → Block A → open_response', () => {
   assert.equal(nextAfter(fakeParticipant, 'postq_6'), 'open_response');       // last Block A → open
 });
 test('post-scenarios sequence', () => {
-  assert.equal(nextAfter(fakeParticipant, 'open_response'), 'ai_usage');
+  assert.equal(nextAfter(fakeParticipant, 'open_response'), 'about_you_intro');
+  assert.equal(nextAfter(fakeParticipant, 'about_you_intro'), 'ai_usage');
   assert.equal(nextAfter(fakeParticipant, 'ai_usage'), 'demographics');
   assert.equal(nextAfter(fakeParticipant, 'demographics'), 'debrief');
   assert.equal(nextAfter(fakeParticipant, 'debrief'), 'complete');

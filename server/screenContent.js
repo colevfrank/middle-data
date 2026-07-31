@@ -191,6 +191,14 @@ function screenPayload(p, screenId, extra = {}) {
       };
     }
 
+    case 'about_you_intro': {
+      return {
+        screen: 'about_you_intro',
+        body: ['In the last part of this survey, we have a few questions about you.'],
+        button: 'Next'
+      };
+    }
+
     case 'ai_usage': {
       return {
         screen: 'ai_usage',
@@ -232,7 +240,7 @@ function progressFor(screenId, participant) {
   order.push('post_scenario_intro');
   for (const qid of participant.block_b_order) order.push(`postq_${qid}`);
   for (const qid of participant.block_a_order) order.push(`postq_${qid}`);
-  order.push('open_response', 'ai_usage', 'demographics', 'debrief');
+  order.push('open_response', 'about_you_intro', 'ai_usage', 'demographics', 'debrief');
   const idx = order.indexOf(screenId);
   if (idx < 0) return 0;
   return Math.round(((idx + 1) / order.length) * 100);

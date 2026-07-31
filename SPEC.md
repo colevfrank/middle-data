@@ -176,7 +176,10 @@ Its own screen, after the post-scenario battery and before AI usage. Optional fr
 "A lot of companies rely on user data. Sometimes, selling user data is a major revenue stream. Or user data may be critical to their main product so that their revenue stream indirectly depends on user data. How do you feel about your online data being a source of revenue for companies? Does your answer change if your data is being used to train AI tools?"
 [Open-ended response text box]
 
-Screen 23: AI Usage & Literacy
+Screen 23: About-You Intro
+"In the last part of this survey, we have a few questions about you." with a "Next" button. No data recorded.
+
+Screen 24: AI Usage & Literacy
 How often do you use AI tools (where AI is the core feature), such as AI chatbots, AI email composition, AI writing assistants, AI schedulers, or AI image generators? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
 
 How often do you use social media apps, like Instagram, Facebook, TikTok, Reddit, Snapchat, Retro, and others? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
@@ -187,14 +190,14 @@ Do you currently work in the technology sector? ◯ Yes ◯ No ◯ Prefer not to
 
 Have you ever worked in the technology sector? ◯ Yes ◯ No ◯ Prefer not to answer
 
-Screen 24: Demographics
+Screen 25: Demographics
 All questions include "Prefer not to answer" as an option.
 
 Age: 18–24 / 25–34 / 35–44 / 45–54 / 55–64 / 65+ / Prefer not to answer
 Gender: Man / Woman / Non-binary / Other [text] / Prefer not to answer
 Education: Less than high school / High school / Some college / Bachelor's degree / Graduate degree / Prefer not to answer
 
-Screen 25: Debrief
+Screen 26: Debrief
 "Thank you for completing this study."
 "The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.
 The "App Z" service in this survey was hypothetical. No company called App Z collected any of your information, and your responses to the scenarios will not be shared with any third party."
@@ -243,7 +246,7 @@ block_b_order, block_a_order (Postgres integer arrays, INT[])
 comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count, comp_check_fail_count (SMALLINT)
 completed (boolean)
 created_at, completed_at (timestamps)
-All response fields (Scenario 1 accepted discounts (s1_accepted_discounts) + s1_none; Scenario 2 accepted revenue shares (s2_accepted_shares) + s2_none; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the open-ended response (open_data_revenue); the Screen 23 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
+All response fields (Scenario 1 accepted discounts (s1_accepted_discounts) + s1_none; Scenario 2 accepted revenue shares (s2_accepted_shares) + s2_none; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the open-ended response (open_data_revenue); the Screen 24 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
 
 events — one row per screen view, for latency tracking:
 

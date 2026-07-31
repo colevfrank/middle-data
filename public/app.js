@@ -344,6 +344,16 @@
     root.appendChild(btn);
   };
 
+  // Lead-in to the "about you" section (AI usage + demographics).
+  RENDERERS.about_you_intro = function (p) {
+    for (const para of p.body) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    }
+    const btn = continueBtn(() => submit('about_you_intro', {}), p.button || 'Continue');
+    btn.disabled = false;
+    root.appendChild(btn);
+  };
+
   // Merged intro screen: App Z setup → the "recent change" (data type + use case)
   // → comprehension check. The comprehension gates Continue until all three items
   // are correct, counting wrong submissions per item.

@@ -9,6 +9,7 @@ const FIXED_ORDER = [
   '__block_b__',          // expanded via block_b_order
   '__block_a__',          // expanded via block_a_order
   'open_response',
+  'about_you_intro',
   'ai_usage',
   'demographics',
   'debrief',
@@ -74,7 +75,7 @@ function nextAfter(participant, currentScreen) {
   }
 
   // post-questions sequence
-  const post = ['open_response', 'ai_usage', 'demographics', 'debrief', 'complete'];
+  const post = ['open_response', 'about_you_intro', 'ai_usage', 'demographics', 'debrief', 'complete'];
   const postIdx = post.indexOf(currentScreen);
   if (postIdx >= 0 && postIdx < post.length - 1) {
     return post[postIdx + 1];
