@@ -1,4 +1,4 @@
-This survey is part of a research study conducted by Dr. Sarah Cen at Carnegie Mellon University.
+This survey is part of a research study conducted by Cole Frank and Sarah Cen at Carnegie Mellon University.
 
 #### Purpose
 This study examines how people feel and think about their digital information.
@@ -19,10 +19,10 @@ There are no direct benefits to you. The research aims to inform academic and po
 You will receive $4 through Prolific upon completion of the survey. Partial completions are not compensated unless you contact the research team.
 
 #### Future Use of Information 
-In the future, once we have removed all identifiable information from your data, we may use the data for our future research studies, or we may distribute the data to other researchers for their research studies.  We would do this without getting additional informed consent from you.  Sharing of data with other researchers will only be done in such a manner that you will not be identified.
+We may release, share, or reuse the data. Any released or shared data will be first de-identified so that no responses can be traced back to you. Such release, sharing, and reuse will not require further consent from you.
 
 #### Confidentiality
-Your responses are anonymous. We collect only your Prolific ID for the purpose of issuing payment and preventing duplicate participation; this ID will be removed before any data analysis. We do not collect any actual personal data of yours (e.g., we do not collect your real browsing history or your real messages); we only ask about your preferences regarding hypothetical data-sharing arrangements. De-identified data may be shared with other researchers or made publicly available.
+Your responses are anonymous. We collect only your Prolific ID for the purpose of issuing payment and preventing duplicate participation. This ID will be removed before any data analysis. We will collect your responses to our questions and your interaction with our interface. We will not collect further information (e.g., we will not collect your browsing history).
 
 #### Right to Ask Questions & Contact Information
 If you have any questions about this study, you should feel free to ask them by contacting the Principal Investigator at:
