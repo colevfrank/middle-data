@@ -206,13 +206,15 @@ test('consent: missing field → ok false', () => {
   const r = VALIDATORS.consent({ consent_age_ok: true });
   assert.equal(r.ok, false);
 });
-test('intro: T,T,F + wrong counts → ok; stores counts', () => {
+test('intro: T,T,F + wrong counts → ok; stores per-item + overall fail counts', () => {
   const r = VALIDATORS.intro({
     answer_1: true, answer_2: true, answer_3: false,
-    comp_check_1_wrong_count: 0, comp_check_2_wrong_count: 2, comp_check_3_wrong_count: 1
+    comp_check_1_wrong_count: 0, comp_check_2_wrong_count: 2, comp_check_3_wrong_count: 1,
+    comp_check_fail_count: 2
   });
   assert.equal(r.ok, true);
   assert.equal(r.fields.comp_check_2_wrong_count, 2);
+  assert.equal(r.fields.comp_check_fail_count, 2);
 });
 test('intro: wrong answers rejected (gate is client-side, server verifies)', () => {
   const bad = VALIDATORS.intro({
@@ -222,12 +224,17 @@ test('intro: wrong answers rejected (gate is client-side, server verifies)', () 
   assert.equal(bad.ok, false);
   assert.equal(bad.error, 'comprehension_not_passed');
 });
-test('intro: missing/invalid wrong count rejected', () => {
+test('intro: missing/invalid wrong or fail count rejected', () => {
   assert.equal(VALIDATORS.intro({ answer_1: true, answer_2: true, answer_3: false }).ok, false);
   assert.equal(VALIDATORS.intro({
     answer_1: true, answer_2: true, answer_3: false,
     comp_check_1_wrong_count: -1, comp_check_2_wrong_count: 0, comp_check_3_wrong_count: 0
   }).ok, false);
+  // valid wrong counts but missing overall fail count → rejected
+  assert.equal(VALIDATORS.intro({
+    answer_1: true, answer_2: true, answer_3: false,
+    comp_check_1_wrong_count: 0, comp_check_2_wrong_count: 0, comp_check_3_wrong_count: 0
+  }).error, 'fail_count_invalid');
 });
 test('scenario_1: multi-select accepted set + mutually-exclusive none', () => {
   const ok = VALIDATORS.scenario_1({ s1_accepted_discounts: ['5off', '8off'], s1_none: false });
@@ -501,7 +508,8 @@ test('cookie-based session + screen state machine via supertest-style flow', asy
     // 4. intro (merged setup + data type + comprehension) — pass with wrong counts
     next = await postJson(`http://localhost:${port}/screen/intro`, {
       answer_1: true, answer_2: true, answer_3: false,
-      comp_check_1_wrong_count: 0, comp_check_2_wrong_count: 1, comp_check_3_wrong_count: 0
+      comp_check_1_wrong_count: 0, comp_check_2_wrong_count: 1, comp_check_3_wrong_count: 0,
+      comp_check_fail_count: 1
     }, cookieHeader, token);
     assert.ok(/^scenario_/.test(next.screen));
 

@@ -52,6 +52,9 @@ function validateIntro(body) {
     if (!isInt(w, 0, 1000)) return { ok: false, error: 'wrong_count_invalid' };
     fields[`comp_check_${i}_wrong_count`] = w;
   }
+  // Overall failed-attempt count (once per Continue click with any wrong answer).
+  if (!isInt(b.comp_check_fail_count, 0, 1000)) return { ok: false, error: 'fail_count_invalid' };
+  fields.comp_check_fail_count = b.comp_check_fail_count;
   return { ok: true, fields };
 }
 

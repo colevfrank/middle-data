@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS participants (
   comp_check_1_wrong_count SMALLINT,
   comp_check_2_wrong_count SMALLINT,
   comp_check_3_wrong_count SMALLINT,
+  comp_check_fail_count SMALLINT,     -- overall failed attempts before passing
 
   -- Consent
   consent_age_ok BOOLEAN,

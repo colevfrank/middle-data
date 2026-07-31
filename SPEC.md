@@ -103,7 +103,7 @@ Comprehension check (same screen, below the narrative): "Based on the informatio
 - (data type — TRUE) "The data you would share with App Z is: [assigned data type's short description]."
 - (use case — TRUE) "App Z would use your data to [use-case phrase matching the narrative — B1: 'improve its personalization algorithm'; B2: 'improve its generative AI system']."
 - (FALSE — same for everyone) "App Z guarantees that your data will be permanently deleted after 30 days."
-Continue does not advance until all three are correct (T, T, F); participants may retry unlimited times. Record how many times each item was answered wrong before passing (comp_check_1/2/3_wrong_count). No comprehension screen-out.
+Continue does not advance until all three are correct (T, T, F); participants may retry unlimited times. Record how many times each item was answered wrong before passing (comp_check_1/2/3_wrong_count) and the overall number of failed attempts (comp_check_fail_count — incremented once per Continue click with any wrong answer). No comprehension screen-out.
 
 Screens 4–5: Scenarios 1 and 2 (order randomized)
 (The "Scenario 1 / Scenario 2" labels below are internal identifiers only. Because the order is randomized, each is shown to participants with a neutral, unnumbered "Scenario" heading — no copy may imply that one comes before another.)
@@ -223,6 +223,7 @@ response_latency_ms (difference between shown and submitted)
 Additional tracking:
 
 comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count (integer — wrong attempts per T/F item before passing; comprehension requires passing, so everyone ends correct)
+comp_check_fail_count (integer — overall failed attempts before passing)
 scenario_order (array, e.g., [2,1])
 post_question_order (array giving the randomized order of the 14 post-scenario items: the 13 questions + attention check)
 attention_check_pass (boolean — did they select the instructed response)
@@ -237,7 +238,7 @@ data_type (1–16)
 use_case (B1 or B2)
 scenario_order (Postgres integer array, INT[])
 post_question_order (Postgres integer array, INT[])
-comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count (SMALLINT)
+comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count, comp_check_fail_count (SMALLINT)
 completed (boolean)
 created_at, completed_at (timestamps)
 All response fields (Scenario 1 least-acceptable discount (s1_min_share); Scenario 2 least-acceptable revenue share (s2_min_share) + follow-up reason; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the open-ended response (open_data_revenue); the Screen 21 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)

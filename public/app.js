@@ -367,6 +367,7 @@
     // Correct answers: 1 = True, 2 = True, 3 = False
     const correct = { 1: true, 2: true, 3: false };
     const wrong = { 1: 0, 2: 0, 3: 0 };
+    let failCount = 0; // failed submissions overall (once per Continue click with any wrong)
 
     const btn = continueBtn(() => {
       const chosen = {};
@@ -379,6 +380,7 @@
         if (chosen[s.id] !== correct[s.id]) { wrong[s.id] += 1; allCorrect = false; }
       }
       if (!allCorrect) {
+        failCount += 1;
         errMsg.classList.remove('hidden');
         return; // stay on the screen — unlimited retries
       }
@@ -387,7 +389,8 @@
         answer_1: chosen[1], answer_2: chosen[2], answer_3: chosen[3],
         comp_check_1_wrong_count: wrong[1],
         comp_check_2_wrong_count: wrong[2],
-        comp_check_3_wrong_count: wrong[3]
+        comp_check_3_wrong_count: wrong[3],
+        comp_check_fail_count: failCount
       });
     }, 'Continue');
     root.appendChild(btn);
