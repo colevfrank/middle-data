@@ -391,6 +391,7 @@ test('intro screen: App Z setup + data type (longer def inline) + use case + com
   assert.ok(change.includes(dt5.data_type_description));       // full description in first sentence
   assert.ok(change.includes(dt5.inline));                      // short name in use-case sentence
   assert.ok(change.includes("improve App Z's services"));     // B1 use-case wording
+  assert.equal(p.data_type_bold, "users' financial information"); // core phrase (no including…)
   // Comprehension bundled on the same screen
   assert.equal(p.comprehension.statements.length, 3);
   assert.ok(p.comprehension.statements[0].text.includes(dt5.inline)); // short name in check
@@ -402,14 +403,18 @@ test('intro screen B2 uses the AI-training use-case wording', () => {
   const p = screenPayload({ ...fakeParticipant, use_case: 'B2' }, 'intro');
   assert.ok(p.change.join(' ').includes("train App Z's AI models and AI agents to improve its services"));
 });
+test('intro data_type_bold is core phrase for process types', () => {
+  const p = screenPayload({ ...fakeParticipant, data_type: 16 }, 'intro');
+  assert.equal(p.data_type_bold, 'how its users cook');
+});
 test('scenario_1 (Subscription Discount): settings-frame payload + first-person use', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1');
   assert.equal(p.heading, 'Subscription');
   assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
   assert.ok(!p.lead_in.join(' ').includes('One day'));
-  const yours5 = dt5.data_type_description.replace(/^its users' /, '');
-  assert.equal(p.collect_line, `We will access or ask you to provide your ${yours5}`);
-  assert.deepEqual(p.collect_emphasis, [yours5]);
+  assert.equal(p.collect_line,
+    `We will access or ask you to provide your ${dt5.inline}. This includes bank statements and investment portfolios.`);
+  assert.deepEqual(p.collect_emphasis, [dt5.inline]);
   assert.ok(p.use_line.includes("improve App Z's services"));
   assert.deepEqual(p.tiers, content.S1_TIERS);
   assert.equal(p.none_label, 'I will not share this data regardless of the discount amount');
@@ -453,11 +458,25 @@ test('attention-check has no Block A description header', () => {
 test('post-question Block B payload: use-case header + trimmed prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_7');
   assert.equal(p.item.key, 'postq_comp_by_amount');
-  assert.ok(p.item.header.startsWith('Suppose App Z collects your '));
-  assert.ok(p.item.header.includes(dt5.data_type_description.replace(/^its users' /, '')));
+  assert.ok(p.item.header.startsWith(`Suppose App Z collects your ${dt5.inline}, to `));
   assert.ok(p.item.header.includes(`, to ${content.USE_CASES.B1.data_use}.`));
+  assert.ok(p.item.header.includes('Financial information includes bank statements and investment portfolios.'));
   assert.ok(p.item.prompt.includes(dt5.inline));                        // short data name in question
   assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
+});
+test('Block B process-type header uses short name + includes (not "your how you…")', () => {
+  const p = screenPayload({ ...fakeParticipant, data_type: 16 }, 'postq_11');
+  assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your cooking behavior data, to '));
+  assert.ok(p.item.header.includes('Cooking behavior data includes detailed behavioral data'));
+  assert.ok(!p.item.header.includes('your how you'));
+});
+test('selected Block B headers use "wants to collect"', () => {
+  for (const id of [11, 13]) {
+    const p = screenPayload(fakeParticipant, `postq_${id}`);
+    assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your '), `postq_${id}`);
+  }
+  const other = screenPayload(fakeParticipant, 'postq_7');
+  assert.ok(other.item.header.startsWith('Suppose App Z collects your '));
 });
 test('Block B prompts use short data name instead of generic "your data"', () => {
   for (const id of [7, 8, 9, 10, 11, 12, 13]) {

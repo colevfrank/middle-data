@@ -389,9 +389,9 @@
           el('strong', { class: 'font-bold underline text-blue-500' }, para)
         ]));
       } else {
-        // Bold the data-type description (e.g. "users' communications, including…").
+        // Bold+underline the core data-type phrase (e.g. "how its users cook").
         root.appendChild(el('p', { class: 'text-blue-500 mb-3' },
-          emphasize(para, p.data_type_bold ? [p.data_type_bold] : [], 'font-bold')));
+          emphasize(para, p.data_type_bold ? [p.data_type_bold] : [], 'font-bold underline')));
       }
     }
 

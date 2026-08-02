@@ -15,25 +15,20 @@ function getUseCase(p) {
   return USE_CASES[p.use_case];
 }
 
-// Phrase after "your …" using the full intro description (examples included).
-// "its users' communications, including…" → "communications, including…"
-// "how its users manage their emails, including…" → "how you manage their emails, including…"
-function dataTypeAsYours(dt) {
-  const d = dt.data_type_description;
-  if (d.startsWith("its users' ")) return d.slice("its users' ".length);
-  if (d.startsWith('how its users ')) return 'how you ' + d.slice('how its users '.length);
-  return dt.inline;
-}
-
-// Block A reminder, e.g. "Financial information includes bank statements and investment portfolios."
-function dataTypeIncludesHeader(dt) {
+// Examples clause from the intro description (text after ", including ").
+function dataTypeExamples(dt) {
   const d = dt.data_type_description;
   const marker = ', including ';
   const i = d.indexOf(marker);
-  const examples = i >= 0 ? d.slice(i + marker.length) : dataTypeAsYours(dt);
+  if (i < 0) return '';
+  return d.slice(i + marker.length).replace(/\.$/, '');
+}
+
+// Block A / Block B reminder, e.g. "Financial information includes bank statements…."
+function dataTypeIncludesHeader(dt) {
+  const examples = dataTypeExamples(dt) || dt.inline;
   const name = dt.inline.charAt(0).toUpperCase() + dt.inline.slice(1);
-  const body = examples.endsWith('.') ? examples : examples + '.';
-  return `${name} includes ${body}`;
+  return `${name} includes ${examples}.`;
 }
 
 // The two scenarios share one voice-neutral, first-person design: a bold lead-in,
@@ -47,8 +42,8 @@ function scenarioPayload(p, screenId) {
     intro: [
       'You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.'
     ],
-    collect_line: `We will access or ask you to provide your ${dataTypeAsYours(dt)}`,
-    collect_emphasis: [dataTypeAsYours(dt)],
+    collect_line: `We will access or ask you to provide your ${dt.inline}. This includes ${dataTypeExamples(dt)}.`,
+    collect_emphasis: [dt.inline],
     use_line: `We will use this information to ${uc.scenario_use}`,
     use_emphasis: [uc.scenario_use]
   };
@@ -113,7 +108,12 @@ function postQuestionPayload(p, screenId) {
   // Block B: use-case context. Block A: data-type description reminder.
   // Attention check: no header.
   if (q.block === 'B') {
-    item.header = `Suppose App Z collects your ${dataTypeAsYours(dt)}, to ${uc.data_use}.`;
+    // Short name + use, then the same "includes …" reminder as Block A.
+    // Some items: "wants to collect" (hypothetical intent); others: "collects".
+    const wantsToCollect = q.key === 'postq_coworker_sells_feel'
+      || q.key === 'postq_concerns';
+    const verb = wantsToCollect ? 'wants to collect' : 'collects';
+    item.header = `Suppose App Z ${verb} your ${dt.inline}, to ${uc.data_use}. ${dataTypeIncludesHeader(dt)}`;
   } else if (q.block === 'A') {
     item.header = dataTypeIncludesHeader(dt);
   }
@@ -184,11 +184,12 @@ function screenPayload(p, screenId, extra = {}) {
           `Earlier this year, App Z became interested in ${dt.data_type_description}.`,
           uc.intro_sentences(dt)
         ],
-        // Bold the description after "its " when present (e.g. "users' communications, including…");
-        // otherwise bold the full description (e.g. "how its users manage their emails…").
-        data_type_bold: dt.data_type_description.startsWith('its ')
-          ? dt.data_type_description.slice(4)
-          : dt.data_type_description,
+        // Bold+underline the core data-type phrase (before ", including …"),
+        // e.g. "how its users cook" or "users' financial information".
+        data_type_bold: (() => {
+          const core = dt.data_type_description.split(', including ')[0];
+          return core.startsWith('its ') ? core.slice(4) : core;
+        })(),
         // Phrases bold+underlined in setup; `access_line` is the full intro
         // sentence (second change para) styled separately as bold+underline.
         access_line: uc.intro_sentences(dt),

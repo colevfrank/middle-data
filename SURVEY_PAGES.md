@@ -92,6 +92,7 @@ By default, App Z does not record or store any of your information beyond what i
 **But there has been a recent change**
 
 Earlier this year, App Z became interested in `{data_type_description}`.
+*(Core data-type phrase before “including …” is bold + underlined — e.g. “how its users cook”.)*
 
 App Z would like to access your `{inline}` to `{data_use}`.
 
@@ -134,13 +135,13 @@ App Z would like to access your `{inline}` to `{data_use}`.
 11. purchase history
 12. professional or educational documents
 13. photos library
-14. email management behavior
-15. administrative task behavior
-16. cooking behavior
+14. email management behavior data
+15. administrative task behavior data
+16. cooking behavior data
 17. music preferences
 18. streaming preferences
-19. screen usage
-20. exercise activities
+19. screen usage data
+20. exercise activities data
 
 `{data_use}`:
 
@@ -173,9 +174,9 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-We will access or ask you to provide your `{full description from intro}`
+We will access or ask you to provide your `{inline}`. This includes `{examples}`.
 
-Example: We will access or ask you to provide your health information and medical records, including doctors' visit notes, test results, prescribed medication, and vaccination history
+Example: We will access or ask you to provide your health information and medical records. This includes doctors' visit notes, test results, prescribed medication, and vaccination history.
 
 We will use this information to `{data_use}` *(data use underlined)*
 
@@ -200,13 +201,13 @@ We would like to offer you a monthly discount on your subscription for sharing t
 11. purchase history
 12. professional or educational documents
 13. photos library
-14. email management behavior
-15. administrative task behavior
-16. cooking behavior
+14. email management behavior data
+15. administrative task behavior data
+16. cooking behavior data
 17. music preferences
 18. streaming preferences
-19. screen usage
-20. exercise activities
+19. screen usage data
+20. exercise activities data
 
 `{data_use}`:
 
@@ -247,9 +248,9 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-We will access or ask you to provide your `{full description from intro}`
+We will access or ask you to provide your `{inline}`. This includes `{examples}`.
 
-Example: We will access or ask you to provide your health information and medical records, including doctors' visit notes, test results, prescribed medication, and vaccination history
+Example: We will access or ask you to provide your health information and medical records. This includes doctors' visit notes, test results, prescribed medication, and vaccination history.
 
 We will use this information to `{data_use}` *(data use underlined)*
 
@@ -274,13 +275,13 @@ Because your data will increase our revenue, we would like to offer to pay you a
 11. purchase history
 12. professional or educational documents
 13. photos library
-14. email management behavior
-15. administrative task behavior
-16. cooking behavior
+14. email management behavior data
+15. administrative task behavior data
+16. cooking behavior data
 17. music preferences
 18. streaming preferences
-19. screen usage
-20. exercise activities
+19. screen usage data
+20. exercise activities data
 
 `{data_use}`:
 
@@ -322,13 +323,13 @@ On the following pages, we'll ask you a series of questions.
 11. purchase history
 12. professional or educational documents
 13. photos library
-14. email management behavior
-15. administrative task behavior
-16. cooking behavior
+14. email management behavior data
+15. administrative task behavior data
+16. cooking behavior data
 17. music preferences
 18. streaming preferences
-19. screen usage
-20. exercise activities
+19. screen usage data
+20. exercise activities data
 
 `{data_use}`:
 
@@ -345,11 +346,11 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue):**
 
-Suppose App Z collects your `{full description from intro}`, to `{data_use}.` **`{question}`**
+Suppose App Z collects your `{inline}`, to `{data_use}.` `{Inline} includes {examples}.` **`{question}`**
 
-Example: Suppose App Z collects your financial information, including bank statements and investment portfolios, to improve App Z's services. **What is/are your main concern(s) about sharing your financial information with App Z? (Please check all that apply)**
+Example: Suppose App Z collects your cooking behavior data, to improve App Z's services. Cooking behavior data includes detailed behavioral data of what users cook, what ingredients they use, whether they follow recipes, and how long they spend cooking. **Suppose your phone manufacturer collected your cooking behavior data and sold it to App Z. How would you feel?**
 
-`{inline}` (short name; Block B header uses the full description, not this list alone):
+`{inline}`:
 
 1. demographic information
 2. government IDs
@@ -364,13 +365,13 @@ Example: Suppose App Z collects your financial information, including bank state
 11. purchase history
 12. professional or educational documents
 13. photos library
-14. email management behavior
-15. administrative task behavior
-16. cooking behavior
+14. email management behavior data
+15. administrative task behavior data
+16. cooking behavior data
 17. music preferences
 18. streaming preferences
-19. screen usage
-20. exercise activities
+19. screen usage data
+20. exercise activities data
 
 `{data_use}`:
 
@@ -413,7 +414,9 @@ Should you be compensated for how unique or original your `{inline}` `{is/are}` 
 - Unsure
 - I don't care
 
-### B5 — Coworker sells data
+### B5 — Phone manufacturer sells data
+
+*(Header uses “wants to collect” instead of “collects”.)*
 
 Suppose your phone manufacturer collected your `{inline}` and sold `{it/them}` to App Z. How would you feel?
 
@@ -434,6 +437,8 @@ Should you receive credit or acknowledgement for your `{inline}` when `{it is/th
 - 5: I absolutely should receive credit
 
 ### B7 — Main concerns
+
+*(Header uses “wants to collect” instead of “collects”.)*
 
 What is/are your main concern(s) about sharing your `{inline}` with App Z? (Please check all that apply)
 
@@ -471,13 +476,13 @@ On the following pages, we'll ask you a series of questions.
 11. purchase history
 12. professional or educational documents
 13. photos library
-14. email management behavior
-15. administrative task behavior
-16. cooking behavior
+14. email management behavior data
+15. administrative task behavior data
+16. cooking behavior data
 17. music preferences
 18. streaming preferences
-19. screen usage
-20. exercise activities
+19. screen usage data
+20. exercise activities data
 
 **Button:** Continue
 
@@ -514,13 +519,13 @@ Do you consider `{inline}` to be important?
 11. purchase history
 12. professional or educational documents
 13. photos library
-14. email management behavior
-15. administrative task behavior
-16. cooking behavior
+14. email management behavior data
+15. administrative task behavior data
+16. cooking behavior data
 17. music preferences
 18. streaming preferences
-19. screen usage
-20. exercise activities
+19. screen usage data
+20. exercise activities data
 
 ### A2 — Sensitivity
 
