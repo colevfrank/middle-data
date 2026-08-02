@@ -87,9 +87,7 @@ Click "Continue" when you are ready to begin.
 
 App Z is an online service that you use often. You currently pay $20 per month for App Z.
 
-By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service.
-
-App Z does not sell your information, and App Z also deletes any data it holds after one year.
+By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service. App Z does not sell your information, and App Z also deletes any data it holds after one year.
 
 **But there has been a recent change**
 
@@ -151,8 +149,6 @@ App Z would like to access your `{inline}` to `{data_use}`.
 
 **Comprehension check**
 
-Based on the information above, indicate whether each statement is True or False.
-
 1. App Z would like to access its users' `{inline}`. *(True)*
 2. App Z would use your data to `{data_use}`. *(True)*
 3. App Z guarantees that your data will be permanently deleted after 30 days. *(False)*
@@ -169,17 +165,17 @@ Based on the information above, indicate whether each statement is True or False
 
 *(Order of this page vs. Data Sharing Program is randomized; a transition page sits between them.)*
 
-**Heading:** We’d like you to imagine: One day, you open App Z and it offers you the option to receive a Subscription Discount:
+**Heading:** We’d like you to imagine: One day, you open App Z and it offers you the option to receive a Subscription Discount
 
 **Settings frame — Subscription**
 
-You currently pay $20 per month for our app.
-
-By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.
+You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-We will access or ask you to provide your `{inline}`
+We will access or ask you to provide your `{full description from intro}`
+
+Example: We will access or ask you to provide your health information and medical records, including doctors' visit notes, test results, prescribed medication, and vaccination history
 
 We will use this information to `{data_use}` *(data use underlined)*
 
@@ -241,17 +237,17 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 *(Same randomization note as Subscription Discount.)*
 
-**Heading:** We’d like you to imagine: One day, you open App Z and it offers you the option to join a Data Sharing Program:
+**Heading:** We’d like you to imagine: One day, you open App Z and it offers you the option to join a Data Sharing Program
 
 **Settings frame — Data Sharing Program**
 
-You currently pay $20 per month for our app.
-
-By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.
+You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-We will access or ask you to provide your `{inline}`
+We will access or ask you to provide your `{full description from intro}`
+
+Example: We will access or ask you to provide your health information and medical records, including doctors' visit notes, test results, prescribed medication, and vaccination history
 
 We will use this information to `{data_use}` *(data use underlined)*
 
@@ -345,9 +341,11 @@ On the following pages, we'll ask you a series of questions.
 
 **Header (all Block B pages):**
 
-Suppose App Z accesses your `{inline}` to `{data_use}`
+Suppose App Z collects your `{full description from intro}` to `{data_use}`.
 
-`{inline}`:
+Example: Suppose App Z collects your communications, including text messages, social media messages, and emails to improve App Z's services.
+
+`{inline}` (short name; Block B header uses the full description, not this list alone):
 
 1. demographic information
 2. government IDs
@@ -377,7 +375,7 @@ Suppose App Z accesses your `{inline}` to `{data_use}`
 
 ### B1 — Compensated by amount
 
-Should you be compensated based on how much of your data is used by App Z?
+Should you be compensated based on how much of your `{inline}` is used by App Z?
 
 - Yes
 - No
@@ -386,7 +384,7 @@ Should you be compensated based on how much of your data is used by App Z?
 
 ### B2 — Compensated per use
 
-Should you be compensated each time your data is used by App Z?
+Should you be compensated each time your `{inline}` is used by App Z?
 
 - Yes
 - No
@@ -395,7 +393,7 @@ Should you be compensated each time your data is used by App Z?
 
 ### B3 — Compensated by effort
 
-Should you be compensated based on how much effort it took for you to generate or provide this data to App Z?
+Should you be compensated based on how much effort it took for you to generate or provide your `{inline}` to App Z?
 
 - Yes
 - No
@@ -404,7 +402,7 @@ Should you be compensated based on how much effort it took for you to generate o
 
 ### B4 — Compensated by originality
 
-Should you be compensated for how unique or original your data is relative to others' on App Z?
+Should you be compensated for how unique or original your `{inline}` is relative to others' on App Z?
 
 - Yes
 - No
@@ -413,7 +411,7 @@ Should you be compensated for how unique or original your data is relative to ot
 
 ### B5 — Coworker sells data
 
-Suppose your phone manufacturer collected this data and sold it to App Z. How would you feel?
+Suppose your phone manufacturer collected your `{inline}` and sold it to App Z. How would you feel?
 
 - Very upset
 - A little upset
@@ -423,7 +421,7 @@ Suppose your phone manufacturer collected this data and sold it to App Z. How wo
 
 ### B6 — Credit / acknowledgement
 
-Should you receive credit or acknowledgement for this data when it is used by App Z?
+Should you receive credit or acknowledgement for your `{inline}` when it is used by App Z?
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -433,7 +431,9 @@ Should you receive credit or acknowledgement for this data when it is used by Ap
 
 ### B7 — Main concerns
 
-What is/are your main concern(s) about sharing this data with App Z? (Please check all that apply)
+What is/are your main concern(s) about sharing your `{inline}` with App Z? (Please check all that apply)
+
+*(Options randomized per participant/load; Other always last.)*
 
 - I'm not concerned
 - I don't understand why App Z wants it
@@ -441,7 +441,7 @@ What is/are your main concern(s) about sharing this data with App Z? (Please che
 - It could be used to manipulate me
 - It could be used to impersonate or represent me
 - It could be used to harm me
-- I don't trust App Z 
+- I don't trust App Z
 - Other [text box]
 
 ---

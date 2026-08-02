@@ -5,6 +5,7 @@ const {
   DATA_TYPES, USE_CASES, S1_TIERS, S2_TIERS,
   POST_QUESTIONS, OPEN_RESPONSE, AI_LITERACY_QUESTIONS, DEMOGRAPHICS
 } = require('./content');
+const { shuffle } = require('./randomization');
 
 function getDataType(p) {
   return DATA_TYPES.find(d => d.id === p.data_type);
@@ -12,6 +13,16 @@ function getDataType(p) {
 
 function getUseCase(p) {
   return USE_CASES[p.use_case];
+}
+
+// Phrase after "your …" using the full intro description (examples included).
+// "its users' communications, including…" → "communications, including…"
+// "how its users manage their emails, including…" → "how you manage their emails, including…"
+function dataTypeAsYours(dt) {
+  const d = dt.data_type_description;
+  if (d.startsWith("its users' ")) return d.slice("its users' ".length);
+  if (d.startsWith('how its users ')) return 'how you ' + d.slice('how its users '.length);
+  return dt.inline;
 }
 
 // The two scenarios share one voice-neutral, first-person design: a bold lead-in,
@@ -22,9 +33,11 @@ function scenarioPayload(p, screenId) {
   const dt = getDataType(p);
   const uc = getUseCase(p);
   const common = {
-    intro_default: 'By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.',
-    collect_line: `We will access or ask you to provide your ${dt.inline}`,
-    collect_emphasis: [dt.inline],
+    intro: [
+      'You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.'
+    ],
+    collect_line: `We will access or ask you to provide your ${dataTypeAsYours(dt)}`,
+    collect_emphasis: [dataTypeAsYours(dt)],
     use_line: `We will use this information to ${uc.scenario_use}`,
     use_emphasis: [uc.scenario_use]
   };
@@ -32,20 +45,17 @@ function scenarioPayload(p, screenId) {
     return Object.assign({
       screen: 'scenario_1',
       lead_in: [
-        "We'd like you to imagine: One day, you open App Z and it offers you the option to receive a Subscription Discount:"
+        "We'd like you to imagine: One day, you open App Z and it offers you the option to receive a Subscription Discount"
       ],
       frame_url: 'appz.com/settings/subscription',
       sidebar_active: 'subscription',
       heading: 'Subscription',
-      intro: [
-        'You currently pay $20 per month for our app.',
-        common.intro_default
-      ],
       intro_offer: 'We are now offering you the option to receive a Subscription Discount. If you agree:',
       offer_line: 'We would like to offer you a monthly discount on your subscription for sharing this data.',
       // Decorative settings-UI mock (not the participant response).
       offer_agree: {
         checkbox_label: 'I agree',
+        disagree_label: 'I do not agree',
         blank_prefix: '$',
         blank_suffix: ' / month discount',
         blank_placeholder: ''
@@ -59,19 +69,16 @@ function scenarioPayload(p, screenId) {
   return Object.assign({
     screen: 'scenario_2',
     lead_in: [
-      "We'd like you to imagine: One day, you open App Z and it offers you the option to join a Data Sharing Program:"
+      "We'd like you to imagine: One day, you open App Z and it offers you the option to join a Data Sharing Program"
     ],
     frame_url: 'appz.com/settings/data-sharing',
     sidebar_active: 'data_sharing',
     heading: 'Data Sharing Program',
-    intro: [
-      'You currently pay $20 per month for our app.',
-      common.intro_default
-    ],
     intro_offer: 'We are now offering you the option to join a Data Sharing Program. If you opt in:',
     offer_line: 'Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.',
     offer_agree: {
       checkbox_label: 'I agree',
+      disagree_label: 'I do not agree',
       blank_prefix: '',
       blank_suffix: '% of revenue',
       blank_placeholder: ''
@@ -95,16 +102,23 @@ function postQuestionPayload(p, screenId) {
   // Block B screens carry a use-case context header; Block A (and the attention
   // check) show only the question.
   if (q.block === 'B') {
-    item.header = `Suppose App Z accesses your ${dt.inline} to ${uc.data_use}`;
+    item.header = `Suppose App Z collects your ${dataTypeAsYours(dt)} to ${uc.data_use}.`;
   }
   if (q.type === 'likert5' || q.type === 'attention') {
     item.anchors = q.anchors;
   } else {
-    item.options = q.options.map(o => ({
+    let options = q.options.map(o => ({
       value: o.value,
       label: o.label,
       has_other: !!o.has_other
     }));
+    // Concerns (multiselect): randomize order; Other always last.
+    if (q.type === 'multiselect') {
+      const other = options.filter(o => o.has_other);
+      const rest = shuffle(options.filter(o => !o.has_other));
+      options = rest.concat(other);
+    }
+    item.options = options;
   }
   return {
     screen: screenId,
@@ -150,16 +164,20 @@ function screenPayload(p, screenId, extra = {}) {
         setup: [
           "Imagine you're a frequent user of App Z!",
           'App Z is an online service that you use often. You currently pay $20 per month for App Z.',
-          'By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service.',
-          'App Z does not sell your information, and App Z also deletes any data it holds after one year.'
+          'By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service. App Z does not sell your information, and App Z also deletes any data it holds after one year.'
         ],
         change_heading: 'But there has been a recent change',
         change: [
           `Earlier this year, App Z became interested in ${dt.data_type_description}.`,
           uc.intro_sentences(dt)
         ],
-        // Phrases bold+underlined in setup/change; `access_line` is the full intro
-        // sentence (second change para) styled separately as bold+underline+red.
+        // Bold the description after "its " when present (e.g. "users' communications, including…");
+        // otherwise bold the full description (e.g. "how its users manage their emails…").
+        data_type_bold: dt.data_type_description.startsWith('its ')
+          ? dt.data_type_description.slice(4)
+          : dt.data_type_description,
+        // Phrases bold+underlined in setup; `access_line` is the full intro
+        // sentence (second change para) styled separately as bold+underline.
         access_line: uc.intro_sentences(dt),
         emphasis: [
           '$20 per month',
@@ -169,7 +187,7 @@ function screenPayload(p, screenId, extra = {}) {
           'after one year'
         ],
         comprehension: {
-          instruction: 'Based on the information above, indicate whether each statement is True or False.',
+          instruction: '',
           statements: [
             { id: 1, text: `App Z would like to access its users' ${dt.inline}.` },
             { id: 2, text: `App Z would use your data to ${uc.comp_use}.` },

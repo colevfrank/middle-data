@@ -405,8 +405,9 @@ test('scenario_1 (Subscription Discount): settings-frame payload + first-person 
   const p = screenPayload(fakeParticipant, 'scenario_1');
   assert.equal(p.heading, 'Subscription');
   assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
-  assert.equal(p.collect_line, `We will access or ask you to provide your ${dt5.inline}`);
-  assert.deepEqual(p.collect_emphasis, [dt5.inline]);
+  const yours5 = dt5.data_type_description.replace(/^its users' /, '');
+  assert.equal(p.collect_line, `We will access or ask you to provide your ${yours5}`);
+  assert.deepEqual(p.collect_emphasis, [yours5]);
   assert.ok(p.use_line.includes("improve App Z's services"));
   assert.deepEqual(p.tiers, content.S1_TIERS);
   assert.equal(p.none_label, 'I will not share this data regardless of the discount amount');
@@ -445,9 +446,33 @@ test('post-question Block A payload: data-type prompt, no header, no About label
 test('post-question Block B payload: use-case header + trimmed prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_7');
   assert.equal(p.item.key, 'postq_comp_by_amount');
-  assert.ok(p.item.header.includes(dt5.inline));                        // "Suppose App Z accesses your <data>…"
-  assert.ok(p.item.header.includes(`to ${content.USE_CASES.B1.data_use}`)); // "…to <use>"
+  assert.ok(p.item.header.startsWith('Suppose App Z collects your '));
+  assert.ok(p.item.header.includes(dt5.data_type_description.replace(/^its users' /, '')));
+  assert.ok(p.item.header.includes(`to ${content.USE_CASES.B1.data_use}.`));
+  assert.ok(p.item.prompt.includes(dt5.inline));                        // short data name in question
   assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
+});
+test('Block B prompts use short data name instead of generic "your data"', () => {
+  for (const id of [7, 8, 9, 10, 11, 12, 13]) {
+    const p = screenPayload(fakeParticipant, `postq_${id}`);
+    assert.ok(p.item.prompt.includes(dt5.inline), `postq_${id}`);
+    assert.ok(!/\byour data\b/.test(p.item.prompt), `postq_${id}`);
+    assert.ok(!/\bthis data\b/.test(p.item.prompt), `postq_${id}`);
+  }
+});
+test('postq_concerns options: randomized order, Other always last', () => {
+  const q = content.POST_QUESTIONS.find(x => x.key === 'postq_concerns');
+  const canonical = q.options.map(o => o.value);
+  const orders = new Set();
+  for (let i = 0; i < 40; i++) {
+    const p = screenPayload(fakeParticipant, 'postq_13');
+    const vals = p.item.options.map(o => o.value);
+    assert.deepEqual(vals.slice().sort(), canonical.slice().sort());
+    assert.equal(vals[vals.length - 1], 'other');
+    assert.ok(p.item.options[vals.length - 1].has_other);
+    orders.add(vals.join(','));
+  }
+  assert.ok(orders.size > 1); // order varies across loads
 });
 test('attention-check payload (postq_14): plain Block-A item (no header)', () => {
   const p = screenPayload(fakeParticipant, 'postq_14');

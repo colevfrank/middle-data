@@ -207,10 +207,11 @@
   }
 
   // Split `text` into DOM nodes, wrapping any occurrence of a phrase in `phrases`
-  // in a bold + underlined <strong>. Returns an array suitable as el() children.
-  function emphasize(text, phrases) {
+  // in a <strong>. Default class is bold + underline. Returns an array suitable as el() children.
+  function emphasize(text, phrases, cls) {
     const list = (phrases || []).filter(Boolean);
     if (!list.length) return [text];
+    const strongCls = cls || 'font-bold underline';
     const escaped = list.slice().sort((a, b) => b.length - a.length)
       .map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
     const re = new RegExp('(' + escaped.join('|') + ')', 'g');
@@ -218,7 +219,7 @@
     let last = 0, m;
     while ((m = re.exec(text)) !== null) {
       if (m.index > last) nodes.push(text.slice(last, m.index));
-      nodes.push(el('strong', { class: 'font-bold underline' }, m[0]));
+      nodes.push(el('strong', { class: strongCls }, m[0]));
       last = m.index + m[0].length;
     }
     if (last < text.length) nodes.push(text.slice(last));
@@ -388,13 +389,17 @@
           el('strong', { class: 'font-bold underline text-blue-500' }, para)
         ]));
       } else {
-        root.appendChild(el('p', { class: 'text-blue-500 mb-3' }, emphasize(para, em)));
+        // Bold the data-type description (e.g. "users' communications, including…").
+        root.appendChild(el('p', { class: 'text-blue-500 mb-3' },
+          emphasize(para, p.data_type_bold ? [p.data_type_bold] : [], 'font-bold')));
       }
     }
 
     root.appendChild(el('div', { class: 'border-t border-slate-200 mt-5 mb-5' }));
     root.appendChild(el('h3', { class: 'text-xl font-bold text-slate-900 mb-2' }, 'Comprehension check'));
-    root.appendChild(el('p', { class: 'text-slate-700 mb-4' }, p.comprehension.instruction));
+    if (p.comprehension.instruction) {
+      root.appendChild(el('p', { class: 'text-slate-700 mb-4' }, p.comprehension.instruction));
+    }
 
     const statements = p.comprehension.statements;
     const form = el('div', { class: 'space-y-5' });
@@ -463,22 +468,26 @@
     if (p.intro_offer) {
       box.appendChild(el('p', { class: 'settings-section-helper font-bold text-red-500' }, p.intro_offer));
     }
-    const list = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-slate-700 space-y-1' });
+    const list = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-red-500 space-y-1' });
     list.appendChild(el('li', {}, emphasize(p.collect_line, p.collect_emphasis)));
     list.appendChild(el('li', {}, emphasize(p.use_line, p.use_emphasis)));
     box.appendChild(list);
-    // Offer prose (below the two bullets), then decorative I-agree row.
+    // Offer prose (below the two bullets; red, not a callout block), then decorative I-agree row.
     if (p.offer_line) {
-      box.appendChild(el('div', { class: 'settings-callout mt-3' }, p.offer_line));
+      box.appendChild(el('p', { class: 'settings-section-helper mt-3 text-red-500' }, p.offer_line));
     }
     if (p.offer_agree) {
       const oa = p.offer_agree;
       const row = el('div', {
-        class: 'mt-6 flex flex-wrap items-center gap-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-slate-700'
+        class: 'mt-6 flex flex-wrap items-center gap-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-slate-700'
       });
       row.appendChild(el('label', { class: 'flex items-center gap-2 cursor-default' }, [
-        el('input', { type: 'checkbox', disabled: true, class: 'h-4 w-4 border-slate-300' }),
-        el('span', { class: 'font-medium' }, oa.checkbox_label)
+        el('input', { type: 'radio', name: 'offer_agree_mock', disabled: true, class: 'h-4 w-4 border-slate-300' }),
+        el('span', { class: 'font-medium' }, oa.checkbox_label || 'I agree')
+      ]));
+      row.appendChild(el('label', { class: 'flex items-center gap-2 cursor-default' }, [
+        el('input', { type: 'radio', name: 'offer_agree_mock', disabled: true, class: 'h-4 w-4 border-slate-300' }),
+        el('span', { class: 'font-medium' }, oa.disagree_label || 'I do not agree')
       ]));
       row.appendChild(el('span', { class: 'flex items-center gap-1' }, [
         oa.blank_prefix ? el('span', {}, oa.blank_prefix) : null,

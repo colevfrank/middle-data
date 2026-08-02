@@ -161,18 +161,18 @@ const POST_QUESTIONS = [
 
   // ----- Block B: about compensation for the use case -----
   { id: 7, key: 'postq_comp_by_amount', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    prompt: () => 'Should you be compensated based on how much of your data is used by App Z?',
+    prompt: (dt) => `Should you be compensated based on how much of your ${dt.inline} is used by App Z?`,
     prompt_emphasis: ['how much'] },
   { id: 8, key: 'postq_comp_per_use', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    prompt: () => 'Should you be compensated each time your data is used by App Z?' },
+    prompt: (dt) => `Should you be compensated each time your ${dt.inline} is used by App Z?` },
   { id: 9, key: 'postq_comp_by_effort', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    prompt: () => 'Should you be compensated based on how much effort it took for you to generate or provide this data to App Z?',
+    prompt: (dt) => `Should you be compensated based on how much effort it took for you to generate or provide your ${dt.inline} to App Z?`,
     prompt_emphasis: ['how much effort'] },
   { id: 10, key: 'postq_comp_by_originality', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    prompt: () => "Should you be compensated for how unique or original your data is relative to others' on App Z?",
+    prompt: (dt) => `Should you be compensated for how unique or original your ${dt.inline} is relative to others' on App Z?`,
     prompt_emphasis: ['how unique or original'] },
   { id: 11, key: 'postq_coworker_sells_feel', block: 'B', type: 'choice',
-    prompt: () => 'Suppose your phone manufacturer collected this data and sold it to App Z. How would you feel?',
+    prompt: (dt) => `Suppose your phone manufacturer collected your ${dt.inline} and sold it to App Z. How would you feel?`,
     options: [
       { value: 'very_upset',   label: 'Very upset' },
       { value: 'little_upset', label: 'A little upset' },
@@ -181,7 +181,7 @@ const POST_QUESTIONS = [
       { value: 'happy',        label: 'Happy for them' }
     ] },
   { id: 12, key: 'postq_credit_ack', block: 'B', type: 'choice_num',
-    prompt: () => 'Should you receive credit or acknowledgement for this data when it is used by App Z?',
+    prompt: (dt) => `Should you receive credit or acknowledgement for your ${dt.inline} when it is used by App Z?`,
     prompt_emphasis: ['credit or acknowledgement'],
     options: [
       { value: 1, label: '1: I definitely do not want to receive credit' },
@@ -191,7 +191,7 @@ const POST_QUESTIONS = [
       { value: 5, label: '5: I absolutely should receive credit' }
     ] },
   { id: 13, key: 'postq_concerns', block: 'B', type: 'multiselect',
-    prompt: () => 'What is/are your main concern(s) about sharing this data with App Z? (Please check all that apply)',
+    prompt: (dt) => `What is/are your main concern(s) about sharing your ${dt.inline} with App Z? (Please check all that apply)`,
     options: [
       { value: 'not_concerned', label: "I'm not concerned" },
       { value: 'dont_understand', label: "I don't understand why App Z wants it" },
