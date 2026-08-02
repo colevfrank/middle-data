@@ -161,13 +161,16 @@ const POST_QUESTIONS = [
 
   // ----- Block B: about compensation for the use case -----
   { id: 7, key: 'postq_comp_by_amount', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    prompt: () => 'Should you be compensated based on how much of your data is used by App Z?' },
+    prompt: () => 'Should you be compensated based on how much of your data is used by App Z?',
+    prompt_emphasis: ['how much'] },
   { id: 8, key: 'postq_comp_per_use', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
     prompt: () => 'Should you be compensated each time your data is used by App Z?' },
   { id: 9, key: 'postq_comp_by_effort', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    prompt: () => 'Should you be compensated based on how much effort it took for you to generate or provide this data to App Z?' },
+    prompt: () => 'Should you be compensated based on how much effort it took for you to generate or provide this data to App Z?',
+    prompt_emphasis: ['how much effort'] },
   { id: 10, key: 'postq_comp_by_originality', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    prompt: () => "Should you be compensated for how unique or original your data is relative to others' on App Z?" },
+    prompt: () => "Should you be compensated for how unique or original your data is relative to others' on App Z?",
+    prompt_emphasis: ['how unique or original'] },
   { id: 11, key: 'postq_coworker_sells_feel', block: 'B', type: 'choice',
     prompt: () => 'Suppose your phone manufacturer collected this data and sold it to App Z. How would you feel?',
     options: [
@@ -179,6 +182,7 @@ const POST_QUESTIONS = [
     ] },
   { id: 12, key: 'postq_credit_ack', block: 'B', type: 'choice_num',
     prompt: () => 'Should you receive credit or acknowledgement for this data when it is used by App Z?',
+    prompt_emphasis: ['credit or acknowledgement'],
     options: [
       { value: 1, label: '1: I definitely do not want to receive credit' },
       { value: 2, label: '2: I do not need to receive credit' },

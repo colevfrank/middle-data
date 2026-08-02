@@ -23,7 +23,7 @@ function scenarioPayload(p, screenId) {
   const uc = getUseCase(p);
   const common = {
     intro_default: 'By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.',
-    collect_line: `We will access your ${dt.inline}`,
+    collect_line: `We will access or ask you to provide your ${dt.inline}`,
     collect_emphasis: [dt.inline],
     use_line: `We will use this information to ${uc.scenario_use}`,
     use_emphasis: [uc.scenario_use]
@@ -42,6 +42,7 @@ function scenarioPayload(p, screenId) {
         common.intro_default
       ],
       intro_offer: 'We are now offering you the option to receive a Subscription Discount. If you agree:',
+      offer_line: 'We would like to offer you a monthly discount on your subscription for sharing this data.',
       // Decorative settings-UI mock (not the participant response).
       offer_agree: {
         checkbox_label: 'I agree',
@@ -68,6 +69,7 @@ function scenarioPayload(p, screenId) {
       common.intro_default
     ],
     intro_offer: 'We are now offering you the option to join a Data Sharing Program. If you opt in:',
+    offer_line: 'Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.',
     offer_agree: {
       checkbox_label: 'I agree',
       blank_prefix: '',
@@ -89,6 +91,7 @@ function postQuestionPayload(p, screenId) {
   const qid = parseInt(screenId.split('_')[1], 10);
   const q = POST_QUESTIONS.find(x => x.id === qid);
   const item = { id: q.id, key: q.key, type: q.type, prompt: q.prompt(dt, uc) };
+  if (q.prompt_emphasis) item.prompt_emphasis = q.prompt_emphasis;
   // Block B screens carry a use-case context header; Block A (and the attention
   // check) show only the question.
   if (q.block === 'B') {

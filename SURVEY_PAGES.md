@@ -179,11 +179,13 @@ By default, we do not record or store your information; we do not sell your info
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-We will access your `{inline}`
+We will access or ask you to provide your `{inline}`
 
 We will use this information to `{data_use}` *(data use underlined)*
 
-☐ I agree   [ ____ ] $ / month discount *(decorative settings UI)*
+We would like to offer you a monthly discount on your subscription for sharing this data.
+
+☐ I agree   [ ____ ] $ / month discount *(decorative settings UI, red-tinted)*
 
 `{inline}`:
 
@@ -249,11 +251,13 @@ By default, we do not record or store your information; we do not sell your info
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-We will access your `{inline}`
+We will access or ask you to provide your `{inline}`
 
 We will use this information to `{data_use}` *(data use underlined)*
 
-☐ I agree   [ ____ ] % of revenue *(decorative settings UI)*
+Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
+
+☐ I agree   [ ____ ] % of revenue *(decorative settings UI, red-tinted)*
 
 `{inline}`:
 

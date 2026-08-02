@@ -169,28 +169,21 @@
   }
 
   // ===== Helpers for question UI =====
-  function likert5(name) {
-    // Spread the 5 options edge-to-edge so they line up with the anchorRow's
-    // justify-between endpoints (low under option 1, high under option 5).
-    const container = el('div', { class: 'flex items-center justify-between mt-2' });
+  // Vertical 1–5 radios; endpoint labels from anchors when provided.
+  function likert5(name, anchors) {
+    const container = el('div', { class: 'mt-2 space-y-1' });
     for (let i = 1; i <= 5; i++) {
+      let label = String(i);
+      if (anchors) {
+        if (i === 1) label = '1: ' + anchors.low;
+        else if (i === 5) label = '5: ' + anchors.high;
+      }
       container.appendChild(el('label', { class: 'label-radio' }, [
         el('input', { type: 'radio', name, value: i }),
-        el('span', {}, String(i))
+        el('span', {}, label)
       ]));
     }
     return container;
-  }
-
-  // When lowNum/highNum are given, the scale endpoints are prefixed with their
-  // number, e.g. "1: Not at all" … "5: Extremely".
-  function anchorRow(anchors, lowNum, highNum) {
-    const lowText = lowNum != null ? lowNum + ': ' + anchors.low : anchors.low;
-    const highText = highNum != null ? highNum + ': ' + anchors.high : anchors.high;
-    return el('div', { class: 'flex justify-between text-xs text-slate-500 mt-1' }, [
-      el('span', {}, lowText),
-      el('span', {}, highText)
-    ]);
   }
 
   function continueBtn(onClick, label) {
@@ -337,7 +330,7 @@
   // Transition between the two scenarios.
   RENDERERS.scenario_transition = function (p) {
     if (p.heading) {
-      root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, p.heading));
+      root.appendChild(el('h2', { class: 'text-2xl font-bold text-slate-900 mb-4' }, p.heading));
     }
     for (const para of p.body || []) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
@@ -360,7 +353,8 @@
   // Intro before Block A (data-type questions).
   RENDERERS.block_a_intro = function (p) {
     for (const para of p.body) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' },
+        emphasize(para, ['regardless of its use'])));
     }
     const btn = continueBtn(() => submit('block_a_intro', {}), 'Continue');
     btn.disabled = false;
@@ -382,19 +376,19 @@
   // are correct, counting wrong submissions per item.
   RENDERERS.intro = function (p) {
     const em = p.emphasis || [];
-    // First setup line is a larger, bold bright-blue opener; the rest are body paragraphs.
-    root.appendChild(el('h2', { class: 'text-xl font-bold text-blue-500 mb-4' }, p.setup[0]));
+    // Opener: larger, bold, black. Change section: bright blue (heading larger).
+    root.appendChild(el('h2', { class: 'text-3xl font-bold text-slate-900 mb-4' }, p.setup[0]));
     for (const para of p.setup.slice(1)) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(para, em)));
     }
-    root.appendChild(el('h3', { class: 'text-xl font-bold text-blue-500 mt-5 mb-2' }, p.change_heading));
+    root.appendChild(el('h3', { class: 'text-2xl font-bold text-blue-500 mt-5 mb-2' }, p.change_heading));
     for (const para of p.change) {
       if (p.access_line && para === p.access_line) {
-        root.appendChild(el('p', { class: 'mb-3' }, [
-          el('strong', { class: 'font-bold underline text-red-500' }, para)
+        root.appendChild(el('p', { class: 'mb-3 text-blue-500' }, [
+          el('strong', { class: 'font-bold underline text-blue-500' }, para)
         ]));
       } else {
-        root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(para, em)));
+        root.appendChild(el('p', { class: 'text-blue-500 mb-3' }, emphasize(para, em)));
       }
     }
 
@@ -473,10 +467,14 @@
     list.appendChild(el('li', {}, emphasize(p.collect_line, p.collect_emphasis)));
     list.appendChild(el('li', {}, emphasize(p.use_line, p.use_emphasis)));
     box.appendChild(list);
+    // Offer prose (below the two bullets), then decorative I-agree row.
+    if (p.offer_line) {
+      box.appendChild(el('div', { class: 'settings-callout mt-3' }, p.offer_line));
+    }
     if (p.offer_agree) {
       const oa = p.offer_agree;
       const row = el('div', {
-        class: 'mt-3 flex flex-wrap items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700'
+        class: 'mt-6 flex flex-wrap items-center gap-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-slate-700'
       });
       row.appendChild(el('label', { class: 'flex items-center gap-2 cursor-default' }, [
         el('input', { type: 'checkbox', disabled: true, class: 'h-4 w-4 border-slate-300' }),
@@ -539,7 +537,9 @@
   }
 
   function renderScenarioPlain(p) {
-    for (const line of p.lead_in) root.appendChild(el('p', { class: 'text-xl font-bold text-blue-500 mb-3' }, line));
+    for (const line of p.lead_in) {
+      root.appendChild(el('p', { class: 'text-2xl font-bold text-blue-500 mt-6 mb-6' }, line));
+    }
     const box = scenarioContentBox(p);
     box.className = 'border border-slate-200 rounded p-4 mb-4';
     root.appendChild(box);
@@ -557,15 +557,15 @@
     if (it.header) {
       root.appendChild(el('p', { class: 'text-slate-700 mb-2' }, it.header));
     }
-    root.appendChild(el('p', { class: 'text-slate-900 font-semibold mb-1' }, it.prompt));
+    root.appendChild(el('p', { class: 'text-slate-900 font-semibold mb-1' },
+      emphasize(it.prompt, it.prompt_emphasis || [])));
 
     const form = el('div', {});
     let getValue;
     let isComplete;
 
     if (it.type === 'likert5' || it.type === 'attention') {
-      form.appendChild(likert5(it.key));
-      form.appendChild(anchorRow(it.anchors, 1, 5));
+      form.appendChild(likert5(it.key, it.anchors));
       getValue = () => {
         const sel = form.querySelector(`input[name="${it.key}"]:checked`);
         return sel ? parseInt(sel.value, 10) : null;
@@ -809,7 +809,9 @@
 
   // ===== Scenarios (settings mode) — shared browser frame for scenario_1 & _2 =====
   function renderScenarioSettings(p) {
-    for (const line of p.lead_in) root.appendChild(el('p', { class: 'text-xl font-bold text-blue-500 mb-3' }, line));
+    for (const line of p.lead_in) {
+      root.appendChild(el('p', { class: 'text-2xl font-bold text-blue-500 mt-6 mb-6' }, line));
+    }
     const frame = el('div', { class: 'browser-frame' });
     frame.appendChild(browserChrome(p.frame_url));
     const body = el('div', { class: 'browser-body' });
