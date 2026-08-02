@@ -1,9 +1,10 @@
 // All content shown to participants. Server-side only — clients never see codes.
 //
 // Per data type:
-//   `inline` — short mid-sentence name ("demographic information")
+//   `inline` — short mid-sentence name (intro, scenarios, Block A, …)
+//   `inline_b` — optional Block A/B short name (falls back to `inline`; intro/scenarios keep `inline`)
+//   `plural` / `plural_b` — grammatical number for is/are and it/them
 //   `data_type_description` — fuller phrase for the intro first sentence
-//   `plural` — grammatical number for is/are and it/them in prompts
 //   `category` — internal grouping; never sent to clients.
 // Source of truth for participant-facing copy: SURVEY_PAGES.md
 
@@ -12,6 +13,7 @@ const DATA_TYPES = [
     data_type_description: "its users' demographic information, including their age, gender, race, zip code, marital status, income, and level of education",
     category: 'Demographic/Identity' },
   { id: 2,  inline: 'government IDs', plural: true,
+    inline_b: 'government ID data', plural_b: false,
     data_type_description: "its users' government IDs, including their driver's license or passport information",
     category: 'Demographic/Identity' },
   { id: 3,  inline: 'voice data', plural: false,
@@ -24,27 +26,34 @@ const DATA_TYPES = [
     data_type_description: "its users' financial information, including bank statements and investment portfolios",
     category: 'Sensitive Personal' },
   { id: 6,  inline: 'communications', plural: true,
+    inline_b: 'communications data', plural_b: false,
     data_type_description: "its users' communications, including text messages, social media messages, and emails",
     category: 'Relational/Communicative' },
   { id: 7,  inline: 'social network', plural: false,
+    inline_b: 'social network data',
     data_type_description: "its users' social network, including the names of friends, coworkers, and family members",
     category: 'Relational/Communicative' },
   { id: 8,  inline: 'contacts', plural: true,
+    inline_b: 'contacts data', plural_b: false,
     data_type_description: "its users' contacts, including the names, emails, and phone numbers of contacts on a user's device",
     category: 'Relational/Communicative' },
   { id: 9,  inline: 'location history', plural: false,
+    inline_b: 'location history data',
     data_type_description: "its users' location history, including where users go and at what times",
     category: 'Behavioral/Preference' },
   { id: 10, inline: 'web browsing history', plural: false,
+    inline_b: 'web browsing history data',
     data_type_description: "its users' web browsing history, including websites users visit and the timestamps of each visit",
     category: 'Behavioral/Preference' },
   { id: 11, inline: 'purchase history', plural: false,
+    inline_b: 'purchase history data',
     data_type_description: "its users' purchase history, including what users purchase from which vendors and at what times",
     category: 'Behavioral/Preference' },
   { id: 12, inline: 'professional or educational documents', plural: true,
     data_type_description: "its users' professional or educational documents, including notes, essays, and reports used for work or education but not including financial, government, or otherwise sensitive documents",
     category: 'Expressive' },
   { id: 13, inline: 'photos library', plural: false,
+    inline_b: 'photos library data',
     data_type_description: "its users' photos library, including photo or video data stored on their device",
     category: 'Expressive' },
   { id: 14, inline: 'email management behavior data', plural: false,
@@ -57,9 +66,11 @@ const DATA_TYPES = [
     data_type_description: 'how its users cook, including detailed behavioral data of what users cook, what ingredients they use, whether they follow recipes, and how long they spend cooking',
     category: 'Process' },
   { id: 17, inline: 'music preferences', plural: true,
+    inline_b: 'music preferences data', plural_b: false,
     data_type_description: "its users' music preferences, including the songs and artists users listen to as well as users' rating, like, and skip behaviors",
     category: 'Behavioral/Preference' },
   { id: 18, inline: 'streaming preferences', plural: true,
+    inline_b: 'streaming preferences data', plural_b: false,
     data_type_description: "its users' streaming preferences, including the shows and movies users watch, whether users finish each video, and how users rate the videos",
     category: 'Behavioral/Preference' },
   { id: 19, inline: 'screen usage data', plural: false,
@@ -73,6 +84,14 @@ const DATA_TYPES = [
 function be(dt) { return dt.plural ? 'are' : 'is'; }
 function itThem(dt) { return dt.plural ? 'them' : 'it'; }
 function theyIt(dt) { return dt.plural ? 'they' : 'it'; }
+
+// View of a data type for Block A/B prompts/headers (uses inline_b when set).
+function forBlockB(dt) {
+  return Object.assign({}, dt, {
+    inline: dt.inline_b || dt.inline,
+    plural: dt.plural_b !== undefined ? dt.plural_b : dt.plural
+  });
+}
 
 const USE_CASES = {
   B1: {
@@ -299,6 +318,7 @@ module.exports = {
   POST_QUESTIONS,
   ATTENTION_CHECK_EXPECTED,
   OPEN_RESPONSE,
+  forBlockB,
   AI_LITERACY_QUESTIONS,
   DEMOGRAPHICS,
   SCREEN_FLOW

@@ -471,6 +471,23 @@ test('Block B process-type header uses short name + includes (not "your how youâ
   assert.ok(!p.item.header.includes('your how you'));
   assert.ok(!p.item.header.includes('Cooking behavior data includes'));
 });
+test('Blocks A/B use inline_b where set; intro/scenarios keep inline', () => {
+  const b = screenPayload({ ...fakeParticipant, data_type: 6 }, 'postq_7');
+  assert.ok(b.item.header.includes('communications data'));
+  assert.ok(b.item.prompt.includes('communications data is used'));
+  const a = screenPayload({ ...fakeParticipant, data_type: 6 }, 'postq_1');
+  assert.equal(a.item.prompt, 'Do you consider communications data to be important?');
+  assert.ok(a.item.header.startsWith('Communications data includes'));
+  const introA = screenPayload({ ...fakeParticipant, data_type: 6 }, 'block_a_intro');
+  assert.ok(introA.body.join(' ').includes('communications data'));
+  const scen = screenPayload({ ...fakeParticipant, data_type: 6 }, 'scenario_1');
+  assert.ok(scen.collect_line.includes('your communications.'));
+  assert.ok(!scen.collect_line.includes('communications data'));
+  const histA = screenPayload({ ...fakeParticipant, data_type: 9 }, 'postq_1');
+  assert.equal(histA.item.prompt, 'Do you consider location history data to be important?');
+  const prefB = screenPayload({ ...fakeParticipant, data_type: 17 }, 'postq_8');
+  assert.ok(prefB.item.prompt.includes('music preferences data is used'));
+});
 test('selected Block B headers use "wants to collect"', () => {
   for (const id of [11, 13]) {
     const p = screenPayload(fakeParticipant, `postq_${id}`);

@@ -3,7 +3,8 @@
 
 const {
   DATA_TYPES, USE_CASES, S1_TIERS, S2_TIERS,
-  POST_QUESTIONS, OPEN_RESPONSE, AI_LITERACY_QUESTIONS, DEMOGRAPHICS
+  POST_QUESTIONS, OPEN_RESPONSE, AI_LITERACY_QUESTIONS, DEMOGRAPHICS,
+  forBlockB
 } = require('./content');
 const { shuffle } = require('./randomization');
 
@@ -109,19 +110,21 @@ function postQuestionPayload(p, screenId) {
   const uc = getUseCase(p);
   const qid = parseInt(screenId.split('_')[1], 10);
   const q = POST_QUESTIONS.find(x => x.id === qid);
-  const item = { id: q.id, key: q.key, type: q.type, prompt: q.prompt(dt, uc) };
+  // Blocks A/B may use alternate short names (inline_b); attention check unchanged.
+  const dtForPrompt = (q.block === 'A' || q.block === 'B') ? forBlockB(dt) : dt;
+  const item = { id: q.id, key: q.key, type: q.type, prompt: q.prompt(dtForPrompt, uc) };
   if (q.prompt_emphasis) item.prompt_emphasis = q.prompt_emphasis;
   // Block B: use-case context. Block A: data-type description reminder.
   // Attention check: no header.
   if (q.block === 'B') {
-    // Short name + use, then the same "includes …" reminder as Block A.
+    // Short name + use, then "This includes …".
     // Some items: "wants to collect" (hypothetical intent); others: "collects".
     const wantsToCollect = q.key === 'postq_coworker_sells_feel'
       || q.key === 'postq_concerns';
     const verb = wantsToCollect ? 'wants to collect' : 'collects';
-    item.header = `Suppose App Z ${verb} your ${dt.inline}, to ${uc.data_use}. ${thisIncludesSentence(dt)}`;
+    item.header = `Suppose App Z ${verb} your ${dtForPrompt.inline}, to ${uc.data_use}. ${thisIncludesSentence(dt)}`;
   } else if (q.block === 'A') {
-    item.header = dataTypeIncludesHeader(dt);
+    item.header = dataTypeIncludesHeader(dtForPrompt);
   }
   if (q.type === 'likert5' || q.type === 'attention') {
     item.anchors = q.anchors;
@@ -241,10 +244,11 @@ function screenPayload(p, screenId, extra = {}) {
     }
 
     case 'block_a_intro': {
+      const dtA = forBlockB(dt);
       return {
         screen: 'block_a_intro',
         body: [
-          `Now, we'd like to understand how you feel about ${dt.inline}, regardless of its use.`,
+          `Now, we'd like to understand how you feel about ${dtA.inline}, regardless of its use.`,
           "On the following pages, we'll ask you a series of questions."
         ]
       };

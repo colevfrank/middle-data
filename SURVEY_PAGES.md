@@ -5,7 +5,8 @@ Page-by-page text as currently assembled from `server/content.js` and `server/sc
 **Placeholders** (curly braces) mark text that varies by assigned condition. Under each page that uses them, possible values are listed.
 
 - `{data_type_description}` — fuller phrase (intro first sentence only)
-- `{inline}` — short mid-sentence data-type name
+- `{inline}` — short mid-sentence data-type name (intro, scenarios, …)
+- `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. communications data)
 - `{data_use}` — use-case phrase (same wording as `comp_use` / `scenario_use` in code)
 
 Scenario order (Subscription Discount vs Data Sharing Program) is randomized. Block B questions are randomized within Block B; Block A questions (plus the attention check) are randomized within Block A. Block B is always shown before Block A.
@@ -346,30 +347,30 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue):**
 
-Suppose App Z collects your `{inline}`, to `{data_use}.` This includes `{examples}.` **`{question}`**
+Suppose App Z collects your `{inline_b}`, to `{data_use}.` This includes `{examples}.` **`{question}`**
 
 Example: Suppose App Z wants to collect your email management behavior data, to improve App Z's services. This includes detailed behavioral data of how users respond, sort, delete, and search their email. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
 
-`{inline}`:
+`{inline_b}` *(Block A and Block B; intro/scenarios use `{inline}`)*:
 
 1. demographic information
-2. government IDs
+2. government ID data
 3. voice data
 4. health information and medical records
 5. financial information
-6. communications
-7. social network
-8. contacts
-9. location history
-10. web browsing history
-11. purchase history
+6. communications data
+7. social network data
+8. contacts data
+9. location history data
+10. web browsing history data
+11. purchase history data
 12. professional or educational documents
-13. photos library
+13. photos library data
 14. email management behavior data
 15. administrative task behavior data
 16. cooking behavior data
-17. music preferences
-18. streaming preferences
+17. music preferences data
+18. streaming preferences data
 19. screen usage data
 20. exercise activities data
 
@@ -380,7 +381,7 @@ Example: Suppose App Z wants to collect your email management behavior data, to 
 
 ### B1 — Compensated by amount
 
-Should you be compensated based on how much of your `{inline}` `{is/are}` used by App Z?
+Should you be compensated based on how much of your `{inline_b}` `{is/are}` used by App Z?
 
 - Yes
 - No
@@ -389,7 +390,7 @@ Should you be compensated based on how much of your `{inline}` `{is/are}` used b
 
 ### B2 — Compensated per use
 
-Should you be compensated each time your `{inline}` `{is/are}` used by App Z?
+Should you be compensated each time your `{inline_b}` `{is/are}` used by App Z?
 
 - Yes
 - No
@@ -398,7 +399,7 @@ Should you be compensated each time your `{inline}` `{is/are}` used by App Z?
 
 ### B3 — Compensated by effort
 
-Should you be compensated based on how much effort it took for you to generate or provide your `{inline}` to App Z?
+Should you be compensated based on how much effort it took for you to generate or provide your `{inline_b}` to App Z?
 
 - Yes
 - No
@@ -407,7 +408,7 @@ Should you be compensated based on how much effort it took for you to generate o
 
 ### B4 — Compensated by originality
 
-Should you be compensated for how unique or original your `{inline}` `{is/are}` relative to others' on App Z?
+Should you be compensated for how unique or original your `{inline_b}` `{is/are}` relative to others' on App Z?
 
 - Yes
 - No
@@ -418,7 +419,7 @@ Should you be compensated for how unique or original your `{inline}` `{is/are}` 
 
 *(Header uses “wants to collect” instead of “collects”.)*
 
-Suppose your phone manufacturer collected your `{inline}` and sold `{it/them}` to App Z. How would you feel?
+Suppose your phone manufacturer collected your `{inline_b}` and sold `{it/them}` to App Z. How would you feel?
 
 - Very upset
 - A little upset
@@ -428,7 +429,7 @@ Suppose your phone manufacturer collected your `{inline}` and sold `{it/them}` t
 
 ### B6 — Credit / acknowledgement
 
-Should you receive credit or acknowledgement for your `{inline}` when `{it is/they are}` used by App Z?
+Should you receive credit or acknowledgement for your `{inline_b}` when `{it is/they are}` used by App Z?
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -440,7 +441,7 @@ Should you receive credit or acknowledgement for your `{inline}` when `{it is/th
 
 *(Header uses “wants to collect” instead of “collects”.)*
 
-What is/are your main concern(s) about sharing your `{inline}` with App Z? (Please check all that apply)
+What is/are your main concern(s) about sharing your `{inline_b}` with App Z? (Please check all that apply)
 
 *(Options randomized per participant/load; Other always last.)*
 
@@ -457,32 +458,11 @@ What is/are your main concern(s) about sharing your `{inline}` with App Z? (Plea
 
 ## Page 15 — Block A intro
 
-Now, we'd like to understand how you feel about `{inline}`, regardless of its use.
+Now, we'd like to understand how you feel about `{inline_b}`, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
-`{inline}`:
-
-1. demographic information
-2. government IDs
-3. voice data
-4. health information and medical records
-5. financial information
-6. communications
-7. social network
-8. contacts
-9. location history
-10. web browsing history
-11. purchase history
-12. professional or educational documents
-13. photos library
-14. email management behavior data
-15. administrative task behavior data
-16. cooking behavior data
-17. music preferences
-18. streaming preferences
-19. screen usage data
-20. exercise activities data
+`{inline_b}`: *(same list as Block B)*
 
 **Button:** Continue
 
@@ -494,77 +474,56 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue; not shown on attention check):**
 
-`{Inline capitalized} includes {examples from data_type_description}.` **`{question}`**
+`{Inline_b capitalized} includes {examples from data_type_description}.` **`{question}`**
 
 Example: Financial information includes bank statements and investment portfolios. **Do you consider financial information to be important?**
 
 ### A1 — Importance
 
-Do you consider `{inline}` to be important?
+Do you consider `{inline_b}` to be important?
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
-`{inline}`:
-
-1. demographic information
-2. government IDs
-3. voice data
-4. health information and medical records
-5. financial information
-6. communications
-7. social network
-8. contacts
-9. location history
-10. web browsing history
-11. purchase history
-12. professional or educational documents
-13. photos library
-14. email management behavior data
-15. administrative task behavior data
-16. cooking behavior data
-17. music preferences
-18. streaming preferences
-19. screen usage data
-20. exercise activities data
+`{inline_b}`: *(same list as Block B)*
 
 ### A2 — Sensitivity
 
-Do you consider `{inline}` to be sensitive?
+Do you consider `{inline_b}` to be sensitive?
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### A3 — Ownership
 
-Do you feel ownership over `{inline}`?
+Do you feel ownership over `{inline_b}`?
 
 *(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### A4 — Share publicly
 
-Would you ever share your `{inline}` publicly? For example, would you share `{it/them}` with a person or group of people you have never met before? Choose the option that best describes your answer:
+Would you ever share your `{inline_b}` publicly? For example, would you share `{it/them}` with a person or group of people you have never met before? Choose the option that best describes your answer:
 
 - No — I would never share it publicly.
 - Maybe — it would depend on the situation.
 - Yes, but only without my name attached (anonymously).
 - Yes, including with my name attached.
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### A5 — Buy / sell appropriate
 
-Is it appropriate to buy and sell your `{inline}`?
+Is it appropriate to buy and sell your `{inline_b}`?
 
 *(1–5 Likert)* 1: Completely inappropriate … 5: Completely appropriate
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### A6 — Upset if leaked
 
-If you found out your `{inline}` had been released publicly without your knowledge, which best describes how you would feel?
+If you found out your `{inline_b}` had been released publicly without your knowledge, which best describes how you would feel?
 
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
@@ -573,39 +532,39 @@ If you found out your `{inline}` had been released publicly without your knowled
 - I would be very upset either way.
 - I'm not sure.
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### A7 — Identifiability
 
-How identifiable (traceable to you) do you think `{inline}` `{is/are}`?
+How identifiable (traceable to you) do you think `{inline_b}` `{is/are}`?
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### A8 — Usefulness to companies
 
-How useful do you think `{inline}` `{is/are}` to companies?
+How useful do you think `{inline_b}` `{is/are}` to companies?
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### A9 — Replaceability / commonness
 
-How common or replaceable do you think `{inline}` `{is/are}` across people? In other words, if you didn't provide `{it/them}`, could someone else easily provide similar data?
+How common or replaceable do you think `{inline_b}` `{is/are}` across people? In other words, if you didn't provide `{it/them}`, could someone else easily provide similar data?
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### A10 — Control
 
-How much control do you feel you have over your `{inline}` in general?
+How much control do you feel you have over your `{inline_b}` in general?
 
 *(1–5 Likert)* 1: no control at all … 5: complete control
 
-`{inline}`: *(same list as A1)*
+`{inline_b}`: *(same list as Block B)*
 
 ### Attention check
 
