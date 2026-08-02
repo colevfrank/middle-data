@@ -52,9 +52,9 @@ const DATA_TYPES = [
   { id: 12, inline: 'professional or educational documents', plural: true,
     data_type_description: "its users' professional or educational documents, including notes, essays, and reports used for work or education but not including financial, government, or otherwise sensitive documents",
     category: 'Expressive' },
-  { id: 13, inline: 'photos library', plural: false,
-    inline_b: 'photos library data',
-    data_type_description: "its users' photos library, including photo or video data stored on their device",
+  { id: 13, inline: 'photo library', plural: false,
+    inline_b: 'photo library data',
+    data_type_description: "its users' photo library, including photo or video data stored on their device",
     category: 'Expressive' },
   { id: 14, inline: 'email management behavior data', plural: false,
     data_type_description: 'how its users manage their emails, including detailed behavioral data of how users respond, sort, delete, and search their email',
@@ -152,7 +152,8 @@ const POST_QUESTIONS = [
   { id: 4, key: 'postq_share_public', block: 'A', type: 'choice_num',
     prompt: (dt) => `Would you ever share your ${dt.inline} publicly? For example, would you share ${itThem(dt)} with a person or group of people you have never met before? Choose the option that best describes your answer:`,
     options: [
-      { value: 0, label: 'No — I would never share it publicly.' },
+      // Pronoun-neutral so labels work for both singular and plural data types.
+      { value: 0, label: 'No — I would never share this publicly.' },
       { value: 1, label: 'Maybe — it would depend on the situation.' },
       { value: 2, label: 'Yes, but only without my name attached (anonymously).' },
       { value: 3, label: 'Yes, including with my name attached.' }

@@ -355,7 +355,7 @@
   RENDERERS.block_a_intro = function (p) {
     for (const para of p.body) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' },
-        emphasize(para, ['regardless of its use'])));
+        emphasize(para, ['regardless of its use', 'regardless of their use'])));
     }
     const btn = continueBtn(() => submit('block_a_intro', {}), 'Continue');
     btn.disabled = false;

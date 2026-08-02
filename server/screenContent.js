@@ -25,11 +25,12 @@ function dataTypeExamples(dt) {
   return d.slice(i + marker.length).replace(/\.$/, '');
 }
 
-// Block A reminder, e.g. "Financial information includes bank statements…."
+// Block A reminder, e.g. "Financial information includes…" / "…documents include…".
 function dataTypeIncludesHeader(dt) {
   const examples = dataTypeExamples(dt) || dt.inline;
   const name = dt.inline.charAt(0).toUpperCase() + dt.inline.slice(1);
-  return `${name} includes ${examples}.`;
+  const verb = dt.plural ? 'include' : 'includes';
+  return `${name} ${verb} ${examples}.`;
 }
 
 // Block B / scenario reminder (avoids repeating the data-type name).
@@ -122,7 +123,8 @@ function postQuestionPayload(p, screenId) {
     const wantsToCollect = q.key === 'postq_coworker_sells_feel'
       || q.key === 'postq_concerns';
     const verb = wantsToCollect ? 'wants to collect' : 'collects';
-    item.header = `Suppose App Z ${verb} your ${dtForPrompt.inline}, to ${uc.data_use}. ${thisIncludesSentence(dt)}`;
+    // No comma before "to …" — the includes clause is a separate sentence.
+    item.header = `Suppose App Z ${verb} your ${dtForPrompt.inline} to ${uc.data_use}. ${thisIncludesSentence(dt)}`;
   } else if (q.block === 'A') {
     item.header = dataTypeIncludesHeader(dtForPrompt);
   }
@@ -245,10 +247,11 @@ function screenPayload(p, screenId, extra = {}) {
 
     case 'block_a_intro': {
       const dtA = forBlockB(dt);
+      const itsTheir = dtA.plural ? 'their' : 'its';
       return {
         screen: 'block_a_intro',
         body: [
-          `Now, we'd like to understand how you feel about ${dtA.inline}, regardless of its use.`,
+          `Now, we'd like to understand how you feel about ${dtA.inline}, regardless of ${itsTheir} use.`,
           "On the following pages, we'll ask you a series of questions."
         ]
       };

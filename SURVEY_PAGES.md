@@ -111,7 +111,7 @@ App Z would like to access your `{inline}` to `{data_use}`.
 10. its users' web browsing history, including websites users visit and the timestamps of each visit
 11. its users' purchase history, including what users purchase from which vendors and at what times
 12. its users' professional or educational documents, including notes, essays, and reports used for work or education but not including financial, government, or otherwise sensitive documents
-13. its users' photos library, including photo or video data stored on their device
+13. its users' photo library, including photo or video data stored on their device
 14. how its users manage their emails, including detailed behavioral data of how users respond, sort, delete, and search their email
 15. how its users perform basic administrative tasks, including detailed behavioral data of how users book flights, pay bills, search for restaurants, or plan a party
 16. how its users cook, including detailed behavioral data of what users cook, what ingredients they use, whether they follow recipes, and how long they spend cooking
@@ -135,7 +135,7 @@ App Z would like to access your `{inline}` to `{data_use}`.
 10. web browsing history
 11. purchase history
 12. professional or educational documents
-13. photos library
+13. photo library
 14. email management behavior data
 15. administrative task behavior data
 16. cooking behavior data
@@ -201,7 +201,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 10. web browsing history
 11. purchase history
 12. professional or educational documents
-13. photos library
+13. photo library
 14. email management behavior data
 15. administrative task behavior data
 16. cooking behavior data
@@ -275,7 +275,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 10. web browsing history
 11. purchase history
 12. professional or educational documents
-13. photos library
+13. photo library
 14. email management behavior data
 15. administrative task behavior data
 16. cooking behavior data
@@ -323,7 +323,7 @@ On the following pages, we'll ask you a series of questions.
 10. web browsing history
 11. purchase history
 12. professional or educational documents
-13. photos library
+13. photo library
 14. email management behavior data
 15. administrative task behavior data
 16. cooking behavior data
@@ -347,9 +347,9 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue):**
 
-Suppose App Z collects your `{inline_b}`, to `{data_use}.` This includes `{examples}.` **`{question}`**
+Suppose App Z collects your `{inline_b}` to `{data_use}.` This includes `{examples}.` **`{question}`**
 
-Example: Suppose App Z wants to collect your email management behavior data, to improve App Z's services. This includes detailed behavioral data of how users respond, sort, delete, and search their email. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
+Example: Suppose App Z wants to collect your email management behavior data to improve App Z's services. This includes detailed behavioral data of how users respond, sort, delete, and search their email. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
 
 `{inline_b}` *(Block A and Block B; intro/scenarios use `{inline}`)*:
 
@@ -365,7 +365,7 @@ Example: Suppose App Z wants to collect your email management behavior data, to 
 10. web browsing history data
 11. purchase history data
 12. professional or educational documents
-13. photos library data
+13. photo library data
 14. email management behavior data
 15. administrative task behavior data
 16. cooking behavior data
@@ -458,7 +458,7 @@ What is/are your main concern(s) about sharing your `{inline_b}` with App Z? (Pl
 
 ## Page 15 — Block A intro
 
-Now, we'd like to understand how you feel about `{inline_b}`, regardless of its use.
+Now, we'd like to understand how you feel about `{inline_b}`, regardless of `{its/their}` use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -474,9 +474,10 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue; not shown on attention check):**
 
-`{Inline_b capitalized} includes {examples from data_type_description}.` **`{question}`**
+`{Inline_b capitalized} {includes/include} {examples from data_type_description}.` **`{question}`**
 
 Example: Financial information includes bank statements and investment portfolios. **Do you consider financial information to be important?**
+*(Plural names use “include”, e.g. “Professional or educational documents include…”.)*
 
 ### A1 — Importance
 
@@ -506,7 +507,7 @@ Do you feel ownership over `{inline_b}`?
 
 Would you ever share your `{inline_b}` publicly? For example, would you share `{it/them}` with a person or group of people you have never met before? Choose the option that best describes your answer:
 
-- No — I would never share it publicly.
+- No — I would never share this publicly.
 - Maybe — it would depend on the situation.
 - Yes, but only without my name attached (anonymously).
 - Yes, including with my name attached.

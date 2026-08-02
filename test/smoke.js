@@ -458,15 +458,16 @@ test('attention-check has no Block A description header', () => {
 test('post-question Block B payload: use-case header + trimmed prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_7');
   assert.equal(p.item.key, 'postq_comp_by_amount');
-  assert.ok(p.item.header.startsWith(`Suppose App Z collects your ${dt5.inline}, to `));
-  assert.ok(p.item.header.includes(`, to ${content.USE_CASES.B1.data_use}.`));
+  assert.ok(p.item.header.startsWith(`Suppose App Z collects your ${dt5.inline} to `));
+  assert.ok(p.item.header.includes(` to ${content.USE_CASES.B1.data_use}.`));
+  assert.ok(!p.item.header.includes(`, to ${content.USE_CASES.B1.data_use}.`));
   assert.ok(p.item.header.includes('This includes bank statements and investment portfolios.'));
   assert.ok(p.item.prompt.includes(dt5.inline));                        // short data name in question
   assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
 });
 test('Block B process-type header uses short name + includes (not "your how you…")', () => {
   const p = screenPayload({ ...fakeParticipant, data_type: 16 }, 'postq_11');
-  assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your cooking behavior data, to '));
+  assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your cooking behavior data to '));
   assert.ok(p.item.header.includes('This includes detailed behavioral data'));
   assert.ok(!p.item.header.includes('your how you'));
   assert.ok(!p.item.header.includes('Cooking behavior data includes'));
@@ -487,6 +488,12 @@ test('Blocks A/B use inline_b where set; intro/scenarios keep inline', () => {
   assert.equal(histA.item.prompt, 'Do you consider location history data to be important?');
   const prefB = screenPayload({ ...fakeParticipant, data_type: 17 }, 'postq_8');
   assert.ok(prefB.item.prompt.includes('music preferences data is used'));
+  const docs = screenPayload({ ...fakeParticipant, data_type: 12 }, 'postq_1');
+  assert.ok(docs.item.header.startsWith('Professional or educational documents include '));
+  const docsIntro = screenPayload({ ...fakeParticipant, data_type: 12 }, 'block_a_intro');
+  assert.ok(docsIntro.body[0].includes('regardless of their use'));
+  const share = screenPayload(fakeParticipant, 'postq_4');
+  assert.ok(share.item.options[0].label.includes('share this publicly'));
 });
 test('selected Block B headers use "wants to collect"', () => {
   for (const id of [11, 13]) {
