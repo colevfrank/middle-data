@@ -418,7 +418,9 @@ test('scenario_2 (Data Sharing Program): renamed + multi-select payload', () => 
   const p = screenPayload(fakeParticipant, 'scenario_2');
   assert.equal(p.heading, 'Data Sharing Program');
   assert.ok(p.frame_url.includes('data-sharing'));
-  assert.ok(p.offer_line.includes('percentage of the revenue'));
+  assert.ok(p.intro_offer.includes('Data Sharing Program'));
+  assert.ok(p.offer_agree && p.offer_agree.checkbox_label === 'I agree');
+  assert.ok(p.offer_agree.blank_suffix.includes('%'));
   assert.deepEqual(p.tiers.map(t => t.value), ['1', '10', '25', '50', '75', '99']);
   assert.equal(p.none_label, 'I will not share this data regardless of the percentage');
   assert.deepEqual(p.submit, { accepted: 's2_accepted_shares', none: 's2_none' });

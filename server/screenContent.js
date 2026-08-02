@@ -25,24 +25,30 @@ function scenarioPayload(p, screenId) {
     intro_default: 'By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.',
     collect_line: `We will access your ${dt.inline}`,
     collect_emphasis: [dt.inline],
-    use_line: `We will use this information to ${uc.scenario_use}`
+    use_line: `We will use this information to ${uc.scenario_use}`,
+    use_emphasis: [uc.scenario_use]
   };
   if (screenId === 'scenario_1') {
     return Object.assign({
       screen: 'scenario_1',
       lead_in: [
-        "We'd like you to imagine ...",
-        '... One day, you open App Z and it offers you the option to receive a Subscription Discount:'
+        "We'd like you to imagine: One day, you open App Z and it offers you the option to receive a Subscription Discount:"
       ],
       frame_url: 'appz.com/settings/subscription',
       sidebar_active: 'subscription',
       heading: 'Subscription',
       intro: [
         'You currently pay $20 per month for our app.',
-        common.intro_default,
-        'We are now offering you the option to receive a Subscription Discount. If you agree:'
+        common.intro_default
       ],
-      offer_line: 'We would like to offer you a monthly discount on your subscription for sharing this data.',
+      intro_offer: 'We are now offering you the option to receive a Subscription Discount. If you agree:',
+      // Decorative settings-UI mock (not the participant response).
+      offer_agree: {
+        checkbox_label: 'I agree',
+        blank_prefix: '$',
+        blank_suffix: ' / month discount',
+        blank_placeholder: ''
+      },
       question: 'Please select what discount you would be willing to accept (select all that apply):',
       tiers: S1_TIERS,
       none_label: 'I will not share this data regardless of the discount amount',
@@ -52,18 +58,22 @@ function scenarioPayload(p, screenId) {
   return Object.assign({
     screen: 'scenario_2',
     lead_in: [
-      "We'd like you to imagine ...",
-      '... One day, you open App Z and it offers you the option to join a Data Sharing Program:'
+      "We'd like you to imagine: One day, you open App Z and it offers you the option to join a Data Sharing Program:"
     ],
     frame_url: 'appz.com/settings/data-sharing',
     sidebar_active: 'data_sharing',
     heading: 'Data Sharing Program',
     intro: [
       'You currently pay $20 per month for our app.',
-      common.intro_default,
-      'We are now offering you the option to join a Data Sharing Program. If you opt in:'
+      common.intro_default
     ],
-    offer_line: 'Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.',
+    intro_offer: 'We are now offering you the option to join a Data Sharing Program. If you opt in:',
+    offer_agree: {
+      checkbox_label: 'I agree',
+      blank_prefix: '',
+      blank_suffix: '% of revenue',
+      blank_placeholder: ''
+    },
     question: 'Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):',
     tiers: S2_TIERS,
     none_label: 'I will not share this data regardless of the percentage',
@@ -136,24 +146,24 @@ function screenPayload(p, screenId, extra = {}) {
         screen: 'intro',
         setup: [
           "Imagine you're a frequent user of App Z!",
-          'App Z is an online service that you use often.',
-          'You currently pay $20 per month for App Z.',
+          'App Z is an online service that you use often. You currently pay $20 per month for App Z.',
           'By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service.',
           'App Z does not sell your information, and App Z also deletes any data it holds after one year.'
         ],
-        change_heading: 'But there has been a recent change.',
+        change_heading: 'But there has been a recent change',
         change: [
           `Earlier this year, App Z became interested in ${dt.data_type_description}.`,
           uc.intro_sentences(dt)
         ],
+        // Phrases bold+underlined in setup/change; `access_line` is the full intro
+        // sentence (second change para) styled separately as bold+underline+red.
+        access_line: uc.intro_sentences(dt),
         emphasis: [
           '$20 per month',
           'does not record or store',
           'does not sell',
           'deletes',
-          'after one year',
-          dt.inline,
-          `to ${uc.comp_use}`
+          'after one year'
         ],
         comprehension: {
           instruction: 'Based on the information above, indicate whether each statement is True or False.',

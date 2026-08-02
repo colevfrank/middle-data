@@ -316,8 +316,18 @@
 
   RENDERERS.welcome = function (p) {
     root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, p.heading || 'Welcome!'));
+    const boldPhrase = 'you will not be able to return to previous pages';
     for (const para of p.body) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+      const nodes = [];
+      const idx = para.indexOf(boldPhrase);
+      if (idx >= 0) {
+        if (idx > 0) nodes.push(para.slice(0, idx));
+        nodes.push(el('strong', { class: 'font-bold' }, boldPhrase));
+        nodes.push(para.slice(idx + boldPhrase.length));
+        root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, nodes));
+      } else {
+        root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+      }
     }
     const btn = continueBtn(() => submit('welcome', {}), 'Continue');
     btn.disabled = false;
@@ -372,14 +382,20 @@
   // are correct, counting wrong submissions per item.
   RENDERERS.intro = function (p) {
     const em = p.emphasis || [];
-    // First setup line is a larger, bold opener; the rest are body paragraphs.
-    root.appendChild(el('h2', { class: 'text-xl font-bold text-slate-900 mb-4' }, p.setup[0]));
+    // First setup line is a larger, bold bright-blue opener; the rest are body paragraphs.
+    root.appendChild(el('h2', { class: 'text-xl font-bold text-blue-500 mb-4' }, p.setup[0]));
     for (const para of p.setup.slice(1)) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(para, em)));
     }
-    root.appendChild(el('h3', { class: 'text-xl font-bold text-slate-900 mt-5 mb-2' }, p.change_heading));
+    root.appendChild(el('h3', { class: 'text-xl font-bold text-blue-500 mt-5 mb-2' }, p.change_heading));
     for (const para of p.change) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(para, em)));
+      if (p.access_line && para === p.access_line) {
+        root.appendChild(el('p', { class: 'mb-3' }, [
+          el('strong', { class: 'font-bold underline text-red-500' }, para)
+        ]));
+      } else {
+        root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(para, em)));
+      }
     }
 
     root.appendChild(el('div', { class: 'border-t border-slate-200 mt-5 mb-5' }));
@@ -444,16 +460,39 @@
 
   // ===== Scenarios (voice-neutral, first person; shared by scenario_1 & _2) =====
   // The "settings page" body: bold heading, program description, collect/use bullets
-  // (collect line bold+underlines the data type), and the highlighted offer line.
+  // (collect line bold+underlines the data type; use line underlines the use),
+  // then a decorative "I agree" + blank amount row (not the participant response).
   function scenarioContentBox(p) {
     const box = el('div', {});
     box.appendChild(el('h2', { class: 'settings-section-title' }, p.heading));
     for (const para of p.intro) box.appendChild(el('p', { class: 'settings-section-helper' }, para));
+    if (p.intro_offer) {
+      box.appendChild(el('p', { class: 'settings-section-helper font-bold text-red-500' }, p.intro_offer));
+    }
     const list = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-slate-700 space-y-1' });
     list.appendChild(el('li', {}, emphasize(p.collect_line, p.collect_emphasis)));
-    list.appendChild(el('li', {}, p.use_line));
+    list.appendChild(el('li', {}, emphasize(p.use_line, p.use_emphasis)));
     box.appendChild(list);
-    box.appendChild(el('div', { class: 'settings-callout mt-3' }, p.offer_line));
+    if (p.offer_agree) {
+      const oa = p.offer_agree;
+      const row = el('div', {
+        class: 'mt-3 flex flex-wrap items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700'
+      });
+      row.appendChild(el('label', { class: 'flex items-center gap-2 cursor-default' }, [
+        el('input', { type: 'checkbox', disabled: true, class: 'h-4 w-4 border-slate-300' }),
+        el('span', { class: 'font-medium' }, oa.checkbox_label)
+      ]));
+      row.appendChild(el('span', { class: 'flex items-center gap-1' }, [
+        oa.blank_prefix ? el('span', {}, oa.blank_prefix) : null,
+        el('input', {
+          type: 'text', disabled: true, readonly: true,
+          placeholder: oa.blank_placeholder || ' ',
+          class: 'w-16 rounded border border-slate-300 bg-white px-2 py-1 text-sm text-center'
+        }),
+        oa.blank_suffix ? el('span', {}, oa.blank_suffix) : null
+      ].filter(Boolean)));
+      box.appendChild(row);
+    }
     return box;
   }
 
@@ -500,7 +539,7 @@
   }
 
   function renderScenarioPlain(p) {
-    for (const line of p.lead_in) root.appendChild(el('p', { class: 'font-bold text-slate-900 mb-3' }, line));
+    for (const line of p.lead_in) root.appendChild(el('p', { class: 'text-xl font-bold text-blue-500 mb-3' }, line));
     const box = scenarioContentBox(p);
     box.className = 'border border-slate-200 rounded p-4 mb-4';
     root.appendChild(box);
@@ -770,7 +809,7 @@
 
   // ===== Scenarios (settings mode) — shared browser frame for scenario_1 & _2 =====
   function renderScenarioSettings(p) {
-    for (const line of p.lead_in) root.appendChild(el('p', { class: 'font-bold text-slate-900 mb-3' }, line));
+    for (const line of p.lead_in) root.appendChild(el('p', { class: 'text-xl font-bold text-blue-500 mb-3' }, line));
     const frame = el('div', { class: 'browser-frame' });
     frame.appendChild(browserChrome(p.frame_url));
     const body = el('div', { class: 'browser-body' });
