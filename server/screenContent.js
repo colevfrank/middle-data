@@ -24,11 +24,17 @@ function dataTypeExamples(dt) {
   return d.slice(i + marker.length).replace(/\.$/, '');
 }
 
-// Block A / Block B reminder, e.g. "Financial information includes bank statements…."
+// Block A reminder, e.g. "Financial information includes bank statements…."
 function dataTypeIncludesHeader(dt) {
   const examples = dataTypeExamples(dt) || dt.inline;
   const name = dt.inline.charAt(0).toUpperCase() + dt.inline.slice(1);
   return `${name} includes ${examples}.`;
+}
+
+// Block B / scenario reminder (avoids repeating the data-type name).
+function thisIncludesSentence(dt) {
+  const examples = dataTypeExamples(dt) || dt.inline;
+  return `This includes ${examples}.`;
 }
 
 // The two scenarios share one voice-neutral, first-person design: a bold lead-in,
@@ -42,7 +48,7 @@ function scenarioPayload(p, screenId) {
     intro: [
       'You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.'
     ],
-    collect_line: `We will access or ask you to provide your ${dt.inline}. This includes ${dataTypeExamples(dt)}.`,
+    collect_line: `We will access or ask you to provide your ${dt.inline}. ${thisIncludesSentence(dt)}`,
     collect_emphasis: [dt.inline],
     use_line: `We will use this information to ${uc.scenario_use}`,
     use_emphasis: [uc.scenario_use]
@@ -113,7 +119,7 @@ function postQuestionPayload(p, screenId) {
     const wantsToCollect = q.key === 'postq_coworker_sells_feel'
       || q.key === 'postq_concerns';
     const verb = wantsToCollect ? 'wants to collect' : 'collects';
-    item.header = `Suppose App Z ${verb} your ${dt.inline}, to ${uc.data_use}. ${dataTypeIncludesHeader(dt)}`;
+    item.header = `Suppose App Z ${verb} your ${dt.inline}, to ${uc.data_use}. ${thisIncludesSentence(dt)}`;
   } else if (q.block === 'A') {
     item.header = dataTypeIncludesHeader(dt);
   }

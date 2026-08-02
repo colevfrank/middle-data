@@ -346,9 +346,9 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue):**
 
-Suppose App Z collects your `{inline}`, to `{data_use}.` `{Inline} includes {examples}.` **`{question}`**
+Suppose App Z collects your `{inline}`, to `{data_use}.` This includes `{examples}.` **`{question}`**
 
-Example: Suppose App Z collects your cooking behavior data, to improve App Z's services. Cooking behavior data includes detailed behavioral data of what users cook, what ingredients they use, whether they follow recipes, and how long they spend cooking. **Suppose your phone manufacturer collected your cooking behavior data and sold it to App Z. How would you feel?**
+Example: Suppose App Z wants to collect your email management behavior data, to improve App Z's services. This includes detailed behavioral data of how users respond, sort, delete, and search their email. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
 
 `{inline}`:
 

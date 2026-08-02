@@ -460,15 +460,16 @@ test('post-question Block B payload: use-case header + trimmed prompt', () => {
   assert.equal(p.item.key, 'postq_comp_by_amount');
   assert.ok(p.item.header.startsWith(`Suppose App Z collects your ${dt5.inline}, to `));
   assert.ok(p.item.header.includes(`, to ${content.USE_CASES.B1.data_use}.`));
-  assert.ok(p.item.header.includes('Financial information includes bank statements and investment portfolios.'));
+  assert.ok(p.item.header.includes('This includes bank statements and investment portfolios.'));
   assert.ok(p.item.prompt.includes(dt5.inline));                        // short data name in question
   assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
 });
 test('Block B process-type header uses short name + includes (not "your how you…")', () => {
   const p = screenPayload({ ...fakeParticipant, data_type: 16 }, 'postq_11');
   assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your cooking behavior data, to '));
-  assert.ok(p.item.header.includes('Cooking behavior data includes detailed behavioral data'));
+  assert.ok(p.item.header.includes('This includes detailed behavioral data'));
   assert.ok(!p.item.header.includes('your how you'));
+  assert.ok(!p.item.header.includes('Cooking behavior data includes'));
 });
 test('selected Block B headers use "wants to collect"', () => {
   for (const id of [11, 13]) {
