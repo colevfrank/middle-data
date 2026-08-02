@@ -23,14 +23,17 @@ function scenarioPayload(p, screenId) {
   const uc = getUseCase(p);
   const common = {
     intro_default: 'By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.',
-    collect_line: `We will collect your ${dt.inline}`,
+    collect_line: `We will access your ${dt.inline}`,
     collect_emphasis: [dt.inline],
     use_line: `We will use this information to ${uc.scenario_use}`
   };
   if (screenId === 'scenario_1') {
     return Object.assign({
       screen: 'scenario_1',
-      lead_in: ['Imagine App Z offers you the option to receive a Subscription Discount:'],
+      lead_in: [
+        "We'd like you to imagine ...",
+        '... One day, you open App Z and it offers you the option to receive a Subscription Discount:'
+      ],
       frame_url: 'appz.com/settings/subscription',
       sidebar_active: 'subscription',
       heading: 'Subscription',
@@ -42,13 +45,16 @@ function scenarioPayload(p, screenId) {
       offer_line: 'We would like to offer you a monthly discount on your subscription for sharing this data.',
       question: 'Please select what discount you would be willing to accept (select all that apply):',
       tiers: S1_TIERS,
-      none_label: 'I would not accept any discount',
+      none_label: 'I will not share this data regardless of the discount amount',
       submit: { accepted: 's1_accepted_discounts', none: 's1_none' }
     }, common);
   }
   return Object.assign({
     screen: 'scenario_2',
-    lead_in: ["We'd like you to imagine…", '… One day, you open App Z and it offers you the option to join a Data Sharing Program:'],
+    lead_in: [
+      "We'd like you to imagine ...",
+      '... One day, you open App Z and it offers you the option to join a Data Sharing Program:'
+    ],
     frame_url: 'appz.com/settings/data-sharing',
     sidebar_active: 'data_sharing',
     heading: 'Data Sharing Program',
@@ -58,9 +64,9 @@ function scenarioPayload(p, screenId) {
       'We are now offering you the option to join a Data Sharing Program. If you opt in:'
     ],
     offer_line: 'Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.',
-    question: 'Please select what percentages you would be willing to accept (select all that apply):',
+    question: 'Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):',
     tiers: S2_TIERS,
-    none_label: 'I would not agree to this program',
+    none_label: 'I will not share this data regardless of the percentage',
     submit: { accepted: 's2_accepted_shares', none: 's2_none' }
   }, common);
 }
@@ -76,12 +82,16 @@ function postQuestionPayload(p, screenId) {
   // Block B screens carry a use-case context header; Block A (and the attention
   // check) show only the question.
   if (q.block === 'B') {
-    item.header = `Suppose App Z collects your ${dt.inline} for ${uc.data_use}`;
+    item.header = `Suppose App Z accesses your ${dt.inline} to ${uc.data_use}`;
   }
   if (q.type === 'likert5' || q.type === 'attention') {
     item.anchors = q.anchors;
   } else {
-    item.options = q.options.map(o => ({ value: o.value, label: o.label }));
+    item.options = q.options.map(o => ({
+      value: o.value,
+      label: o.label,
+      has_other: !!o.has_other
+    }));
   }
   return {
     screen: screenId,
@@ -112,19 +122,16 @@ function screenPayload(p, screenId, extra = {}) {
     case 'welcome': {
       return {
         screen: 'welcome',
+        heading: 'Welcome!',
         body: [
-          'This survey has multiple-choice and checkbox questions, with one open-ended response question.',
-          'Once you advance, you will not be able to return to previous places, so please consider each question carefully before clicking next.',
+          "In the following pages, you'll answer some questions. Then, you'll be redirected back to Prolific once you complete the survey.",
+          'Once you advance, you will not be able to return to previous pages, so please consider each question carefully before clicking next.',
           'Click "Continue" when you are ready to begin.'
         ]
       };
     }
 
     case 'intro': {
-      // Single screen: App Z setup → the "recent change" (data type + longer
-      // definition inline + per-condition use case) → comprehension check.
-      const longDef = dt.learn_more;
-      const defInline = longDef.charAt(0).toLowerCase() + longDef.slice(1);
       return {
         screen: 'intro',
         setup: [
@@ -134,26 +141,24 @@ function screenPayload(p, screenId, extra = {}) {
           'By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service.',
           'App Z does not sell your information, and App Z also deletes any data it holds after one year.'
         ],
-        change_heading: "But there's been a recent change.",
+        change_heading: 'But there has been a recent change.',
         change: [
-          `Earlier this year, App Z became interested in collecting the ${dt.label} of its users.`,
-          `By ${dt.label}, we mean ${defInline}`,
+          `Earlier this year, App Z became interested in ${dt.data_type_description}.`,
           uc.intro_sentences(dt)
         ],
-        // Phrases the client bolds + underlines inline within the setup/change paragraphs.
         emphasis: [
           '$20 per month',
           'does not record or store',
           'does not sell',
           'deletes',
           'after one year',
-          dt.label,
+          dt.inline,
           `to ${uc.comp_use}`
         ],
         comprehension: {
           instruction: 'Based on the information above, indicate whether each statement is True or False.',
           statements: [
-            { id: 1, text: `The data you would share with App Z is: ${dt.definition}.` },
+            { id: 1, text: `App Z would like to access its users' ${dt.inline}.` },
             { id: 2, text: `App Z would use your data to ${uc.comp_use}.` },
             { id: 3, text: 'App Z guarantees that your data will be permanently deleted after 30 days.' }
           ]
@@ -168,7 +173,8 @@ function screenPayload(p, screenId, extra = {}) {
     case 'scenario_transition': {
       return {
         screen: 'scenario_transition',
-        body: ["Now we'd like you to imagine that App Z took a different approach."],
+        heading: "Now we'd like you to imagine that App Z took a different approach.",
+        body: [],
         button: 'See this approach on the next page'
       };
     }
@@ -177,7 +183,17 @@ function screenPayload(p, screenId, extra = {}) {
       return {
         screen: 'post_scenario_intro',
         body: [
-          `Now, we'd like to understand how you feel about App Z collecting your ${dt.inline} for ${uc.data_use}.`,
+          `Now, we'd like to understand how you feel about App Z accessing your ${dt.inline} to ${uc.data_use}.`,
+          "On the following pages, we'll ask you a series of questions."
+        ]
+      };
+    }
+
+    case 'block_a_intro': {
+      return {
+        screen: 'block_a_intro',
+        body: [
+          `Now, we'd like to understand how you feel about ${dt.inline}, regardless of its use.`,
           "On the following pages, we'll ask you a series of questions."
         ]
       };
@@ -221,8 +237,8 @@ function screenPayload(p, screenId, extra = {}) {
         screen: 'debrief',
         body: [
           'Thank you for completing this study.',
-          'The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.',
-          'The "App Z" service in this survey was hypothetical. No company called App Z collected any of your information, and your responses to the scenarios will not be shared with any third party.',
+          'The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train AI models or AI agents versus to improve a company\'s services more generally.',
+          'The "App Z" service in this survey was hypothetical. No company called App Z accessed or collected any of your information, and your responses to the scenarios will not be shared with any third party.',
           'Your responses will help inform policy discussions about data governance in the age of AI. If you have questions, please contact Sarah Cen at sarahcen@andrew.cmu.edu.',
           'IRB Protocol: STUDY2026_00000225 — Carnegie Mellon University'
         ]
@@ -239,6 +255,7 @@ function progressFor(screenId, participant) {
   order.push(`scenario_${participant.scenario_order[0]}`, 'scenario_transition', `scenario_${participant.scenario_order[1]}`);
   order.push('post_scenario_intro');
   for (const qid of participant.block_b_order) order.push(`postq_${qid}`);
+  order.push('block_a_intro');
   for (const qid of participant.block_a_order) order.push(`postq_${qid}`);
   order.push('open_response', 'about_you_intro', 'ai_usage', 'demographics', 'debrief');
   const idx = order.indexOf(screenId);

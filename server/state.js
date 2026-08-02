@@ -7,6 +7,7 @@ const FIXED_ORDER = [
   '__scenarios__',        // expanded via scenario_order (+ scenario_transition between)
   'post_scenario_intro',
   '__block_b__',          // expanded via block_b_order
+  'block_a_intro',
   '__block_a__',          // expanded via block_a_order
   'open_response',
   'about_you_intro',
@@ -52,13 +53,17 @@ function nextAfter(participant, currentScreen) {
       if (bIdx < participant.block_b_order.length - 1) {
         return `postq_${participant.block_b_order[bIdx + 1]}`;
       }
-      return `postq_${participant.block_a_order[0]}`; // Block B done → first Block A
+      return 'block_a_intro'; // Block B done → Block A intro
     }
     const aIdx = participant.block_a_order.indexOf(qid);
     if (aIdx >= 0 && aIdx < participant.block_a_order.length - 1) {
       return `postq_${participant.block_a_order[aIdx + 1]}`;
     }
     return 'open_response'; // Block A done
+  }
+
+  if (currentScreen === 'block_a_intro') {
+    return `postq_${participant.block_a_order[0]}`;
   }
 
   const linear = [

@@ -12,13 +12,13 @@ CREATE TABLE IF NOT EXISTS participants (
   session_token UUID UNIQUE NOT NULL,
 
   -- Condition assignment (server-only)
-  data_type SMALLINT NOT NULL CHECK (data_type BETWEEN 1 AND 16),
+  data_type SMALLINT NOT NULL CHECK (data_type BETWEEN 1 AND 20),
   use_case CHAR(2) NOT NULL CHECK (use_case IN ('B1','B2')),
 
   -- Randomized orderings
   scenario_order INT[] NOT NULL,        -- permutation of [1,2]
   block_b_order INT[] NOT NULL,         -- Block B question ids (7-13), shown first
-  block_a_order INT[] NOT NULL,         -- Block A question ids (1-6) + attention check (14), shown after B
+  block_a_order INT[] NOT NULL,         -- Block A question ids (1-6, 15-18) + attention check (14), shown after B
 
   -- State machine
   current_screen TEXT NOT NULL DEFAULT 'consent',
@@ -49,16 +49,21 @@ CREATE TABLE IF NOT EXISTS participants (
   postq_ownership SMALLINT,              -- A3: 1-5
   postq_share_public SMALLINT,           -- A4: 0-3
   postq_buy_sell_appropriate SMALLINT,   -- A5: 1-5
-  postq_upset_if_leaked SMALLINT,        -- A6: 1-5
+  postq_upset_if_leaked TEXT,            -- A6: choice
+  postq_identifiability SMALLINT,        -- A7: 1-5
+  postq_usefulness SMALLINT,             -- A8: 1-5
+  postq_replaceability SMALLINT,         -- A9: 1-5
+  postq_control SMALLINT,                -- A10: 1-5
 
   -- Post-scenario questions, Block B (about compensation for the use case)
-  postq_comp_by_amount TEXT,             -- B1: yes/no/unsure
-  postq_comp_per_use TEXT,               -- B2: yes/no/unsure
-  postq_comp_by_effort TEXT,             -- B3: yes/no/unsure
-  postq_comp_by_originality TEXT,        -- B4: yes/no/unsure
+  postq_comp_by_amount TEXT,             -- B1: yes/no/unsure/dont_care
+  postq_comp_per_use TEXT,               -- B2: yes/no/unsure/dont_care
+  postq_comp_by_effort TEXT,             -- B3: yes/no/unsure/dont_care
+  postq_comp_by_originality TEXT,        -- B4: yes/no/unsure/dont_care
   postq_coworker_sells_feel TEXT,        -- B5
   postq_credit_ack SMALLINT,             -- B6: 1-5
   postq_concerns TEXT[],                 -- B7: multi-select
+  postq_concerns_other TEXT,             -- B7 free text when "other" selected
 
   -- Attention check (pooled + randomized with the post-scenario questions)
   attention_check_value SMALLINT,

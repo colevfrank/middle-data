@@ -315,7 +315,7 @@
   };
 
   RENDERERS.welcome = function (p) {
-    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, 'Welcome!'));
+    root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, p.heading || 'Welcome!'));
     for (const para of p.body) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
     }
@@ -326,7 +326,10 @@
 
   // Transition between the two scenarios.
   RENDERERS.scenario_transition = function (p) {
-    for (const para of p.body) {
+    if (p.heading) {
+      root.appendChild(el('h2', { class: 'text-xl font-semibold mb-4' }, p.heading));
+    }
+    for (const para of p.body || []) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
     }
     const btn = continueBtn(() => submit('scenario_transition', {}), p.button || 'Continue');
@@ -340,6 +343,16 @@
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
     }
     const btn = continueBtn(() => submit('post_scenario_intro', {}), 'Continue');
+    btn.disabled = false;
+    root.appendChild(btn);
+  };
+
+  // Intro before Block A (data-type questions).
+  RENDERERS.block_a_intro = function (p) {
+    for (const para of p.body) {
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+    }
+    const btn = continueBtn(() => submit('block_a_intro', {}), 'Continue');
     btn.disabled = false;
     root.appendChild(btn);
   };
@@ -521,15 +534,45 @@
       isComplete = () => !!form.querySelector(`input[name="${it.key}"]:checked`);
     } else if (it.type === 'multiselect') {
       const opts = el('div', { class: 'mt-2 space-y-1' });
+      let otherInput = null;
       for (const o of it.options) {
-        opts.appendChild(el('label', { class: 'label-radio' }, [
-          el('input', { type: 'checkbox', name: it.key, value: o.value }),
+        const row = el('label', { class: 'label-radio' }, [
+          el('input', { type: 'checkbox', name: it.key, value: o.value, 'data-has-other': o.has_other ? '1' : '0' }),
           el('span', {}, o.label)
-        ]));
+        ]);
+        opts.appendChild(row);
+        if (o.has_other) {
+          otherInput = el('input', {
+            type: 'text', name: it.key + '_other', placeholder: 'Please specify',
+            class: 'input-text mt-1 ml-6 hidden', maxlength: 100
+          });
+          opts.appendChild(otherInput);
+          const cb = row.querySelector('input');
+          cb.addEventListener('change', () => {
+            if (cb.checked) otherInput.classList.remove('hidden');
+            else {
+              otherInput.classList.add('hidden');
+              otherInput.value = '';
+            }
+            form.dispatchEvent(new Event('input', { bubbles: true }));
+          });
+        }
       }
       form.appendChild(opts);
-      getValue = () => Array.from(form.querySelectorAll(`input[name="${it.key}"]:checked`)).map(i => i.value);
-      isComplete = () => form.querySelectorAll(`input[name="${it.key}"]:checked`).length > 0;
+      getValue = () => {
+        const selected = Array.from(form.querySelectorAll(`input[name="${it.key}"]:checked`)).map(i => i.value);
+        const out = { [it.key]: selected };
+        if (otherInput && selected.includes('other')) out[it.key + '_other'] = otherInput.value.trim();
+        return out;
+      };
+      isComplete = () => {
+        const selected = Array.from(form.querySelectorAll(`input[name="${it.key}"]:checked`));
+        if (selected.length === 0) return false;
+        if (selected.some(i => i.dataset.hasOther === '1')) {
+          return otherInput && otherInput.value.trim().length > 0;
+        }
+        return true;
+      };
     } else {
       // choice / choice_num — radio list
       const numeric = it.type === 'choice_num';
@@ -552,7 +595,12 @@
     root.appendChild(form);
 
     const btn = continueBtn(() => {
-      submit(p.screen, { [it.key]: getValue() });
+      const v = getValue();
+      // Multiselect-with-other returns a fields object; other types return a scalar.
+      const body = (v && typeof v === 'object' && !Array.isArray(v) && it.type === 'multiselect')
+        ? v
+        : { [it.key]: v };
+      submit(p.screen, body);
     }, 'Continue');
     root.appendChild(btn);
     watchForCompletion(form, isComplete);

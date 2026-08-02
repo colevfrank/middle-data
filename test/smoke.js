@@ -146,10 +146,10 @@ async function runTests() {
 }
 
 section('content');
-test('16 data types each with label, inline, definition, learn_more', () => {
-  assert.equal(content.DATA_TYPES.length, 16);
+test('20 data types each with inline, data_type_description, category', () => {
+  assert.equal(content.DATA_TYPES.length, 20);
   for (const d of content.DATA_TYPES) {
-    assert.ok(d.label && d.inline && d.definition && d.learn_more && d.category);
+    assert.ok(d.inline && d.data_type_description && d.category);
   }
 });
 test('2 use cases B1 and B2 with data_use + intro_sentences', () => {
@@ -157,8 +157,8 @@ test('2 use cases B1 and B2 with data_use + intro_sentences', () => {
   assert.ok(content.USE_CASES.B1.data_use && typeof content.USE_CASES.B1.intro_sentences === 'function');
   assert.ok(content.USE_CASES.B2.data_use && typeof content.USE_CASES.B2.intro_sentences === 'function');
 });
-test('14 post-scenario questions (13 + attention check)', () => {
-  assert.equal(content.POST_QUESTIONS.length, 14);
+test('18 post-scenario questions (17 + attention check)', () => {
+  assert.equal(content.POST_QUESTIONS.length, 18);
   const ac = content.POST_QUESTIONS.find(q => q.type === 'attention');
   assert.ok(ac && ac.expected === 1);
 });
@@ -179,15 +179,15 @@ test('shuffle preserves length and contents', () => {
 test('generateAllOrderings returns valid permutations', () => {
   const o = generateAllOrderings();
   assert.deepEqual([...o.scenario_order].sort(), [1, 2]);
-  // Block B = ids 7-13 (7 questions); Block A = ids 1-6 + attention check 14 (7 items)
+  // Block B = ids 7-13 (7 questions); Block A = ids 1-6, 15-18 + attention check 14 (11 items)
   assert.deepEqual([...o.block_b_order].sort((a, b) => a - b), [7, 8, 9, 10, 11, 12, 13]);
-  assert.deepEqual([...o.block_a_order].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 14]);
+  assert.deepEqual([...o.block_a_order].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 14, 15, 16, 17, 18]);
 });
-test('assignCell yields a valid cell (dt 1..16, uc B1/B2)', async () => {
+test('assignCell yields a valid cell (dt 1..20, uc B1/B2)', async () => {
   mockState.participants.clear();
   mockState.byPid.clear();
   const cell = await assignCell();
-  assert.ok(cell.data_type >= 1 && cell.data_type <= 16);
+  assert.ok(cell.data_type >= 1 && cell.data_type <= 20);
   assert.ok(['B1', 'B2'].includes(cell.use_case));
 });
 
@@ -271,15 +271,20 @@ test('post-question choice_num (postq_4): 0-3 valid, coerces strings', () => {
   assert.equal(validatePostQuestion({ postq_share_public: '2' }, 'postq_4').fields.postq_share_public, 2);
   assert.equal(validatePostQuestion({ postq_share_public: 4 }, 'postq_4').ok, false);
 });
-test('post-question choice (postq_7): yes/no/unsure', () => {
+test('post-question choice (postq_7): yes/no/unsure/dont_care', () => {
   assert.equal(validatePostQuestion({ postq_comp_by_amount: 'yes' }, 'postq_7').ok, true);
+  assert.equal(validatePostQuestion({ postq_comp_by_amount: 'dont_care' }, 'postq_7').ok, true);
   assert.equal(validatePostQuestion({ postq_comp_by_amount: 'maybe' }, 'postq_7').ok, false);
 });
-test('post-question multiselect (postq_13): requires >=1, all valid, unique', () => {
+test('post-question multiselect (postq_13): requires >=1, all valid, unique; other needs text', () => {
   assert.equal(validatePostQuestion({ postq_concerns: ['too_personal', 'no_trust'] }, 'postq_13').ok, true);
   assert.equal(validatePostQuestion({ postq_concerns: [] }, 'postq_13').ok, false);
   assert.equal(validatePostQuestion({ postq_concerns: ['nope'] }, 'postq_13').ok, false);
   assert.equal(validatePostQuestion({ postq_concerns: ['no_trust', 'no_trust'] }, 'postq_13').ok, false);
+  assert.equal(validatePostQuestion({ postq_concerns: ['other'] }, 'postq_13').ok, false);
+  const withOther = validatePostQuestion({ postq_concerns: ['other'], postq_concerns_other: 'custom' }, 'postq_13');
+  assert.equal(withOther.ok, true);
+  assert.equal(withOther.fields.postq_concerns_other, 'custom');
 });
 test('post-question attention (postq_14): pass iff value === expected', () => {
   const pass = validatePostQuestion({ attention_check: 1 }, 'postq_14');
@@ -330,7 +335,7 @@ const fakeParticipant = {
   current_screen: 'consent',
   data_type: 5, use_case: 'B1',
   block_b_order: [9, 7, 13, 11, 8, 12, 10],   // Block B ids (7-13)
-  block_a_order: [4, 1, 14, 2, 5, 3, 6]        // Block A ids (1-6) + attention check (14)
+  block_a_order: [4, 1, 14, 2, 5, 3, 6, 15, 16, 17, 18] // Block A + AC
 };
 test('consent → welcome → intro', () => {
   assert.equal(nextAfter(fakeParticipant, 'consent'), 'welcome');
@@ -348,14 +353,15 @@ test('scenario_transition screen carries the button label', () => {
   const p = screenPayload(fakeParticipant, 'scenario_transition');
   assert.equal(p.screen, 'scenario_transition');
   assert.equal(p.button, 'See this approach on the next page');
-  assert.ok(p.body.join(' ').includes('a different approach'));
+  assert.ok(p.heading.includes('a different approach'));
 });
-test('post-scenario intro → Block B → Block A → open_response', () => {
+test('post-scenario intro → Block B → Block A intro → Block A → open_response', () => {
   assert.equal(nextAfter(fakeParticipant, 'post_scenario_intro'), 'postq_9'); // first Block B
   assert.equal(nextAfter(fakeParticipant, 'postq_9'), 'postq_7');             // next Block B
-  assert.equal(nextAfter(fakeParticipant, 'postq_10'), 'postq_4');            // last Block B → first Block A
+  assert.equal(nextAfter(fakeParticipant, 'postq_10'), 'block_a_intro');      // last Block B → Block A intro
+  assert.equal(nextAfter(fakeParticipant, 'block_a_intro'), 'postq_4');       // intro → first Block A
   assert.equal(nextAfter(fakeParticipant, 'postq_4'), 'postq_1');             // next Block A
-  assert.equal(nextAfter(fakeParticipant, 'postq_6'), 'open_response');       // last Block A → open
+  assert.equal(nextAfter(fakeParticipant, 'postq_18'), 'open_response');      // last Block A → open
 });
 test('post-scenarios sequence', () => {
   assert.equal(nextAfter(fakeParticipant, 'open_response'), 'about_you_intro');
@@ -370,7 +376,8 @@ const dt5 = content.DATA_TYPES.find(d => d.id === 5);
 test('welcome screen carries intro copy', () => {
   const p = screenPayload(fakeParticipant, 'welcome');
   assert.equal(p.screen, 'welcome');
-  assert.ok(p.body.join(' ').includes('open-ended'));
+  assert.equal(p.heading, 'Welcome!');
+  assert.ok(p.body.join(' ').includes('Prolific'));
 });
 test('intro screen: App Z setup + data type (longer def inline) + use case + comprehension', () => {
   const p = screenPayload(fakeParticipant, 'intro');
@@ -380,30 +387,29 @@ test('intro screen: App Z setup + data type (longer def inline) + use case + com
   assert.ok(setup.includes('$20 per month'));
   assert.ok(setup.includes('deletes any data it holds after one year'));
   const change = p.change.join(' ');
-  assert.ok(change.includes(dt5.label));                       // data type named
-  assert.ok(change.includes(dt5.learn_more.slice(1)));         // longer (example) def shown inline
-  assert.ok(change.includes(dt5.inline));                      // use-case sentence uses inline
-  assert.ok(change.includes('personalization algorithm'));     // B1 use-case wording
+  assert.ok(change.includes(dt5.data_type_description));       // full description in first sentence
+  assert.ok(change.includes(dt5.inline));                      // short name in use-case sentence
+  assert.ok(change.includes("improve App Z's services"));     // B1 use-case wording
   // Comprehension bundled on the same screen
   assert.equal(p.comprehension.statements.length, 3);
-  assert.ok(p.comprehension.statements[0].text.includes(dt5.definition)); // SHORT def in check
-  assert.ok(p.comprehension.statements[1].text.includes('improve its personalization algorithm')); // matches narrative
+  assert.ok(p.comprehension.statements[0].text.includes(dt5.inline)); // short name in check
+  assert.ok(p.comprehension.statements[1].text.includes("improve App Z's services")); // matches narrative
   assert.ok(p.comprehension.statements[2].text.includes('permanently deleted after 30 days'));
-  assert.ok(p.comprehension.statements[0].text.startsWith('The data you would share with App Z'));
+  assert.ok(p.comprehension.statements[0].text.startsWith("App Z would like to access its users'"));
 });
 test('intro screen B2 uses the AI-training use-case wording', () => {
   const p = screenPayload({ ...fakeParticipant, use_case: 'B2' }, 'intro');
-  assert.ok(p.change.join(' ').includes('generative AI system'));
+  assert.ok(p.change.join(' ').includes("train App Z's AI models and AI agents to improve its services"));
 });
 test('scenario_1 (Subscription Discount): settings-frame payload + first-person use', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1');
   assert.equal(p.heading, 'Subscription');
   assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
-  assert.equal(p.collect_line, `We will collect your ${dt5.inline}`);
+  assert.equal(p.collect_line, `We will access your ${dt5.inline}`);
   assert.deepEqual(p.collect_emphasis, [dt5.inline]);
-  assert.ok(p.use_line.includes('improve our personalization algorithm')); // first-person "our"
+  assert.ok(p.use_line.includes("improve App Z's services"));
   assert.deepEqual(p.tiers, content.S1_TIERS);
-  assert.equal(p.none_label, 'I would not accept any discount');
+  assert.equal(p.none_label, 'I will not share this data regardless of the discount amount');
   assert.deepEqual(p.submit, { accepted: 's1_accepted_discounts', none: 's1_none' });
   // Generic "your information" in the by-default line (not the data type)
   assert.ok(p.intro.join(' ').includes('we do not sell your information'));
@@ -414,7 +420,7 @@ test('scenario_2 (Data Sharing Program): renamed + multi-select payload', () => 
   assert.ok(p.frame_url.includes('data-sharing'));
   assert.ok(p.offer_line.includes('percentage of the revenue'));
   assert.deepEqual(p.tiers.map(t => t.value), ['1', '10', '25', '50', '75', '99']);
-  assert.equal(p.none_label, 'I would not agree to this program');
+  assert.equal(p.none_label, 'I will not share this data regardless of the percentage');
   assert.deepEqual(p.submit, { accepted: 's2_accepted_shares', none: 's2_none' });
 });
 test('scenario copy is voice-neutral (voice=appx unchanged)', () => {
@@ -428,15 +434,16 @@ test('post-question Block A payload: data-type prompt, no header, no About label
   assert.equal(p.screen, 'postq_1');
   assert.equal(p.item.key, 'postq_importance');
   assert.equal(p.item.type, 'likert5');
-  assert.ok(p.item.prompt.includes(dt5.label));
+  assert.ok(p.item.prompt.includes(dt5.inline));
+  assert.ok(p.item.prompt.startsWith('Do you consider'));
   assert.equal(p.item.header, undefined);   // Block A → no use-case header
   assert.equal(p.data_label, undefined);    // "About:" label removed
 });
 test('post-question Block B payload: use-case header + trimmed prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_7');
   assert.equal(p.item.key, 'postq_comp_by_amount');
-  assert.ok(p.item.header.includes(dt5.inline));                        // "Suppose App Z collects your <data>…"
-  assert.ok(p.item.header.includes(content.USE_CASES.B1.data_use));     // "…for <use>"
+  assert.ok(p.item.header.includes(dt5.inline));                        // "Suppose App Z accesses your <data>…"
+  assert.ok(p.item.header.includes(`to ${content.USE_CASES.B1.data_use}`)); // "…to <use>"
   assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
 });
 test('attention-check payload (postq_14): plain Block-A item (no header)', () => {
@@ -451,6 +458,12 @@ test('post_scenario_intro screen mentions data type + use case', () => {
   const text = p.body.join(' ');
   assert.ok(text.includes(dt5.inline));
   assert.ok(text.includes(content.USE_CASES.B1.data_use));
+});
+test('block_a_intro screen mentions data type regardless of use', () => {
+  const p = screenPayload(fakeParticipant, 'block_a_intro');
+  const text = p.body.join(' ');
+  assert.ok(text.includes(dt5.inline));
+  assert.ok(text.includes('regardless of its use'));
 });
 test('open_response screen carries the prompt + field key', () => {
   const p = screenPayload(fakeParticipant, 'open_response');
