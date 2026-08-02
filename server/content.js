@@ -1,94 +1,78 @@
 // All content shown to participants. Server-side only — clients never see codes.
-
-// `inline` is the lowercase-friendly form for mid-sentence references like "share your <inline>".
-// `definition` is the short description (used in the comprehension check); `learn_more` is the
-// longer, example-rich description shown inline on the intro screen (Screen 3). `category` is an
-// internal grouping — never sent to clients.
+//
+// Per data type:
+//   `inline` — short mid-sentence name ("demographic information")
+//   `data_type_description` — fuller phrase for the intro first sentence
+//     ("demographic information, including their age, …")
+//   `category` — internal grouping; never sent to clients.
+// Types 2–16 still use a stub description (= inline) until their copy is finalized.
 const DATA_TYPES = [
-  { id: 1,  label: 'Demographic info', inline: 'demographic information',
-    definition: 'Name, age, gender, ZIP code, marital status',
-    learn_more: 'Basic identifying and demographic information such as your full name, date of birth, sex or gender, home ZIP code, and marital status.',
+  { id: 1,  inline: 'demographic information',
+    data_type_description: 'demographic information, including their age, gender, race, zip code, marital status, income, and level of education',
     category: 'Demographic/Identity' },
-  { id: 2,  label: 'Social security number', inline: 'Social Security number',
-    definition: 'Your 9-digit SSN',
-    learn_more: 'Your Social Security number, used for tax reporting, credit checks, and identity verification.',
+  { id: 2,  inline: 'Social Security number',
+    data_type_description: 'Social Security number',
     category: 'Demographic/Identity' },
-  { id: 3,  label: 'Fingerprint and voice recording data', inline: 'fingerprint and voice recording data',
-    definition: 'Biometric data from your body',
-    learn_more: 'Your stored fingerprints, such as from unlocking your phone, and recordings of your voice, such as from voice assistants or phone calls.',
+  { id: 3,  inline: 'fingerprint and voice recording data',
+    data_type_description: 'fingerprint and voice recording data',
     category: 'Demographic/Identity' },
-  { id: 4,  label: 'Health information', inline: 'health information',
-    definition: 'Medical records and prescriptions',
-    learn_more: "Information about your health, including doctor's appointments, lab and test results, diagnosed conditions, and prescription medications.",
+  { id: 4,  inline: 'health information',
+    data_type_description: 'health information',
     category: 'Sensitive Personal' },
-  { id: 5,  label: 'Financial information', inline: 'financial information',
-    definition: 'Bank statements, taxes, transactions',
-    learn_more: 'Your financial records, including bank and credit card statements, tax documents, and transaction history.',
+  { id: 5,  inline: 'financial information',
+    data_type_description: 'financial information',
     category: 'Sensitive Personal' },
-  { id: 6,  label: 'Password and login credential data', inline: 'password and login credential data',
-    definition: 'Passwords, PINs, and security keys',
-    learn_more: 'The passwords, PINs, and security credentials you use to log in to websites, apps, and accounts.',
+  { id: 6,  inline: 'password and login credential data',
+    data_type_description: 'password and login credential data',
     category: 'Sensitive Personal' },
-  { id: 7,  label: 'Text message and email content', inline: 'text message and email content',
-    definition: 'Content of your private communications',
-    learn_more: 'The actual content of your text messages, emails, and direct messages — what you wrote and what you received.',
+  { id: 7,  inline: 'text message and email content',
+    data_type_description: 'text message and email content',
     category: 'Relational/Communicative' },
-  { id: 8,  label: 'Contact info of friends and family', inline: 'contact information of friends and family',
-    definition: 'Names, numbers, and emails of people you know',
-    learn_more: 'The names, phone numbers, email addresses, and other contact details of people stored in your phone or email contacts.',
+  { id: 8,  inline: 'contact information of friends and family',
+    data_type_description: 'contact information of friends and family',
     category: 'Relational/Communicative' },
-  { id: 9,  label: 'Location history', inline: 'location history',
-    definition: "A record of where you've been",
-    learn_more: 'A log of your physical locations over time, based on GPS, Wi-Fi, or cell tower data from your phone or other devices.',
+  { id: 9,  inline: 'location history',
+    data_type_description: 'location history',
     category: 'Behavioral/Preference' },
-  { id: 10, label: 'Browsing and search history', inline: 'browsing and search history',
-    definition: 'Websites visited and searches made',
-    learn_more: "A record of the websites you've visited, links you've clicked, and queries you've typed into search engines.",
+  { id: 10, inline: 'browsing and search history',
+    data_type_description: 'browsing and search history',
     category: 'Behavioral/Preference' },
-  { id: 11, label: 'Shopping and purchase history', inline: 'shopping and purchase history',
-    definition: "What you've bought and where",
-    learn_more: 'A record of your purchases — what you bought, when, where, and how much you paid — across online and in-store transactions.',
+  { id: 11, inline: 'shopping and purchase history',
+    data_type_description: 'shopping and purchase history',
     category: 'Behavioral/Preference' },
-  { id: 12, label: 'Document, note, and report data', inline: 'document, note, and report data',
-    definition: "Files you've written for work or school",
-    learn_more: "Documents, notes, essays, reports, and other files you've created for professional or academic purposes.",
+  { id: 12, inline: 'document, note, and report data',
+    data_type_description: 'document, note, and report data',
     category: 'Expressive' },
-  { id: 13, label: 'Photo and video data', inline: 'photo and video data',
-    definition: 'Images and recordings from your camera',
-    learn_more: 'Photos and videos you have personally captured and stored on your device or uploaded to cloud services.',
+  { id: 13, inline: 'photo and video data',
+    data_type_description: 'photo and video data',
     category: 'Expressive' },
-  { id: 14, label: 'Email triage behavior', inline: 'email triage behavior',
-    definition: 'How you sort, flag, and manage your inbox',
-    learn_more: 'Behavioral patterns in how you manage email — the order you open messages, what you archive versus flag versus defer, and how you edit drafts before sending, but not the content of the emails themselves.',
+  { id: 14, inline: 'email triage behavior',
+    data_type_description: 'email triage behavior',
     category: 'Process' },
-  { id: 15, label: 'Search and decision trajectory data', inline: 'search and decision trajectory data',
-    definition: 'How you research and make decisions online',
-    learn_more: 'The sequence of steps you take when researching a decision online, such as the tabs you open, options you compare, filters you apply, and how long you spend before choosing when booking flights, shopping, or comparing services.',
+  { id: 15, inline: 'search and decision trajectory data',
+    data_type_description: 'search and decision trajectory data',
     category: 'Process' },
-  { id: 16, label: 'Writing and editing process', inline: 'writing and editing process',
-    definition: 'How you draft, revise, and re-write',
-    learn_more: 'The sequence of keystrokes, deletions, rewrites, and pauses as you compose a document or message, including what you typed and then deleted, how long you paused between sentences, and how many times you revised a paragraph, but not the final version itself.',
+  { id: 16, inline: 'writing and editing process',
+    data_type_description: 'writing and editing process',
     category: 'Process' }
 ];
 
 const USE_CASES = {
   B1: {
     code: 'B1',
-    // Third person "its" — comprehension statement 2 ("App Z would use your data to <comp_use>").
-    comp_use: 'improve its personalization algorithm',
-    // First person "our" — scenario frame ("We will use this information to <scenario_use>").
-    scenario_use: 'improve our personalization algorithm',
-    // Noun form used by Block B post-scenario questions ("…was used for <data_use>").
-    data_use: 'improving a personalization algorithm',
-    // Two-sentence framing shown on the intro screen (dt = assigned data type).
-    intro_sentences: (dt) => `App Z would like to use your ${dt.inline} to improve its personalization algorithm. Using your ${dt.inline} would allow it to provide content that is more targeted to you.`
+    // Infinitive phrase after "to …" (comprehension, scenarios, post-scenario, Block B).
+    comp_use: "improve App Z's services",
+    scenario_use: "improve App Z's services",
+    data_use: "improve App Z's services",
+    // Framing shown on the intro screen (dt = assigned data type).
+    intro_sentences: (dt) => `App Z would like to collect your ${dt.inline}. This information will be used to improve App Z's services.`
   },
   B2: {
     code: 'B2',
-    comp_use: 'improve its generative AI system',
-    scenario_use: 'improve our generative AI system',
-    data_use: 'training and improving a generative AI system (like a chatbot, writing assistant, or image generator)',
-    intro_sentences: (dt) => `App Z would like to use your ${dt.inline} to improve its generative AI system. Using your ${dt.inline} would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator).`
+    comp_use: "train App Z's AI models and AI agents to improve its services",
+    scenario_use: "train App Z's AI models and AI agents to improve its services",
+    data_use: "train App Z's AI models and AI agents to improve its services",
+    intro_sentences: (dt) => `App Z would like to collect your ${dt.inline}. This information will be used to train App Z's AI models and AI agents to improve its services.`
   }
 };
 
@@ -133,16 +117,16 @@ const YESNO_UNSURE = [
 const POST_QUESTIONS = [
   // ----- Block A: about the data type -----
   { id: 1, key: 'postq_importance', block: 'A', type: 'likert5',
-    prompt: (dt) => `Is ${dt.label} important to you?`,
+    prompt: (dt) => `Do you consider ${dt.inline} to be important?`,
     anchors: { low: 'not important to me at all', high: 'extremely important to me' } },
   { id: 2, key: 'postq_sensitivity', block: 'A', type: 'likert5',
-    prompt: (dt) => `Do you consider ${dt.label} sensitive data?`,
+    prompt: (dt) => `Do you consider ${dt.inline} to be sensitive?`,
     anchors: { low: 'not sensitive at all', high: 'extremely sensitive' } },
   { id: 3, key: 'postq_ownership', block: 'A', type: 'likert5',
-    prompt: (dt) => `Do you feel ownership over ${dt.label}?`,
+    prompt: (dt) => `Do you feel ownership over ${dt.inline}?`,
     anchors: { low: 'I do not feel ownership over this type of data', high: 'I feel strong ownership over it' } },
   { id: 4, key: 'postq_share_public', block: 'A', type: 'choice_num',
-    prompt: (dt) => `Would you ever share your ${dt.label} publicly – for example with a room of people you have never met before? Choose the option that best describes how far you'd be willing to go:`,
+    prompt: (dt) => `Would you ever share your ${dt.inline} publicly – for example with a room of people you have never met before? Choose the option that best describes how far you'd be willing to go:`,
     options: [
       { value: 0, label: 'No — I would never share it publicly.' },
       { value: 1, label: 'Maybe — it would depend on the situation.' },
@@ -150,14 +134,14 @@ const POST_QUESTIONS = [
       { value: 3, label: 'Yes, including with my name attached.' }
     ] },
   { id: 5, key: 'postq_buy_sell_appropriate', block: 'A', type: 'likert5',
-    prompt: (dt) => `Is it appropriate to buy and sell your ${dt.label}?`,
+    prompt: (dt) => `Is it appropriate to buy and sell your ${dt.inline}?`,
     anchors: { low: 'Completely inappropriate', high: 'Completely appropriate' } },
   { id: 6, key: 'postq_upset_if_leaked', block: 'A', type: 'likert5',
-    prompt: (dt) => `If you found out your ${dt.label} had been released publicly without your knowledge, how upset would you be?`,
+    prompt: (dt) => `If you found out your ${dt.inline} had been released publicly without your knowledge, how upset would you be?`,
     anchors: { low: 'not at all', high: 'Extremely' } },
 
   // ----- Block B: about compensation for the use case. The use-case context
-  // ("Suppose App Z collects your <data> for <use>") is shown as a per-screen
+  // ("Suppose App Z collects your <data> to <use>") is shown as a per-screen
   // header, so these prompts are trimmed to just the question. -----
   { id: 7, key: 'postq_comp_by_amount', block: 'B', type: 'choice', options: YESNO_UNSURE,
     prompt: () => 'Should you be compensated based on how much of your data was used?' },

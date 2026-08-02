@@ -76,7 +76,7 @@ function postQuestionPayload(p, screenId) {
   // Block B screens carry a use-case context header; Block A (and the attention
   // check) show only the question.
   if (q.block === 'B') {
-    item.header = `Suppose App Z collects your ${dt.inline} for ${uc.data_use}`;
+    item.header = `Suppose App Z collects your ${dt.inline} to ${uc.data_use}`;
   }
   if (q.type === 'likert5' || q.type === 'attention') {
     item.anchors = q.anchors;
@@ -121,10 +121,8 @@ function screenPayload(p, screenId, extra = {}) {
     }
 
     case 'intro': {
-      // Single screen: App Z setup → the "recent change" (data type + longer
-      // definition inline + per-condition use case) → comprehension check.
-      const longDef = dt.learn_more;
-      const defInline = longDef.charAt(0).toLowerCase() + longDef.slice(1);
+      // Single screen: App Z setup → the "recent change" (full data-type
+      // description + short name + use case) → comprehension check.
       return {
         screen: 'intro',
         setup: [
@@ -136,8 +134,7 @@ function screenPayload(p, screenId, extra = {}) {
         ],
         change_heading: "But there's been a recent change.",
         change: [
-          `Earlier this year, App Z became interested in collecting the ${dt.label} of its users.`,
-          `By ${dt.label}, we mean ${defInline}`,
+          `Earlier this year, App Z became interested in collecting its users' ${dt.data_type_description}.`,
           uc.intro_sentences(dt)
         ],
         // Phrases the client bolds + underlines inline within the setup/change paragraphs.
@@ -147,13 +144,13 @@ function screenPayload(p, screenId, extra = {}) {
           'does not sell',
           'deletes',
           'after one year',
-          dt.label,
+          dt.inline,
           `to ${uc.comp_use}`
         ],
         comprehension: {
           instruction: 'Based on the information above, indicate whether each statement is True or False.',
           statements: [
-            { id: 1, text: `The data you would share with App Z is: ${dt.definition}.` },
+            { id: 1, text: `App Z would like to collect its users' ${dt.inline}.` },
             { id: 2, text: `App Z would use your data to ${uc.comp_use}.` },
             { id: 3, text: 'App Z guarantees that your data will be permanently deleted after 30 days.' }
           ]
@@ -177,7 +174,7 @@ function screenPayload(p, screenId, extra = {}) {
       return {
         screen: 'post_scenario_intro',
         body: [
-          `Now, we'd like to understand how you feel about App Z collecting your ${dt.inline} for ${uc.data_use}.`,
+          `Now, we'd like to understand how you feel about App Z collecting your ${dt.inline} to ${uc.data_use}.`,
           "On the following pages, we'll ask you a series of questions."
         ]
       };

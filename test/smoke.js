@@ -146,10 +146,10 @@ async function runTests() {
 }
 
 section('content');
-test('16 data types each with label, inline, definition, learn_more', () => {
+test('16 data types each with inline, data_type_description, category', () => {
   assert.equal(content.DATA_TYPES.length, 16);
   for (const d of content.DATA_TYPES) {
-    assert.ok(d.label && d.inline && d.definition && d.learn_more && d.category);
+    assert.ok(d.inline && d.data_type_description && d.category);
   }
 });
 test('2 use cases B1 and B2 with data_use + intro_sentences', () => {
@@ -380,20 +380,19 @@ test('intro screen: App Z setup + data type (longer def inline) + use case + com
   assert.ok(setup.includes('$20 per month'));
   assert.ok(setup.includes('deletes any data it holds after one year'));
   const change = p.change.join(' ');
-  assert.ok(change.includes(dt5.label));                       // data type named
-  assert.ok(change.includes(dt5.learn_more.slice(1)));         // longer (example) def shown inline
-  assert.ok(change.includes(dt5.inline));                      // use-case sentence uses inline
-  assert.ok(change.includes('personalization algorithm'));     // B1 use-case wording
+  assert.ok(change.includes(dt5.data_type_description));       // full description in first sentence
+  assert.ok(change.includes(dt5.inline));                      // short name in use-case sentence
+  assert.ok(change.includes("improve App Z's services"));     // B1 use-case wording
   // Comprehension bundled on the same screen
   assert.equal(p.comprehension.statements.length, 3);
-  assert.ok(p.comprehension.statements[0].text.includes(dt5.definition)); // SHORT def in check
-  assert.ok(p.comprehension.statements[1].text.includes('improve its personalization algorithm')); // matches narrative
+  assert.ok(p.comprehension.statements[0].text.includes(dt5.inline)); // short name in check
+  assert.ok(p.comprehension.statements[1].text.includes("improve App Z's services")); // matches narrative
   assert.ok(p.comprehension.statements[2].text.includes('permanently deleted after 30 days'));
-  assert.ok(p.comprehension.statements[0].text.startsWith('The data you would share with App Z'));
+  assert.ok(p.comprehension.statements[0].text.startsWith("App Z would like to collect its users'"));
 });
 test('intro screen B2 uses the AI-training use-case wording', () => {
   const p = screenPayload({ ...fakeParticipant, use_case: 'B2' }, 'intro');
-  assert.ok(p.change.join(' ').includes('generative AI system'));
+  assert.ok(p.change.join(' ').includes("train App Z's AI models and AI agents to improve its services"));
 });
 test('scenario_1 (Subscription Discount): settings-frame payload + first-person use', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1');
@@ -401,7 +400,7 @@ test('scenario_1 (Subscription Discount): settings-frame payload + first-person 
   assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
   assert.equal(p.collect_line, `We will collect your ${dt5.inline}`);
   assert.deepEqual(p.collect_emphasis, [dt5.inline]);
-  assert.ok(p.use_line.includes('improve our personalization algorithm')); // first-person "our"
+  assert.ok(p.use_line.includes("improve App Z's services"));
   assert.deepEqual(p.tiers, content.S1_TIERS);
   assert.equal(p.none_label, 'I would not accept any discount');
   assert.deepEqual(p.submit, { accepted: 's1_accepted_discounts', none: 's1_none' });
@@ -428,7 +427,8 @@ test('post-question Block A payload: data-type prompt, no header, no About label
   assert.equal(p.screen, 'postq_1');
   assert.equal(p.item.key, 'postq_importance');
   assert.equal(p.item.type, 'likert5');
-  assert.ok(p.item.prompt.includes(dt5.label));
+  assert.ok(p.item.prompt.includes(dt5.inline));
+  assert.ok(p.item.prompt.startsWith('Do you consider'));
   assert.equal(p.item.header, undefined);   // Block A → no use-case header
   assert.equal(p.data_label, undefined);    // "About:" label removed
 });
@@ -436,7 +436,7 @@ test('post-question Block B payload: use-case header + trimmed prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_7');
   assert.equal(p.item.key, 'postq_comp_by_amount');
   assert.ok(p.item.header.includes(dt5.inline));                        // "Suppose App Z collects your <data>…"
-  assert.ok(p.item.header.includes(content.USE_CASES.B1.data_use));     // "…for <use>"
+  assert.ok(p.item.header.includes(`to ${content.USE_CASES.B1.data_use}`)); // "…to <use>"
   assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
 });
 test('attention-check payload (postq_14): plain Block-A item (no header)', () => {
