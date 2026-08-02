@@ -454,7 +454,7 @@ test('post-question Block B payload: use-case header + trimmed prompt', () => {
   assert.equal(p.item.key, 'postq_comp_by_amount');
   assert.ok(p.item.header.startsWith('Suppose App Z collects your '));
   assert.ok(p.item.header.includes(dt5.data_type_description.replace(/^its users' /, '')));
-  assert.ok(p.item.header.includes(`to ${content.USE_CASES.B1.data_use}.`));
+  assert.ok(p.item.header.includes(`, to ${content.USE_CASES.B1.data_use}.`));
   assert.ok(p.item.prompt.includes(dt5.inline));                        // short data name in question
   assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
 });

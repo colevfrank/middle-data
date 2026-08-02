@@ -343,11 +343,11 @@ On the following pages, we'll ask you a series of questions.
 
 *Each question is its own page. Order randomized within Block B. Every Block B page shows the same header.*
 
-**Header (all Block B pages):**
+**Header + question (same paragraph; question bold + blue):**
 
-Suppose App Z collects your `{full description from intro}` to `{data_use}`.
+Suppose App Z collects your `{full description from intro}`, to `{data_use}.` **`{question}`**
 
-Example: Suppose App Z collects your communications, including text messages, social media messages, and emails to improve App Z's services.
+Example: Suppose App Z collects your financial information, including bank statements and investment portfolios, to improve App Z's services. **What is/are your main concern(s) about sharing your financial information with App Z? (Please check all that apply)**
 
 `{inline}` (short name; Block B header uses the full description, not this list alone):
 
@@ -487,11 +487,11 @@ On the following pages, we'll ask you a series of questions.
 
 *Each question is its own page. Order randomized within Block A (attention check pooled in). No use-case header.*
 
-**Header (all Block A pages; not shown on attention check):**
+**Header + question (same paragraph; question bold + blue; not shown on attention check):**
 
-`{Inline capitalized} includes {examples from data_type_description}.`
+`{Inline capitalized} includes {examples from data_type_description}.` **`{question}`**
 
-Example: Financial information includes bank statements and investment portfolios.
+Example: Financial information includes bank statements and investment portfolios. **Do you consider financial information to be important?**
 
 ### A1 — Importance
 

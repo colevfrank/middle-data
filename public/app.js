@@ -565,12 +565,18 @@
   // is just an item of type 'attention' and renders like a likert5.
   RENDERERS.post_question = function (p) {
     const it = p.item;
-    // Block B items carry an unbolded use-case context header above the question.
+    // Header + question share one paragraph; question stays bold and blue.
+    // Attention check (no header) keeps the plain bold style.
     if (it.header) {
-      root.appendChild(el('p', { class: 'text-slate-700 mb-2' }, it.header));
+      root.appendChild(el('p', { class: 'text-slate-700 mb-2' }, [
+        it.header + ' ',
+        el('span', { class: 'font-bold text-blue-500' },
+          emphasize(it.prompt, it.prompt_emphasis || [], 'font-bold underline text-blue-500'))
+      ]));
+    } else {
+      root.appendChild(el('p', { class: 'text-slate-900 font-semibold mb-1' },
+        emphasize(it.prompt, it.prompt_emphasis || [])));
     }
-    root.appendChild(el('p', { class: 'text-slate-900 font-semibold mb-1' },
-      emphasize(it.prompt, it.prompt_emphasis || [])));
 
     const form = el('div', {});
     let getValue;

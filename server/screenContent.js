@@ -113,7 +113,7 @@ function postQuestionPayload(p, screenId) {
   // Block B: use-case context. Block A: data-type description reminder.
   // Attention check: no header.
   if (q.block === 'B') {
-    item.header = `Suppose App Z collects your ${dataTypeAsYours(dt)} to ${uc.data_use}.`;
+    item.header = `Suppose App Z collects your ${dataTypeAsYours(dt)}, to ${uc.data_use}.`;
   } else if (q.block === 'A') {
     item.header = dataTypeIncludesHeader(dt);
   }
