@@ -494,6 +494,13 @@ test('Blocks A/B use inline_b where set; intro/scenarios keep inline', () => {
   assert.ok(docsIntro.body[0].includes('regardless of their use'));
   const share = screenPayload(fakeParticipant, 'postq_4');
   assert.ok(share.item.options[0].label.includes('share this publicly'));
+  const demo = screenPayload({ ...fakeParticipant, data_type: 1 }, 'postq_7');
+  assert.ok(demo.item.header.includes('This includes your age, gender'));
+  assert.ok(!demo.item.header.includes('their age'));
+  const ex = screenPayload({ ...fakeParticipant, data_type: 20 }, 'postq_7');
+  assert.ok(ex.item.header.includes('what forms of exercise you engage in and when you exercise'));
+  const leak = screenPayload(fakeParticipant, 'postq_6');
+  assert.ok(leak.item.options.some(o => /the data was released anonymously/.test(o.label)));
 });
 test('selected Block B headers use "wants to collect"', () => {
   for (const id of [11, 13]) {

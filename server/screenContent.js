@@ -25,9 +25,24 @@ function dataTypeExamples(dt) {
   return d.slice(i + marker.length).replace(/\.$/, '');
 }
 
+// Rewrite third-person example copy for "your …" contexts (Blocks A/B, scenarios).
+// Intro narrative keeps the original "users/their" wording.
+function examplesAsYours(text) {
+  return text
+    .replace(/\ba user's\b/g, 'your')
+    .replace(/\busers'\b/g, 'your')
+    .replace(/\btheir\b/g, 'your')
+    .replace(/\bthey\b/g, 'you')
+    .replace(/\busers\b/g, 'you');
+}
+
+function examplesForYou(dt) {
+  return examplesAsYours(dataTypeExamples(dt) || dt.inline);
+}
+
 // Block A reminder, e.g. "Financial information includes…" / "…documents include…".
 function dataTypeIncludesHeader(dt) {
-  const examples = dataTypeExamples(dt) || dt.inline;
+  const examples = examplesForYou(dt);
   const name = dt.inline.charAt(0).toUpperCase() + dt.inline.slice(1);
   const verb = dt.plural ? 'include' : 'includes';
   return `${name} ${verb} ${examples}.`;
@@ -35,8 +50,7 @@ function dataTypeIncludesHeader(dt) {
 
 // Block B / scenario reminder (avoids repeating the data-type name).
 function thisIncludesSentence(dt) {
-  const examples = dataTypeExamples(dt) || dt.inline;
-  return `This includes ${examples}.`;
+  return `This includes ${examplesForYou(dt)}.`;
 }
 
 // The two scenarios share one voice-neutral, first-person design: a bold lead-in,

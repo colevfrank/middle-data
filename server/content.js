@@ -167,7 +167,7 @@ const POST_QUESTIONS = [
       { value: 'not_upset',           label: 'I would not be upset, whether or not my name was attached.' },
       { value: 'a_little_uncomfortable', label: 'I would be a little uncomfortable.' },
       { value: 'upset_if_named',      label: 'I would be upset only if my name was attached.' },
-      { value: 'upset_if_anonymous',  label: 'I would be upset even if it was released anonymously (without my name).' },
+      { value: 'upset_if_anonymous',  label: 'I would be upset even if the data was released anonymously (without my name).' },
       { value: 'very_upset_either',   label: 'I would be very upset either way.' },
       { value: 'unsure',              label: "I'm not sure." }
     ] },

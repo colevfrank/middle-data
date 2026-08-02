@@ -347,9 +347,9 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue):**
 
-Suppose App Z collects your `{inline_b}` to `{data_use}.` This includes `{examples}.` **`{question}`**
+Suppose App Z collects your `{inline_b}` to `{data_use}.` This includes `{examples as "you/your"}.` **`{question}`**
 
-Example: Suppose App Z wants to collect your email management behavior data to improve App Z's services. This includes detailed behavioral data of how users respond, sort, delete, and search their email. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
+Example: Suppose App Z wants to collect your email management behavior data to improve App Z's services. This includes detailed behavioral data of how you respond, sort, delete, and search your email. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
 
 `{inline_b}` *(Block A and Block B; intro/scenarios use `{inline}`)*:
 
@@ -529,7 +529,7 @@ If you found out your `{inline_b}` had been released publicly without your knowl
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
 - I would be upset only if my name was attached.
-- I would be upset even if it was released anonymously (without my name).
+- I would be upset even if the data was released anonymously (without my name).
 - I would be very upset either way.
 - I'm not sure.
 
