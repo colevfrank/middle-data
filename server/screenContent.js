@@ -189,7 +189,7 @@ function screenPayload(p, screenId, extra = {}) {
         screen: 'welcome',
         heading: 'Welcome!',
         body: [
-          "In the following pages, you'll answer some questions. Then, you'll be redirected back to Prolific once you complete the survey.",
+          "In the following pages, you'll answer some questions. Then, you'll be redirected back to CloudResearch once you complete the survey.",
           'Once you advance, you will not be able to return to previous pages, so please consider each question carefully before clicking next.',
           'Click "Continue" when you are ready to begin.'
         ]

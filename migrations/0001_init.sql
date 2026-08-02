@@ -3,10 +3,10 @@
 CREATE TABLE IF NOT EXISTS participants (
   id SERIAL PRIMARY KEY,
 
-  -- Prolific identifiers
-  prolific_pid TEXT UNIQUE NOT NULL,
-  study_id TEXT,
-  session_id TEXT,
+  -- CloudResearch identifiers
+  participant_id TEXT UNIQUE NOT NULL,
+  assignment_id TEXT,
+  project_id TEXT,
 
   -- Server-side session
   session_token UUID UNIQUE NOT NULL,

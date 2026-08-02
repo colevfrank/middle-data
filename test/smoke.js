@@ -34,7 +34,7 @@ function makeMockPool() {
       }
       return { rows, rowCount: rows.length, fields: rowToFields(rows[0] || {}) };
     }
-    if (/SELECT \* FROM participants WHERE prolific_pid/i.test(text)) {
+    if (/SELECT \* FROM participants WHERE participant_id/i.test(text)) {
       const r = mockState.byPid.get(params[0]);
       return { rows: r ? [r] : [], rowCount: r ? 1 : 0 };
     }
@@ -47,10 +47,10 @@ function makeMockPool() {
       return { rows: [], rowCount: 0 };
     }
     if (/^INSERT INTO participants/i.test(text)) {
-      const [pid, studyId, sessionId, token, dt, uc, so, bbo, bao] = params;
+      const [pid, assignmentId, projectId, token, dt, uc, so, bbo, bao] = params;
       const row = {
         id: mockState.nextId++,
-        prolific_pid: pid, study_id: studyId, session_id: sessionId, session_token: token,
+        participant_id: pid, assignment_id: assignmentId, project_id: projectId, session_token: token,
         data_type: dt, use_case: uc,
         scenario_order: so, block_b_order: bbo, block_a_order: bao,
         current_screen: 'consent', completed: false
@@ -117,8 +117,8 @@ Module.prototype.require = function (id) {
   return origRequire.apply(this, arguments);
 };
 
-process.env.PROLIFIC_COMPLETION_CODE = 'TESTCODE';
-process.env.PROLIFIC_RETURN_URL = 'https://example.com/return';
+process.env.CLOUDRESEARCH_COMPLETE_URL = 'https://example.com/complete';
+process.env.CLOUDRESEARCH_TERMINATE_URL = 'https://example.com/return';
 process.env.NODE_ENV = 'test';
 
 // ===== Now require everything =====
@@ -378,7 +378,7 @@ test('welcome screen carries intro copy', () => {
   const p = screenPayload(fakeParticipant, 'welcome');
   assert.equal(p.screen, 'welcome');
   assert.equal(p.heading, 'Welcome!');
-  assert.ok(p.body.join(' ').includes('Prolific'));
+  assert.ok(p.body.join(' ').includes('CloudResearch'));
 });
 test('intro screen: App Z setup + data type (longer def inline) + use case + comprehension', () => {
   const p = screenPayload(fakeParticipant, 'intro');
@@ -617,7 +617,7 @@ test('cookie-based session + screen state machine via supertest-style flow', asy
 
   try {
     // 1. /start with valid PID
-    const startRes = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=TEST123&STUDY_ID=s&SESSION_ID=x`);
+    const startRes = await fetchRaw(`http://localhost:${port}/start?participantId=TEST123&assignmentId=s&projectId=x`);
     assert.equal(startRes.status, 302);
     const setCookie = startRes.headers['set-cookie'];
     assert.ok(setCookie, 'should set session cookie');
@@ -686,7 +686,7 @@ test('consent refusal redirects to return URL', async () => {
   const server = app.listen(port);
 
   try {
-    const startRes = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=REFUSE123`);
+    const startRes = await fetchRaw(`http://localhost:${port}/start?participantId=REFUSE123`);
     const cookieHeader = startRes.headers['set-cookie'][0].split(';')[0];
     const token = cookieHeader.split('=')[1];
 
@@ -718,32 +718,32 @@ test('/start preserves ?mode=settings in redirect (new + resume)', async () => {
 
   try {
     // New participant + mode=settings -> redirect to /screen.html?mode=settings
-    const r1 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=MODE_NEW&mode=settings`);
+    const r1 = await fetchRaw(`http://localhost:${port}/start?participantId=MODE_NEW&mode=settings`);
     assert.equal(r1.status, 302);
     assert.equal(r1.headers.location, '/screen.html?mode=settings');
 
     // Resume same PID + mode=settings -> still preserves
-    const r2 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=MODE_NEW&mode=settings`);
+    const r2 = await fetchRaw(`http://localhost:${port}/start?participantId=MODE_NEW&mode=settings`);
     assert.equal(r2.status, 302);
     assert.equal(r2.headers.location, '/screen.html?mode=settings');
 
     // Resume same PID WITHOUT mode -> no mode qs (client now defaults to settings)
-    const r3 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=MODE_NEW`);
+    const r3 = await fetchRaw(`http://localhost:${port}/start?participantId=MODE_NEW`);
     assert.equal(r3.status, 302);
     assert.equal(r3.headers.location, '/screen.html');
 
     // New participant, no mode -> no qs
-    const r4 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=NOMODE_NEW`);
+    const r4 = await fetchRaw(`http://localhost:${port}/start?participantId=NOMODE_NEW`);
     assert.equal(r4.status, 302);
     assert.equal(r4.headers.location, '/screen.html');
 
     // Unknown mode value -> ignored
-    const r5 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=BADMODE_NEW&mode=junk`);
+    const r5 = await fetchRaw(`http://localhost:${port}/start?participantId=BADMODE_NEW&mode=junk`);
     assert.equal(r5.status, 302);
     assert.equal(r5.headers.location, '/screen.html');
 
     // Explicit opt-out ?mode=plain is forwarded so the client can override the default
-    const r6 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=PLAIN_NEW&mode=plain`);
+    const r6 = await fetchRaw(`http://localhost:${port}/start?participantId=PLAIN_NEW&mode=plain`);
     assert.equal(r6.status, 302);
     assert.equal(r6.headers.location, '/screen.html?mode=plain');
   } finally {
@@ -771,22 +771,22 @@ test('/start preserves ?voice=appx in redirect, alone and combined with mode', a
 
   try {
     // voice=appx alone -> /screen.html?voice=appx
-    const r1 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=VOICE_NEW&voice=appx`);
+    const r1 = await fetchRaw(`http://localhost:${port}/start?participantId=VOICE_NEW&voice=appx`);
     assert.equal(r1.status, 302);
     assert.equal(r1.headers.location, '/screen.html?voice=appx');
 
     // Resume same PID + voice=appx -> still preserves
-    const r2 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=VOICE_NEW&voice=appx`);
+    const r2 = await fetchRaw(`http://localhost:${port}/start?participantId=VOICE_NEW&voice=appx`);
     assert.equal(r2.status, 302);
     assert.equal(r2.headers.location, '/screen.html?voice=appx');
 
     // mode=settings + voice=appx combined -> both preserved in order
-    const r3 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=BOTH_NEW&mode=settings&voice=appx`);
+    const r3 = await fetchRaw(`http://localhost:${port}/start?participantId=BOTH_NEW&mode=settings&voice=appx`);
     assert.equal(r3.status, 302);
     assert.equal(r3.headers.location, '/screen.html?mode=settings&voice=appx');
 
     // Unknown voice value -> ignored
-    const r4 = await fetchRaw(`http://localhost:${port}/start?PROLIFIC_PID=BADVOICE_NEW&voice=junk`);
+    const r4 = await fetchRaw(`http://localhost:${port}/start?participantId=BADVOICE_NEW&voice=junk`);
     assert.equal(r4.status, 302);
     assert.equal(r4.headers.location, '/screen.html');
   } finally {

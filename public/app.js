@@ -863,7 +863,7 @@
       render(screen);
     } catch (e) {
       console.error(e);
-      root.innerHTML = '<p class="text-slate-800">Your session could not be loaded. Please return to Prolific and re-enter the study using the original link.</p>';
+      root.innerHTML = '<p class="text-slate-800">Your session could not be loaded. Please return to CloudResearch and re-enter the study using the original link.</p>';
     }
   }
   boot();

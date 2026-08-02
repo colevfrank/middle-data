@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 <body class="min-h-screen flex items-center justify-center bg-gray-50">
 <div class="max-w-md p-8 bg-white rounded shadow text-center">
 <h1 class="text-lg font-semibold mb-3">Survey</h1>
-<p class="text-gray-700">This survey can only be accessed via Prolific. Please return to Prolific and use the study link.</p>
+<p class="text-gray-700">This survey can only be accessed via CloudResearch. Please return to CloudResearch and use the study link.</p>
 </div></body></html>`);
 });
 

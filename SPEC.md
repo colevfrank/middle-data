@@ -1,5 +1,5 @@
 ## Project: Survey Experiment Website
-Build a web-based survey experiment for a research study on data sharing preferences. The survey will be hosted on Railway and participants will be recruited via Prolific.
+Build a web-based survey experiment for a research study on data sharing preferences. The survey will be hosted on Railway and participants will be recruited via CloudResearch Connect.
 Tech Stack
 
 Frontend: HTML/CSS/JS (vanilla or lightweight framework), Tailwind CSS for styling
@@ -7,14 +7,14 @@ Backend: Node.js with Express
 Database: PostgreSQL (Railway provides this as an add-on)
 Hosting: Railway
 
-### Prolific Integration
+### CloudResearch Connect Integration
 
-Participants arrive via Prolific with URL parameters: ?PROLIFIC_PID={pid}&STUDY_ID={sid}&SESSION_ID={ssid}
-Store all three parameters with the response data
-On survey completion, redirect to Prolific's completion URL: https://app.prolific.com/submissions/complete?cc={COMPLETION_CODE} (completion code set via env var)
-On consent refusal, redirect to Prolific's "return" URL. (The comprehension check no longer screens anyone out — it is pass-required with unlimited retries.)
+Participants arrive via CloudResearch Connect with URL parameters: ?participantId={id} (optionally &assignmentId={aid}&projectId={pid})
+Store `participantId` as the unique participant identifier; store `assignmentId`/`projectId` alongside the response data when present.
+On survey completion, redirect to the study's CloudResearch end-of-study redirect URL (copied from the Create-a-Study wizard and set verbatim via the `CLOUDRESEARCH_COMPLETE_URL` env var). Reaching this URL is what marks the participant complete in Connect.
+On consent refusal, redirect to `CLOUDRESEARCH_TERMINATE_URL` if set (a separate termination/screen-out landing URL), otherwise fall back to `CLOUDRESEARCH_COMPLETE_URL`. (The comprehension check no longer screens anyone out — it is pass-required with unlimited retries.)
 
-**TODO (before go-live): add a Prolific screen-out completion code.** Currently consent refusals are sent to the "return" URL (unpaid return). Instead, create a second Prolific completion code designated as a screen-out, expose it as a new env var (e.g. `PROLIFIC_SCREENOUT_CODE`), and redirect those participants to https://app.prolific.com/submissions/complete?cc={SCREENOUT_CODE} so they are recorded as screened out (and can be paid a small screen-out fee). Implementation is ~10 lines in server/routes/screen.js; make it opt-in — fall back to the current return-URL behavior when the env var is unset.
+**TODO (before go-live): configure a dedicated screen-out landing URL.** Currently consent refusals fall back to the completion redirect when `CLOUDRESEARCH_TERMINATE_URL` is unset. Set `CLOUDRESEARCH_TERMINATE_URL` to a Connect termination landing URL so screened-out participants are recorded separately (and can be paid a small screen-out fee). This is already wired in server/routes/screen.js and server/routes/start.js — it just needs the env var populated.
 
 ### Randomization
 Each participant is randomly assigned to one cell at the start of the session. Two between-subjects factors:
@@ -77,7 +77,7 @@ Display the consent information (I'll provide the full text separately). Three c
 "I have read and understand the information above"
 "I want to participate in this research and continue with the survey"
 
-If any checkbox is No, show a message and redirect to Prolific return URL.
+If any checkbox is No, show a message and redirect to the CloudResearch termination/return URL (`CLOUDRESEARCH_TERMINATE_URL`, falling back to `CLOUDRESEARCH_COMPLETE_URL`).
 
 Screen 2: Welcome
 "Welcome!"
@@ -203,23 +203,23 @@ Screen 26: Debrief
 The "App Z" service in this survey was hypothetical. No company called App Z collected any of your information, and your responses to the scenarios will not be shared with any third party."
 "Your responses will help inform policy discussions about data governance in the age of AI. If you have questions, please contact Sarah Cen at sarahcen@andrew.cmu.edu."
 "IRB Protocol: STUDY2026_00000225 — Carnegie Mellon University"
-[Button: "Complete study" → redirects to Prolific completion URL]
+[Button: "Complete study" → redirects to the CloudResearch completion redirect URL]
 
 ### Security
-- On first visit, validate that PROLIFIC_PID is present and not 
+- On first visit, validate that participantId is present and not 
   already in the database. Generate a server-side session token 
   (UUID) and store it with the participant record. Use this token 
   to authenticate all subsequent requests.
 - Condition assignments (data type, use case) are stored 
   server-side only. The client never receives or transmits 
   condition identifiers.
-- Reject duplicate PROLIFIC_PIDs.
-- Rate limit: per-PID deduplication plus a soft IP throttle (max 15 new sessions per IP per hour). IPs are never persisted (hashed with a daily salt).
+- Reject duplicate participantIds.
+- Rate limit: per-participant deduplication plus a soft IP throttle (max 15 new sessions per IP per hour). IPs are never persisted (hashed with a daily salt).
 
 ### Data Tracking Requirements
 For every screen/question, record:
 
-participant_id (Prolific PID)
+participant_id (CloudResearch participantId)
 screen_id (which screen)
 timestamp_shown (when the screen was displayed)
 timestamp_submitted (when the participant clicked Continue/submitted)
@@ -238,7 +238,7 @@ Two tables:
 participants — one row per participant:
 
 id (primary key)
-prolific_pid, study_id, session_id
+participant_id, assignment_id, project_id
 data_type (1–16)
 use_case (B1 or B2)
 scenario_order (Postgres integer array, INT[])
@@ -261,12 +261,13 @@ latency_ms (integer)
 Clean, professional, minimal design. This is an academic survey, not a product.
 One question or scenario per screen. Clear "Continue" button at the bottom.
 Progress bar at the top showing completion percentage.
-Mobile-responsive (some Prolific participants use phones).
+Mobile-responsive (some CloudResearch participants use phones).
 No back button — participants cannot revisit previous screens.
 All radio buttons must be selected before "Continue" is enabled (except optional text fields).
 
 ### Environment Variables
 
 DATABASE_URL (Railway Postgres)
-PROLIFIC_COMPLETION_CODE
+CLOUDRESEARCH_COMPLETE_URL (study's end-of-study redirect URL)
+CLOUDRESEARCH_TERMINATE_URL (optional; screen-out/consent-refusal landing URL)
 PORT

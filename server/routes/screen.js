@@ -10,12 +10,13 @@ const router = express.Router();
 const asyncHandler = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 function returnUrl() {
-  return process.env.PROLIFIC_RETURN_URL || 'https://app.prolific.com/submissions/return';
+  return process.env.CLOUDRESEARCH_TERMINATE_URL || process.env.CLOUDRESEARCH_COMPLETE_URL || '/';
 }
 
 function completionUrl() {
-  const code = process.env.PROLIFIC_COMPLETION_CODE || 'PLACEHOLDER';
-  return `https://app.prolific.com/submissions/complete?cc=${encodeURIComponent(code)}`;
+  // CloudResearch Connect's end-of-study redirect URL is study-specific (generated in the
+  // Create-a-Study wizard) and set verbatim via env var; fall back to '/' for local runs.
+  return process.env.CLOUDRESEARCH_COMPLETE_URL || '/';
 }
 
 // GET /screen — returns the active screen content for the authenticated participant
