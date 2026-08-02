@@ -85,15 +85,13 @@ Click "Continue" when you are ready to begin.
 
 **Heading:** Imagine you're a frequent user of App Z!
 
-App Z is an online service that you use often.
-
-You currently pay $20 per month for App Z.
+App Z is an online service that you use often. You currently pay $20 per month for App Z.
 
 By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service.
 
 App Z does not sell your information, and App Z also deletes any data it holds after one year.
 
-**But there has been a recent change.**
+**But there has been a recent change**
 
 Earlier this year, App Z became interested in `{data_type_description}`.
 
@@ -171,8 +169,7 @@ Based on the information above, indicate whether each statement is True or False
 
 *(Order of this page vs. Data Sharing Program is randomized; a transition page sits between them.)*
 
-**Heading:** We’d like you to imagine ...
-**Heading:** ... One day, you open App Z and it offers you the option to receive a Subscription Discount:
+**Heading:** We’d like you to imagine: One day, you open App Z and it offers you the option to receive a Subscription Discount:
 
 **Settings frame — Subscription**
 
@@ -184,9 +181,9 @@ We are now offering you the option to receive a Subscription Discount. If you ag
 
 We will access your `{inline}`
 
-We will use this information to `{data_use}`
+We will use this information to `{data_use}` *(data use underlined)*
 
-We would like to offer you a monthly discount on your subscription for sharing this data.
+☐ I agree   [ ____ ] $ / month discount *(decorative settings UI)*
 
 `{inline}`:
 
@@ -242,8 +239,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 *(Same randomization note as Subscription Discount.)*
 
-**Heading:** We’d like you to imagine ...
-**Heading:** ... One day, you open App Z and it offers you the option to join a Data Sharing Program:
+**Heading:** We’d like you to imagine: One day, you open App Z and it offers you the option to join a Data Sharing Program:
 
 **Settings frame — Data Sharing Program**
 
@@ -255,9 +251,9 @@ We are now offering you the option to join a Data Sharing Program. If you opt in
 
 We will access your `{inline}`
 
-We will use this information to `{data_use}`
+We will use this information to `{data_use}` *(data use underlined)*
 
-Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
+☐ I agree   [ ____ ] % of revenue *(decorative settings UI)*
 
 `{inline}`:
 
