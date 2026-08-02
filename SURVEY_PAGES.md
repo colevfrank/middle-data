@@ -181,7 +181,9 @@ We will use this information to `{data_use}` *(data use underlined)*
 
 We would like to offer you a monthly discount on your subscription for sharing this data.
 
-☐ I agree   [ ____ ] $ / month discount *(decorative settings UI, red-tinted)*
+☐ I agree   [ ____ ] $ / month discount
+☐ I do not agree
+*(decorative settings UI, red-tinted; agree + amount on one line, disagree on the next)*
 
 `{inline}`:
 
@@ -253,7 +255,9 @@ We will use this information to `{data_use}` *(data use underlined)*
 
 Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
 
-☐ I agree   [ ____ ] % of revenue *(decorative settings UI, red-tinted)*
+☐ I agree   [ ____ ] % of revenue
+☐ I do not agree
+*(decorative settings UI, red-tinted; agree + amount on one line, disagree on the next)*
 
 `{inline}`:
 
@@ -375,7 +379,7 @@ Example: Suppose App Z collects your communications, including text messages, so
 
 ### B1 — Compensated by amount
 
-Should you be compensated based on how much of your `{inline}` is used by App Z?
+Should you be compensated based on how much of your `{inline}` `{is/are}` used by App Z?
 
 - Yes
 - No
@@ -384,7 +388,7 @@ Should you be compensated based on how much of your `{inline}` is used by App Z?
 
 ### B2 — Compensated per use
 
-Should you be compensated each time your `{inline}` is used by App Z?
+Should you be compensated each time your `{inline}` `{is/are}` used by App Z?
 
 - Yes
 - No
@@ -402,7 +406,7 @@ Should you be compensated based on how much effort it took for you to generate o
 
 ### B4 — Compensated by originality
 
-Should you be compensated for how unique or original your `{inline}` is relative to others' on App Z?
+Should you be compensated for how unique or original your `{inline}` `{is/are}` relative to others' on App Z?
 
 - Yes
 - No
@@ -411,7 +415,7 @@ Should you be compensated for how unique or original your `{inline}` is relative
 
 ### B5 — Coworker sells data
 
-Suppose your phone manufacturer collected your `{inline}` and sold it to App Z. How would you feel?
+Suppose your phone manufacturer collected your `{inline}` and sold `{it/them}` to App Z. How would you feel?
 
 - Very upset
 - A little upset
@@ -421,7 +425,7 @@ Suppose your phone manufacturer collected your `{inline}` and sold it to App Z. 
 
 ### B6 — Credit / acknowledgement
 
-Should you receive credit or acknowledgement for your `{inline}` when it is used by App Z?
+Should you receive credit or acknowledgement for your `{inline}` when `{it is/they are}` used by App Z?
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -483,6 +487,12 @@ On the following pages, we'll ask you a series of questions.
 
 *Each question is its own page. Order randomized within Block A (attention check pooled in). No use-case header.*
 
+**Header (all Block A pages; not shown on attention check):**
+
+`{Inline capitalized} includes {examples from data_type_description}.`
+
+Example: Financial information includes bank statements and investment portfolios.
+
 ### A1 — Importance
 
 Do you consider `{inline}` to be important?
@@ -530,7 +540,7 @@ Do you feel ownership over `{inline}`?
 
 ### A4 — Share publicly
 
-Would you ever share your `{inline}` publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:
+Would you ever share your `{inline}` publicly? For example, would you share `{it/them}` with a person or group of people you have never met before? Choose the option that best describes your answer:
 
 - No — I would never share it publicly.
 - Maybe — it would depend on the situation.
@@ -562,7 +572,7 @@ If you found out your `{inline}` had been released publicly without your knowled
 
 ### A7 — Identifiability
 
-How identifiable (traceable to you) do you think `{inline}` is?
+How identifiable (traceable to you) do you think `{inline}` `{is/are}`?
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -570,7 +580,7 @@ How identifiable (traceable to you) do you think `{inline}` is?
 
 ### A8 — Usefulness to companies
 
-How useful do you think `{inline}` is to companies?
+How useful do you think `{inline}` `{is/are}` to companies?
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -578,7 +588,7 @@ How useful do you think `{inline}` is to companies?
 
 ### A9 — Replaceability / commonness
 
-How common or replaceable do you think `{inline}` is across people? In other words, if you didn't provide it, could someone else easily provide similar data?
+How common or replaceable do you think `{inline}` `{is/are}` across people? In other words, if you didn't provide `{it/them}`, could someone else easily provide similar data?
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 

@@ -25,6 +25,17 @@ function dataTypeAsYours(dt) {
   return dt.inline;
 }
 
+// Block A reminder, e.g. "Financial information includes bank statements and investment portfolios."
+function dataTypeIncludesHeader(dt) {
+  const d = dt.data_type_description;
+  const marker = ', including ';
+  const i = d.indexOf(marker);
+  const examples = i >= 0 ? d.slice(i + marker.length) : dataTypeAsYours(dt);
+  const name = dt.inline.charAt(0).toUpperCase() + dt.inline.slice(1);
+  const body = examples.endsWith('.') ? examples : examples + '.';
+  return `${name} includes ${body}`;
+}
+
 // The two scenarios share one voice-neutral, first-person design: a bold lead-in,
 // a settings-page frame (heading + program description), and a multi-select
 // question below the frame. `collect_emphasis` marks the data type for bold+underline;
@@ -99,10 +110,12 @@ function postQuestionPayload(p, screenId) {
   const q = POST_QUESTIONS.find(x => x.id === qid);
   const item = { id: q.id, key: q.key, type: q.type, prompt: q.prompt(dt, uc) };
   if (q.prompt_emphasis) item.prompt_emphasis = q.prompt_emphasis;
-  // Block B screens carry a use-case context header; Block A (and the attention
-  // check) show only the question.
+  // Block B: use-case context. Block A: data-type description reminder.
+  // Attention check: no header.
   if (q.block === 'B') {
     item.header = `Suppose App Z collects your ${dataTypeAsYours(dt)} to ${uc.data_use}.`;
+  } else if (q.block === 'A') {
+    item.header = dataTypeIncludesHeader(dt);
   }
   if (q.type === 'likert5' || q.type === 'attention') {
     item.anchors = q.anchors;

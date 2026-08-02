@@ -146,10 +146,11 @@ async function runTests() {
 }
 
 section('content');
-test('20 data types each with inline, data_type_description, category', () => {
+test('20 data types each with inline, data_type_description, category, plural', () => {
   assert.equal(content.DATA_TYPES.length, 20);
   for (const d of content.DATA_TYPES) {
     assert.ok(d.inline && d.data_type_description && d.category);
+    assert.equal(typeof d.plural, 'boolean');
   }
 });
 test('2 use cases B1 and B2 with data_use + intro_sentences', () => {
@@ -432,7 +433,7 @@ test('scenario copy is voice-neutral (voice=appx unchanged)', () => {
   const a = screenPayload(fakeParticipant, 'scenario_1', { voice: 'appx' });
   assert.deepEqual(r, a);
 });
-test('post-question Block A payload: data-type prompt, no header, no About label', () => {
+test('post-question Block A payload: description header + data-type prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_1');
   assert.equal(p.kind, 'post_question');
   assert.equal(p.screen, 'postq_1');
@@ -440,8 +441,13 @@ test('post-question Block A payload: data-type prompt, no header, no About label
   assert.equal(p.item.type, 'likert5');
   assert.ok(p.item.prompt.includes(dt5.inline));
   assert.ok(p.item.prompt.startsWith('Do you consider'));
-  assert.equal(p.item.header, undefined);   // Block A → no use-case header
+  assert.equal(p.item.header,
+    'Financial information includes bank statements and investment portfolios.');
   assert.equal(p.data_label, undefined);    // "About:" label removed
+});
+test('attention-check has no Block A description header', () => {
+  const p = screenPayload(fakeParticipant, 'postq_14');
+  assert.equal(p.item.header, undefined);
 });
 test('post-question Block B payload: use-case header + trimmed prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_7');
@@ -459,6 +465,17 @@ test('Block B prompts use short data name instead of generic "your data"', () =>
     assert.ok(!/\byour data\b/.test(p.item.prompt), `postq_${id}`);
     assert.ok(!/\bthis data\b/.test(p.item.prompt), `postq_${id}`);
   }
+});
+test('prompts use is/are agreement from data-type plural flag', () => {
+  const singular = screenPayload(fakeParticipant, 'postq_16'); // financial information
+  assert.ok(singular.item.prompt.includes('financial information is to companies'));
+  const pluralP = { ...fakeParticipant, data_type: 4 };
+  const plural = screenPayload(pluralP, 'postq_16');
+  assert.ok(plural.item.prompt.includes('health information and medical records are to companies'));
+  const creditPlural = screenPayload(pluralP, 'postq_12');
+  assert.ok(creditPlural.item.prompt.includes('when they are used by App Z'));
+  const creditSing = screenPayload(fakeParticipant, 'postq_12');
+  assert.ok(creditSing.item.prompt.includes('when it is used by App Z'));
 });
 test('postq_concerns options: randomized order, Other always last', () => {
   const q = content.POST_QUESTIONS.find(x => x.key === 'postq_concerns');

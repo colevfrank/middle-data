@@ -478,27 +478,30 @@
     }
     if (p.offer_agree) {
       const oa = p.offer_agree;
-      const row = el('div', {
-        class: 'mt-6 flex flex-wrap items-center gap-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-slate-700'
+      const wrap = el('div', {
+        class: 'mt-6 space-y-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-slate-700'
       });
-      row.appendChild(el('label', { class: 'flex items-center gap-2 cursor-default' }, [
-        el('input', { type: 'radio', name: 'offer_agree_mock', disabled: true, class: 'h-4 w-4 border-slate-300' }),
-        el('span', { class: 'font-medium' }, oa.checkbox_label || 'I agree')
+      // Line 1: I agree + amount blank; line 2: I do not agree
+      wrap.appendChild(el('div', { class: 'flex flex-wrap items-center gap-3' }, [
+        el('label', { class: 'flex items-center gap-2 cursor-default' }, [
+          el('input', { type: 'radio', name: 'offer_agree_mock', disabled: true, class: 'h-4 w-4 border-slate-300' }),
+          el('span', { class: 'font-medium' }, oa.checkbox_label || 'I agree')
+        ]),
+        el('span', { class: 'flex items-center gap-1' }, [
+          oa.blank_prefix ? el('span', {}, oa.blank_prefix) : null,
+          el('input', {
+            type: 'text', disabled: true, readonly: true,
+            placeholder: oa.blank_placeholder || ' ',
+            class: 'w-16 rounded border border-slate-300 bg-white px-2 py-1 text-sm text-center'
+          }),
+          oa.blank_suffix ? el('span', {}, oa.blank_suffix) : null
+        ].filter(Boolean))
       ]));
-      row.appendChild(el('label', { class: 'flex items-center gap-2 cursor-default' }, [
+      wrap.appendChild(el('label', { class: 'flex items-center gap-2 cursor-default' }, [
         el('input', { type: 'radio', name: 'offer_agree_mock', disabled: true, class: 'h-4 w-4 border-slate-300' }),
         el('span', { class: 'font-medium' }, oa.disagree_label || 'I do not agree')
       ]));
-      row.appendChild(el('span', { class: 'flex items-center gap-1' }, [
-        oa.blank_prefix ? el('span', {}, oa.blank_prefix) : null,
-        el('input', {
-          type: 'text', disabled: true, readonly: true,
-          placeholder: oa.blank_placeholder || ' ',
-          class: 'w-16 rounded border border-slate-300 bg-white px-2 py-1 text-sm text-center'
-        }),
-        oa.blank_suffix ? el('span', {}, oa.blank_suffix) : null
-      ].filter(Boolean)));
-      box.appendChild(row);
+      box.appendChild(wrap);
     }
     return box;
   }
