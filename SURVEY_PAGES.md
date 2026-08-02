@@ -444,10 +444,42 @@ What is/are your main concern(s) about sharing this data with App Z? (Please che
 - I don't trust App Z 
 - Other [text box]
 
+---
+
+## Page 15 — Block A intro
+
+Now, we'd like to understand how you feel about `{inline}`, regardless of its use.
+
+On the following pages, we'll ask you a series of questions.
+
+`{inline}`:
+
+1. demographic information
+2. government IDs
+3. voice data
+4. health information and medical records
+5. financial information
+6. communications
+7. social network
+8. contacts
+9. location history
+10. web browsing history
+11. purchase history
+12. professional or educational documents
+13. photos library
+14. email management behavior
+15. administrative task behavior
+16. cooking behavior
+17. music preferences
+18. streaming preferences
+19. screen usage
+20. exercise activities
+
+**Button:** Continue
 
 ---
 
-## Pages 15–25 — Block A (data-type questions + attention check)
+## Pages 16–26 — Block A (data-type questions + attention check)
 
 *Each question is its own page. Order randomized within Block A (attention check pooled in). No use-case header.*
 
@@ -568,7 +600,7 @@ This is an attention check. To show you are reading carefully, please select the
 
 ---
 
-## Page 26 — Open response
+## Page 27 — Open response
 
 Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data? Does your answer change if your data is being used to train AI models or AI agents?
 
@@ -578,7 +610,7 @@ Many companies rely on user data to improve their services or sell user data as 
 
 ---
 
-## Page 27 — About you intro
+## Page 28 — About you intro
 
 In the last part of this survey, we have a few questions about you.
 
@@ -586,7 +618,7 @@ In the last part of this survey, we have a few questions about you.
 
 ---
 
-## Page 28 — AI usage & literacy
+## Page 29 — AI usage & literacy
 
 A few questions about the tools you use.
 
@@ -624,7 +656,7 @@ A few questions about the tools you use.
 
 ---
 
-## Page 29 — Demographics
+## Page 30 — Demographics
 
 **Age**
 
@@ -657,7 +689,7 @@ A few questions about the tools you use.
 
 ---
 
-## Page 30 — Debrief
+## Page 31 — Debrief
 
 Thank you for completing this study.
 
