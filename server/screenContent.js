@@ -56,7 +56,7 @@ function scenarioPayload(p, screenId) {
     return Object.assign({
       screen: 'scenario_1',
       lead_in: [
-        "We'd like you to imagine: One day, you open App Z and it offers you the option to receive a Subscription Discount"
+        "We'd like you to imagine: You open App Z and it offers you the option to receive a Subscription Discount"
       ],
       frame_url: 'appz.com/settings/subscription',
       sidebar_active: 'subscription',
@@ -80,7 +80,7 @@ function scenarioPayload(p, screenId) {
   return Object.assign({
     screen: 'scenario_2',
     lead_in: [
-      "We'd like you to imagine: One day, you open App Z and it offers you the option to join a Data Sharing Program"
+      "We'd like you to imagine: You open App Z and it offers you the option to join a Data Sharing Program"
     ],
     frame_url: 'appz.com/settings/data-sharing',
     sidebar_active: 'data_sharing',

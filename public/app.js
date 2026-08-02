@@ -466,7 +466,9 @@
     box.appendChild(el('h2', { class: 'settings-section-title' }, p.heading));
     for (const para of p.intro) box.appendChild(el('p', { class: 'settings-section-helper' }, para));
     if (p.intro_offer) {
-      box.appendChild(el('p', { class: 'settings-section-helper font-bold text-red-500' }, p.intro_offer));
+      box.appendChild(el('p', { class: 'settings-section-helper font-bold text-red-500' },
+        emphasize(p.intro_offer, ['Subscription Discount', 'Data Sharing Program'],
+          'font-bold underline text-red-500')));
     }
     const list = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-red-500 space-y-1' });
     list.appendChild(el('li', {}, emphasize(p.collect_line, p.collect_emphasis)));
@@ -550,7 +552,9 @@
 
   function renderScenarioPlain(p) {
     for (const line of p.lead_in) {
-      root.appendChild(el('p', { class: 'text-2xl font-bold text-blue-500 mt-6 mb-6' }, line));
+      root.appendChild(el('p', { class: 'text-2xl font-bold text-blue-500 mt-6 mb-6' },
+        emphasize(line, ['Subscription Discount', 'Data Sharing Program'],
+          'font-bold underline text-blue-500')));
     }
     const box = scenarioContentBox(p);
     box.className = 'border border-slate-200 rounded p-4 mb-4';
@@ -828,7 +832,9 @@
   // ===== Scenarios (settings mode) — shared browser frame for scenario_1 & _2 =====
   function renderScenarioSettings(p) {
     for (const line of p.lead_in) {
-      root.appendChild(el('p', { class: 'text-2xl font-bold text-blue-500 mt-6 mb-6' }, line));
+      root.appendChild(el('p', { class: 'text-2xl font-bold text-blue-500 mt-6 mb-6' },
+        emphasize(line, ['Subscription Discount', 'Data Sharing Program'],
+          'font-bold underline text-blue-500')));
     }
     const frame = el('div', { class: 'browser-frame' });
     frame.appendChild(browserChrome(p.frame_url));

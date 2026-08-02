@@ -165,7 +165,7 @@ App Z would like to access your `{inline}` to `{data_use}`.
 
 *(Order of this page vs. Data Sharing Program is randomized; a transition page sits between them.)*
 
-**Heading:** We’d like you to imagine: One day, you open App Z and it offers you the option to receive a Subscription Discount
+**Heading:** We’d like you to imagine: You open App Z and it offers you the option to receive a Subscription Discount *(program name underlined)*
 
 **Settings frame — Subscription**
 
@@ -239,7 +239,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 *(Same randomization note as Subscription Discount.)*
 
-**Heading:** We’d like you to imagine: One day, you open App Z and it offers you the option to join a Data Sharing Program
+**Heading:** We’d like you to imagine: You open App Z and it offers you the option to join a Data Sharing Program *(program name underlined)*
 
 **Settings frame — Data Sharing Program**
 

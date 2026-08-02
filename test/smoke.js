@@ -406,6 +406,7 @@ test('scenario_1 (Subscription Discount): settings-frame payload + first-person 
   const p = screenPayload(fakeParticipant, 'scenario_1');
   assert.equal(p.heading, 'Subscription');
   assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
+  assert.ok(!p.lead_in.join(' ').includes('One day'));
   const yours5 = dt5.data_type_description.replace(/^its users' /, '');
   assert.equal(p.collect_line, `We will access or ask you to provide your ${yours5}`);
   assert.deepEqual(p.collect_emphasis, [yours5]);
