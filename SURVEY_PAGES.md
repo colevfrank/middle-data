@@ -30,7 +30,7 @@ You will be shown a survey of questions. The survey takes approximately 10-15 mi
 Participation in this study is limited to individuals age 18 and older who are U.S. residents and fluent in English.
 
 #### Risks
-Risks are minimal. Some questions ask you to consider your choices in a hypothetical world. You may exit at any time without penalty
+Risks are minimal. Some questions ask you to consider your choices in a hypothetical world. You may exit at any time without penalty.
 
 #### Benefits
 There are no direct benefits to you. The research aims to inform academic and policy discussions.
@@ -106,14 +106,14 @@ App Z would like to access your `{inline}` to `{data_use}`.
 3. its users' voice data, including voice notes, recordings, and voice-to-text commands
 4. its users' health information and medical records, including doctors' visit notes, test results, prescribed medication, and vaccination history
 5. its users' financial information, including bank statements and investment portfolios
-6. its users' communications, including text messsages, social media messages, and emails
+6. its users' communications, including text messages, social media messages, and emails
 7. its users' social network, including the names of friends, coworkers, and family members
 8. its users' contacts, including the names, emails, and phone numbers of contacts on a user's device
 9. its users' location history, including where users go and at what times
 10. its users' web browsing history, including websites users visit and the timestamps of each visit
-11. its users' purchase history, including what times users purchase from what vendors and at what times
+11. its users' purchase history, including what users purchase from which vendors and at what times
 12. its users' professional or educational documents, including notes, essays, and reports used for work or education but not including financial, government, or otherwise sensitive documents
-13. its users' photos library, including photo or video data stored on their device 
+13. its users' photos library, including photo or video data stored on their device
 14. how its users manage their emails, including detailed behavioral data of how users respond, sort, delete, and search their email
 15. how its users perform basic administrative tasks, including detailed behavioral data of how users book flights, pay bills, search for restaurants, or plan a party
 16. how its users cook, including detailed behavioral data of what users cook, what ingredients they use, whether they follow recipes, and how long they spend cooking
@@ -287,7 +287,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 1. improve App Z's services
 2. train App Z's AI models and AI agents to improve its services
 
-**Question:** Please select what percentages of the revenue attributed to your data that you would be willing to accept (select all that apply):
+**Question:** Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):
 
 - 1%
 - 10%
@@ -295,7 +295,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 - 50%
 - 75%
 - 99%
-- I will share this data regardless of the percentage  *(mutually exclusive)*
+- I will not share this data regardless of the percentage *(mutually exclusive)*
 
 **Button:** Continue
 
@@ -693,7 +693,7 @@ A few questions about the tools you use.
 
 Thank you for completing this study.
 
-The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.
+The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for, particularly when it is used to train AI models or AI agents versus to improve a company's services more generally.
 
 The "App Z" service in this survey was hypothetical. No company called App Z accessed or collected any of your information, and your responses to the scenarios will not be shared with any third party.
 

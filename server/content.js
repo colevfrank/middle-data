@@ -3,81 +3,90 @@
 // Per data type:
 //   `inline` — short mid-sentence name ("demographic information")
 //   `data_type_description` — fuller phrase for the intro first sentence
-//     ("demographic information, including their age, …")
 //   `category` — internal grouping; never sent to clients.
-// Types 2–16 still use a stub description (= inline) until their copy is finalized.
+// Source of truth for participant-facing copy: SURVEY_PAGES.md
+
 const DATA_TYPES = [
   { id: 1,  inline: 'demographic information',
-    data_type_description: 'demographic information, including their age, gender, race, zip code, marital status, income, and level of education',
+    data_type_description: "its users' demographic information, including their age, gender, race, zip code, marital status, income, and level of education",
     category: 'Demographic/Identity' },
-  { id: 2,  inline: 'Social Security number',
-    data_type_description: 'Social Security number',
+  { id: 2,  inline: 'government IDs',
+    data_type_description: "its users' government IDs, including their driver's license or passport information",
     category: 'Demographic/Identity' },
-  { id: 3,  inline: 'fingerprint and voice recording data',
-    data_type_description: 'fingerprint and voice recording data',
+  { id: 3,  inline: 'voice data',
+    data_type_description: "its users' voice data, including voice notes, recordings, and voice-to-text commands",
     category: 'Demographic/Identity' },
-  { id: 4,  inline: 'health information',
-    data_type_description: 'health information',
+  { id: 4,  inline: 'health information and medical records',
+    data_type_description: "its users' health information and medical records, including doctors' visit notes, test results, prescribed medication, and vaccination history",
     category: 'Sensitive Personal' },
   { id: 5,  inline: 'financial information',
-    data_type_description: 'financial information',
+    data_type_description: "its users' financial information, including bank statements and investment portfolios",
     category: 'Sensitive Personal' },
-  { id: 6,  inline: 'password and login credential data',
-    data_type_description: 'password and login credential data',
-    category: 'Sensitive Personal' },
-  { id: 7,  inline: 'text message and email content',
-    data_type_description: 'text message and email content',
+  { id: 6,  inline: 'communications',
+    data_type_description: "its users' communications, including text messages, social media messages, and emails",
     category: 'Relational/Communicative' },
-  { id: 8,  inline: 'contact information of friends and family',
-    data_type_description: 'contact information of friends and family',
+  { id: 7,  inline: 'social network',
+    data_type_description: "its users' social network, including the names of friends, coworkers, and family members",
+    category: 'Relational/Communicative' },
+  { id: 8,  inline: 'contacts',
+    data_type_description: "its users' contacts, including the names, emails, and phone numbers of contacts on a user's device",
     category: 'Relational/Communicative' },
   { id: 9,  inline: 'location history',
-    data_type_description: 'location history',
+    data_type_description: "its users' location history, including where users go and at what times",
     category: 'Behavioral/Preference' },
-  { id: 10, inline: 'browsing and search history',
-    data_type_description: 'browsing and search history',
+  { id: 10, inline: 'web browsing history',
+    data_type_description: "its users' web browsing history, including websites users visit and the timestamps of each visit",
     category: 'Behavioral/Preference' },
-  { id: 11, inline: 'shopping and purchase history',
-    data_type_description: 'shopping and purchase history',
+  { id: 11, inline: 'purchase history',
+    data_type_description: "its users' purchase history, including what users purchase from which vendors and at what times",
     category: 'Behavioral/Preference' },
-  { id: 12, inline: 'document, note, and report data',
-    data_type_description: 'document, note, and report data',
+  { id: 12, inline: 'professional or educational documents',
+    data_type_description: "its users' professional or educational documents, including notes, essays, and reports used for work or education but not including financial, government, or otherwise sensitive documents",
     category: 'Expressive' },
-  { id: 13, inline: 'photo and video data',
-    data_type_description: 'photo and video data',
+  { id: 13, inline: 'photos library',
+    data_type_description: "its users' photos library, including photo or video data stored on their device",
     category: 'Expressive' },
-  { id: 14, inline: 'email triage behavior',
-    data_type_description: 'email triage behavior',
+  { id: 14, inline: 'email management behavior',
+    data_type_description: 'how its users manage their emails, including detailed behavioral data of how users respond, sort, delete, and search their email',
     category: 'Process' },
-  { id: 15, inline: 'search and decision trajectory data',
-    data_type_description: 'search and decision trajectory data',
+  { id: 15, inline: 'administrative task behavior',
+    data_type_description: 'how its users perform basic administrative tasks, including detailed behavioral data of how users book flights, pay bills, search for restaurants, or plan a party',
     category: 'Process' },
-  { id: 16, inline: 'writing and editing process',
-    data_type_description: 'writing and editing process',
-    category: 'Process' }
+  { id: 16, inline: 'cooking behavior',
+    data_type_description: 'how its users cook, including detailed behavioral data of what users cook, what ingredients they use, whether they follow recipes, and how long they spend cooking',
+    category: 'Process' },
+  { id: 17, inline: 'music preferences',
+    data_type_description: "its users' music preferences, including the songs and artists users listen to as well as users' rating, like, and skip behaviors",
+    category: 'Behavioral/Preference' },
+  { id: 18, inline: 'streaming preferences',
+    data_type_description: "its users' streaming preferences, including the shows and movies users watch, whether users finish each video, and how users rate the videos",
+    category: 'Behavioral/Preference' },
+  { id: 19, inline: 'screen usage',
+    data_type_description: "its users' screen usage, including when and how long users open their devices and use each application",
+    category: 'Behavioral/Preference' },
+  { id: 20, inline: 'exercise activities',
+    data_type_description: "its users' exercise activities, including what forms of exercise users engage in and when they exercise",
+    category: 'Behavioral/Preference' }
 ];
 
 const USE_CASES = {
   B1: {
     code: 'B1',
-    // Infinitive phrase after "to …" (comprehension, scenarios, post-scenario, Block B).
+    // Infinitive phrase after "to …"
     comp_use: "improve App Z's services",
     scenario_use: "improve App Z's services",
     data_use: "improve App Z's services",
-    // Framing shown on the intro screen (dt = assigned data type).
-    intro_sentences: (dt) => `App Z would like to collect your ${dt.inline}. This information will be used to improve App Z's services.`
+    intro_sentences: (dt) => `App Z would like to access your ${dt.inline} to improve App Z's services.`
   },
   B2: {
     code: 'B2',
     comp_use: "train App Z's AI models and AI agents to improve its services",
     scenario_use: "train App Z's AI models and AI agents to improve its services",
     data_use: "train App Z's AI models and AI agents to improve its services",
-    intro_sentences: (dt) => `App Z would like to collect your ${dt.inline}. This information will be used to train App Z's AI models and AI agents to improve its services.`
+    intro_sentences: (dt) => `App Z would like to access your ${dt.inline} to train App Z's AI models and AI agents to improve its services.`
   }
 };
 
-// Scenario 1 (Subscription Discount) tiers — multi-select ("select all discounts
-// you'd accept"). Values stored in s1_accepted_discounts (TEXT[]).
 const S1_TIERS = [
   { value: '1off',  label: '$1 off / month ($19/mo)' },
   { value: '3off',  label: '$3 off / month ($17/mo)' },
@@ -87,8 +96,6 @@ const S1_TIERS = [
   { value: '20off', label: '$20 off / month (Free)' }
 ];
 
-// Scenario 2 (Data Sharing Program) revenue-share tiers — multi-select ("select all
-// percentages you'd accept"). Values stored in s2_accepted_shares (TEXT[]).
 const S2_TIERS = [
   { value: '1',  label: '1%' },
   { value: '10', label: '10%' },
@@ -98,22 +105,15 @@ const S2_TIERS = [
   { value: '99', label: '99%' }
 ];
 
-// Post-scenario questions: Block B (about compensation for the use case, shown first) + Block A
-// (about the data type) + one attention check (randomized into Block A). Block B is randomized
-// within itself (block_b_order), then Block A (block_a_order); each shown on its own screen.
-// `key` doubles as the DB column name. `prompt(dt, uc)` builds the
-// text with the assigned data type / use case substituted in.
-//   type: 'likert5'    → 1-5 radio with anchors, stored SMALLINT
-//         'choice'     → radio list of {value,label}, stored TEXT
-//         'choice_num' → radio list with numeric values, stored SMALLINT
-//         'multiselect'→ checkboxes (check all), stored TEXT[]
-//         'attention'  → 1-5 radio like likert5; stores value + pass (value === expected)
-const YESNO_UNSURE = [
-  { value: 'yes',    label: 'Yes' },
-  { value: 'no',     label: 'No' },
-  { value: 'unsure', label: 'Unsure' }
+const YESNO_UNSURE_CARE = [
+  { value: 'yes',       label: 'Yes' },
+  { value: 'no',        label: 'No' },
+  { value: 'unsure',    label: 'Unsure' },
+  { value: 'dont_care', label: "I don't care" }
 ];
 
+// Post-scenario questions: Block B first, then Block A (+ attention check in A).
+// `key` doubles as the DB column name.
 const POST_QUESTIONS = [
   // ----- Block A: about the data type -----
   { id: 1, key: 'postq_importance', block: 'A', type: 'likert5',
@@ -126,7 +126,7 @@ const POST_QUESTIONS = [
     prompt: (dt) => `Do you feel ownership over ${dt.inline}?`,
     anchors: { low: 'I do not feel ownership over this type of data', high: 'I feel strong ownership over it' } },
   { id: 4, key: 'postq_share_public', block: 'A', type: 'choice_num',
-    prompt: (dt) => `Would you ever share your ${dt.inline} publicly – for example with a room of people you have never met before? Choose the option that best describes how far you'd be willing to go:`,
+    prompt: (dt) => `Would you ever share your ${dt.inline} publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:`,
     options: [
       { value: 0, label: 'No — I would never share it publicly.' },
       { value: 1, label: 'Maybe — it would depend on the situation.' },
@@ -136,23 +136,40 @@ const POST_QUESTIONS = [
   { id: 5, key: 'postq_buy_sell_appropriate', block: 'A', type: 'likert5',
     prompt: (dt) => `Is it appropriate to buy and sell your ${dt.inline}?`,
     anchors: { low: 'Completely inappropriate', high: 'Completely appropriate' } },
-  { id: 6, key: 'postq_upset_if_leaked', block: 'A', type: 'likert5',
-    prompt: (dt) => `If you found out your ${dt.inline} had been released publicly without your knowledge, how upset would you be?`,
-    anchors: { low: 'not at all', high: 'Extremely' } },
+  { id: 6, key: 'postq_upset_if_leaked', block: 'A', type: 'choice',
+    prompt: (dt) => `If you found out your ${dt.inline} had been released publicly without your knowledge, which best describes how you would feel?`,
+    options: [
+      { value: 'not_upset',           label: 'I would not be upset, whether or not my name was attached.' },
+      { value: 'a_little_uncomfortable', label: 'I would be a little uncomfortable.' },
+      { value: 'upset_if_named',      label: 'I would be upset only if my name was attached.' },
+      { value: 'upset_if_anonymous',  label: 'I would be upset even if it was released anonymously (without my name).' },
+      { value: 'very_upset_either',   label: 'I would be very upset either way.' },
+      { value: 'unsure',              label: "I'm not sure." }
+    ] },
+  { id: 15, key: 'postq_identifiability', block: 'A', type: 'likert5',
+    prompt: (dt) => `How identifiable (traceable to you) do you think ${dt.inline} is?`,
+    anchors: { low: 'not identifiable at all', high: 'extremely identifiable' } },
+  { id: 16, key: 'postq_usefulness', block: 'A', type: 'likert5',
+    prompt: (dt) => `How useful do you think ${dt.inline} is to companies?`,
+    anchors: { low: 'not useful at all', high: 'extremely useful' } },
+  { id: 17, key: 'postq_replaceability', block: 'A', type: 'likert5',
+    prompt: (dt) => `How common or replaceable do you think ${dt.inline} is across people? In other words, if you didn't provide it, could someone else easily provide similar data?`,
+    anchors: { low: 'unique to me / hard to replace', high: 'very common / easily replaceable' } },
+  { id: 18, key: 'postq_control', block: 'A', type: 'likert5',
+    prompt: (dt) => `How much control do you feel you have over your ${dt.inline} in general?`,
+    anchors: { low: 'no control at all', high: 'complete control' } },
 
-  // ----- Block B: about compensation for the use case. The use-case context
-  // ("Suppose App Z collects your <data> to <use>") is shown as a per-screen
-  // header, so these prompts are trimmed to just the question. -----
-  { id: 7, key: 'postq_comp_by_amount', block: 'B', type: 'choice', options: YESNO_UNSURE,
-    prompt: () => 'Should you be compensated based on how much of your data was used?' },
-  { id: 8, key: 'postq_comp_per_use', block: 'B', type: 'choice', options: YESNO_UNSURE,
-    prompt: () => 'Should you be compensated each time your data is used?' },
-  { id: 9, key: 'postq_comp_by_effort', block: 'B', type: 'choice', options: YESNO_UNSURE,
-    prompt: () => 'Should you be compensated based on how hard it was to generate this data?' },
-  { id: 10, key: 'postq_comp_by_originality', block: 'B', type: 'choice', options: YESNO_UNSURE,
-    prompt: () => "Should you be compensated for how original your data is relative to others'?" },
+  // ----- Block B: about compensation for the use case -----
+  { id: 7, key: 'postq_comp_by_amount', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
+    prompt: () => 'Should you be compensated based on how much of your data is used by App Z?' },
+  { id: 8, key: 'postq_comp_per_use', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
+    prompt: () => 'Should you be compensated each time your data is used by App Z?' },
+  { id: 9, key: 'postq_comp_by_effort', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
+    prompt: () => 'Should you be compensated based on how much effort it took for you to generate or provide this data to App Z?' },
+  { id: 10, key: 'postq_comp_by_originality', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
+    prompt: () => "Should you be compensated for how unique or original your data is relative to others' on App Z?" },
   { id: 11, key: 'postq_coworker_sells_feel', block: 'B', type: 'choice',
-    prompt: () => 'Suppose a coworker got hold of this data and sold it to another company for the same use. How would you feel?',
+    prompt: () => 'Suppose your phone manufacturer collected this data and sold it to App Z. How would you feel?',
     options: [
       { value: 'very_upset',   label: 'Very upset' },
       { value: 'little_upset', label: 'A little upset' },
@@ -160,29 +177,36 @@ const POST_QUESTIONS = [
       { value: 'dont_care',    label: "Don't care at all" },
       { value: 'happy',        label: 'Happy for them' }
     ] },
-  { id: 12, key: 'postq_credit_ack', block: 'B', type: 'likert5',
-    prompt: () => 'Should you receive credit or acknowledgement for this data when it is used?',
-    anchors: { low: 'Not at all', high: 'Completely' } },
+  { id: 12, key: 'postq_credit_ack', block: 'B', type: 'choice_num',
+    prompt: () => 'Should you receive credit or acknowledgement for this data when it is used by App Z?',
+    options: [
+      { value: 1, label: '1: I definitely do not want to receive credit' },
+      { value: 2, label: '2: I do not need to receive credit' },
+      { value: 3, label: '3: I am neutral' },
+      { value: 4, label: '4: I would like to receive credit' },
+      { value: 5, label: '5: I absolutely should receive credit' }
+    ] },
   { id: 13, key: 'postq_concerns', block: 'B', type: 'multiselect',
-    prompt: () => 'What is/are your main concern(s) about sharing this data? (Please check all that apply)',
+    prompt: () => 'What is/are your main concern(s) about sharing this data with App Z? (Please check all that apply)',
     options: [
       { value: 'not_concerned', label: "I'm not concerned" },
+      { value: 'dont_understand', label: "I don't understand why App Z wants it" },
       { value: 'too_personal',  label: "It's too personal or sensitive" },
       { value: 'manipulate',    label: 'It could be used to manipulate me' },
       { value: 'impersonate',   label: 'It could be used to impersonate or represent me' },
-      { value: 'no_trust',      label: "I don't trust the company to protect it" },
-      { value: 'not_sure',      label: "I'm not sure" }
+      { value: 'harm',          label: 'It could be used to harm me' },
+      { value: 'no_trust',      label: "I don't trust App Z" },
+      { value: 'other',         label: 'Other', has_other: true }
     ] },
 
-  // ----- Attention check (pooled + randomized with A1–B7) -----
+  // ----- Attention check (pooled + randomized with Block A) -----
   { id: 14, key: 'attention_check', block: 'AC', type: 'attention', expected: 1,
     prompt: () => "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1).",
     anchors: { low: 'not important to me at all', high: 'extremely important to me' } }
 ];
 
-const ATTENTION_CHECK_EXPECTED = 1; // instructed-response value for the pooled attention check
+const ATTENTION_CHECK_EXPECTED = 1;
 
-// Screen 21: AI Usage & Literacy — five questions on one screen (fixed order).
 const FREQ_OPTIONS = [
   { value: 'multiple_daily',  label: 'More than once a day' },
   { value: 'daily',           label: 'Daily' },
@@ -210,7 +234,6 @@ const AI_LITERACY_QUESTIONS = [
     prompt: 'Have you ever worked in the technology sector?' }
 ];
 
-// Demographics — fixed order. Age, gender, education only.
 const DEMOGRAPHICS = [
   { key: 'age_band', prompt: 'Age', options: [
     { value: '18-24', label: '18–24' },
@@ -238,15 +261,11 @@ const DEMOGRAPHICS = [
   ]}
 ];
 
-// Open-ended response — its own screen, after the post-scenario battery and
-// before AI usage. `key` doubles as the DB column. Optional free text.
 const OPEN_RESPONSE = {
   key: 'open_data_revenue',
-  prompt: 'A lot of companies rely on user data. Sometimes, selling user data is a major revenue stream. Or user data may be critical to their main product so that their revenue stream indirectly depends on user data. How do you feel about your online data being a source of revenue for companies? Does your answer change if your data is being used to train AI tools?'
+  prompt: 'Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data? Does your answer change if your data is being used to train AI models or AI agents?'
 };
 
-// Ordered list of screen IDs. `__scenarios__` expands per participant (scenario_order, with a
-// scenario_transition between); `__block_b__` / `__block_a__` expand via block_b_order / block_a_order.
 const SCREEN_FLOW = [
   'consent',
   'welcome',
@@ -254,8 +273,10 @@ const SCREEN_FLOW = [
   '__scenarios__',
   'post_scenario_intro',
   '__block_b__',
+  'block_a_intro',
   '__block_a__',
   'open_response',
+  'about_you_intro',
   'ai_usage',
   'demographics',
   'debrief'

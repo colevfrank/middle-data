@@ -48,6 +48,11 @@ function validateAboutYouIntro(body) {
   return { ok: true, fields: {} };
 }
 
+function validateBlockAIntro(body) {
+  // No inputs beyond clicking Continue.
+  return { ok: true, fields: {} };
+}
+
 // Merged intro screen: App Z setup + data type + comprehension. The client gates
 // Continue until all three T/F items are correct (T,T,F), so a valid submit always
 // carries the correct answers plus a per-question wrong-attempt count. We re-verify
@@ -134,6 +139,15 @@ function validatePostQuestion(body, screenId) {
     if (uniq.size !== v.length) return { ok: false, error: `${q.key}_invalid` };
     if (!v.every(x => allowed.includes(x))) return { ok: false, error: `${q.key}_invalid` };
     fields[q.key] = v;
+    const otherOpt = q.options.find(o => o.has_other);
+    if (otherOpt && v.includes(otherOpt.value)) {
+      const otherKey = `${q.key}_other`;
+      const otherText = b[otherKey];
+      if (!isStr(otherText, MAX_SHORT_TEXT) || otherText.trim().length === 0) {
+        return { ok: false, error: `${otherKey}_required` };
+      }
+      fields[otherKey] = otherText.trim();
+    }
   } else {
     return { ok: false, error: 'unknown_post_question_type' };
   }
@@ -193,6 +207,7 @@ const VALIDATORS = {
   scenario_2: validateScenario2,
   scenario_transition: validateScenarioTransition,
   post_scenario_intro: validatePostScenarioIntro,
+  block_a_intro: validateBlockAIntro,
   about_you_intro: validateAboutYouIntro,
   open_response: validateOpenResponse,
   ai_usage: validateAiUsage,
