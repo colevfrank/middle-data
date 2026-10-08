@@ -295,12 +295,9 @@ test('post-question attention (postq_14): pass iff value === expected', () => {
   const fail = validatePostQuestion({ attention_check: 3 }, 'postq_14');
   assert.equal(fail.fields.attention_check_pass, false);
 });
-test('open_response: optional free text; blank ok, long capped', () => {
-  const blank = VALIDATORS.open_response({});
-  assert.equal(blank.ok, true);
-  assert.equal(blank.fields.open_data_revenue, null);
-  const empty = VALIDATORS.open_response({ open_data_revenue: '   ' });
-  assert.equal(empty.fields.open_data_revenue, null);
+test('open_response: required free text; blank rejected, long capped', () => {
+  assert.equal(VALIDATORS.open_response({}).ok, false);
+  assert.equal(VALIDATORS.open_response({ open_data_revenue: '   ' }).ok, false);
   const filled = VALIDATORS.open_response({ open_data_revenue: '  I have thoughts.  ' });
   assert.equal(filled.ok, true);
   assert.equal(filled.fields.open_data_revenue, 'I have thoughts.');
@@ -345,10 +342,21 @@ test('consent → welcome → intro', () => {
 test('intro → first scenario per scenario_order', () => {
   assert.equal(nextAfter(fakeParticipant, 'intro'), 'scenario_2');
 });
-test('scenarios: first → transition → second → post-scenario intro', () => {
-  assert.equal(nextAfter(fakeParticipant, 'scenario_2'), 'scenario_transition');   // first → transition
-  assert.equal(nextAfter(fakeParticipant, 'scenario_transition'), 'scenario_1');    // transition → second
-  assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'post_scenario_intro');    // second → intro
+test('scenarios: first → slider → transition → second → slider → post-scenario intro', () => {
+  // Gated by ENABLE_SCENARIO_SLIDER_FOLLOWUPS in server/surveyFeatures.js
+  assert.equal(nextAfter(fakeParticipant, 'scenario_2'), 'scenario_2_slider');
+  assert.equal(nextAfter(fakeParticipant, 'scenario_2_slider'), 'scenario_transition');
+  assert.equal(nextAfter(fakeParticipant, 'scenario_transition'), 'scenario_1');
+  assert.equal(nextAfter(fakeParticipant, 'scenario_1'), 'scenario_1_slider');
+  assert.equal(nextAfter(fakeParticipant, 'scenario_1_slider'), 'post_scenario_intro');
+});
+test('scenario slider validators: value in range or none', () => {
+  assert.equal(VALIDATORS.scenario_1_slider({ s1_slider_value: 8, s1_slider_none: false }).ok, true);
+  assert.equal(VALIDATORS.scenario_1_slider({ s1_slider_value: 8, s1_slider_none: false }).fields.s1_slider_value, 8);
+  assert.equal(VALIDATORS.scenario_1_slider({ s1_slider_none: true }).fields.s1_slider_none, true);
+  assert.equal(VALIDATORS.scenario_1_slider({ s1_slider_value: 21, s1_slider_none: false }).ok, false);
+  assert.equal(VALIDATORS.scenario_2_slider({ s2_slider_value: 50, s2_slider_none: false }).ok, true);
+  assert.equal(VALIDATORS.scenario_2_slider({ s2_slider_value: 100, s2_slider_none: false }).ok, false);
 });
 test('scenario_transition screen carries the button label', () => {
   const p = screenPayload(fakeParticipant, 'scenario_transition');
@@ -383,10 +391,12 @@ test('welcome screen carries intro copy', () => {
 test('intro screen: App Z setup + data type (longer def inline) + use case + comprehension', () => {
   const p = screenPayload(fakeParticipant, 'intro');
   assert.equal(p.screen, 'intro');
-  const setup = p.setup.join(' ');
-  assert.ok(setup.includes('App Z'));
-  assert.ok(setup.includes('$20 per month'));
-  assert.ok(setup.includes('deletes any data it holds after one year'));
+  assert.equal(p.setup.heading, "Imagine you're a frequent user of App Z!");
+  assert.ok(p.setup.lead.includes('App Z'));
+  const pricing = p.setup.sections.find(s => s.heading === 'Pricing');
+  const privacy = p.setup.sections.find(s => s.heading === 'Privacy');
+  assert.ok(pricing && pricing.body.includes('$20 per month'));
+  assert.ok(privacy && privacy.body.includes('deletes any data it holds after one year'));
   const change = p.change.join(' ');
   assert.ok(change.includes(dt5.data_type_description));       // full description in first sentence
   assert.ok(change.includes(dt5.inline));                      // short name in use-case sentence
@@ -413,13 +423,24 @@ test('scenario_1 (Subscription Discount): settings-frame payload + first-person 
   assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
   assert.ok(!p.lead_in.join(' ').includes('One day'));
   assert.equal(p.collect_line,
-    `We will access or ask you to provide your ${dt5.inline}. This includes bank statements and investment portfolios.`);
+    `We will access or give you instructions on how to provide your ${dt5.inline}. This includes bank statements and investment portfolios.`);
   assert.deepEqual(p.collect_emphasis, [dt5.inline]);
   assert.ok(p.use_line.includes("improve App Z's services"));
   assert.deepEqual(p.tiers, content.S1_TIERS);
-  assert.equal(p.none_label, 'I will not share this data regardless of the discount amount');
+  assert.equal(p.none_label, 'I would not share this data regardless of the discount amount');
   assert.deepEqual(p.submit, { accepted: 's1_accepted_discounts', none: 's1_none' });
+  assert.equal(p.response_format, 'checkboxes');
   // Generic "your information" in the by-default line (not the data type)
+  assert.ok(p.intro.join(' ').includes('we do not sell your information'));
+});
+test('scenario_1_slider: same chrome, slider response format', () => {
+  const p = screenPayload(fakeParticipant, 'scenario_1_slider');
+  assert.equal(p.screen, 'scenario_1_slider');
+  assert.equal(p.response_format, 'slider');
+  assert.equal(p.heading, 'Subscription');
+  assert.deepEqual(p.slider, { min: 0, max: 20, step: 1, format: 'dollars' });
+  assert.deepEqual(p.submit, { value: 's1_slider_value', none: 's1_slider_none' });
+  assert.ok(p.question.toLowerCase().includes('slider'));
   assert.ok(p.intro.join(' ').includes('we do not sell your information'));
 });
 test('scenario_2 (Data Sharing Program): renamed + multi-select payload', () => {
@@ -431,7 +452,7 @@ test('scenario_2 (Data Sharing Program): renamed + multi-select payload', () => 
   assert.ok(p.offer_agree && p.offer_agree.checkbox_label === 'I agree');
   assert.ok(p.offer_agree.blank_suffix.includes('%'));
   assert.deepEqual(p.tiers.map(t => t.value), ['1', '10', '25', '50', '75', '99']);
-  assert.equal(p.none_label, 'I will not share this data regardless of the percentage');
+  assert.equal(p.none_label, 'I would not share this data regardless of the percentage');
   assert.deepEqual(p.submit, { accepted: 's2_accepted_shares', none: 's2_none' });
 });
 test('scenario copy is voice-neutral (voice=appx unchanged)', () => {

@@ -377,28 +377,42 @@
   // are correct, counting wrong submissions per item.
   RENDERERS.intro = function (p) {
     const em = p.emphasis || [];
-    // Opener: larger, bold, black. Change section: bright blue (heading larger).
-    root.appendChild(el('h2', { class: 'text-3xl font-bold text-slate-900 mb-4' }, p.setup[0]));
-    for (const para of p.setup.slice(1)) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(para, em)));
+    const setup = p.setup || {};
+    const boxClass = 'border border-slate-200 rounded p-4 mb-4 bg-slate-50';
+
+    // Page title stays outside; setup / change / comprehension each in their own box.
+    root.appendChild(el('h2', { class: 'text-3xl font-bold text-slate-900 mb-4' }, setup.heading));
+
+    const setupBox = el('div', { class: boxClass });
+    if (setup.lead) {
+      setupBox.appendChild(el('p', { class: 'text-slate-800 mb-4' }, emphasize(setup.lead, em)));
     }
-    root.appendChild(el('h3', { class: 'text-2xl font-bold text-blue-500 mt-5 mb-2' }, p.change_heading));
+    for (const section of setup.sections || []) {
+      setupBox.appendChild(el('h3', {
+        class: 'text-xl font-bold text-slate-900 mt-4 mb-1'
+      }, section.heading));
+      setupBox.appendChild(el('p', { class: 'text-slate-800 mb-3' }, emphasize(section.body, em)));
+    }
+    root.appendChild(setupBox);
+
+    const changeBox = el('div', { class: boxClass });
+    changeBox.appendChild(el('h3', { class: 'text-xl font-bold text-blue-500 mb-2' }, p.change_heading));
     for (const para of p.change) {
       if (p.access_line && para === p.access_line) {
-        root.appendChild(el('p', { class: 'mb-3 text-blue-500' }, [
+        changeBox.appendChild(el('p', { class: 'mb-3 text-blue-500' }, [
           el('strong', { class: 'font-bold underline text-blue-500' }, para)
         ]));
       } else {
-        // Bold+underline the core data-type phrase (e.g. "how its users cook").
-        root.appendChild(el('p', { class: 'text-blue-500 mb-3' },
+        changeBox.appendChild(el('p', { class: 'text-blue-500 mb-3' },
           emphasize(para, p.data_type_bold ? [p.data_type_bold] : [], 'font-bold underline')));
       }
     }
+    root.appendChild(changeBox);
 
-    root.appendChild(el('div', { class: 'border-t border-slate-200 mt-5 mb-5' }));
-    root.appendChild(el('h3', { class: 'text-xl font-bold text-slate-900 mb-2' }, 'Comprehension check'));
+    const compBox = el('div', { class: boxClass });
+    compBox.appendChild(el('h3', { class: 'text-xl font-bold text-slate-900 mb-2' }, 'Comprehension check'));
     if (p.comprehension.instruction) {
-      root.appendChild(el('p', { class: 'text-slate-700 mb-4' }, p.comprehension.instruction));
+      compBox.appendChild(el('p', { class: 'text-slate-700 mb-4' }, p.comprehension.instruction));
     }
 
     const statements = p.comprehension.statements;
@@ -418,11 +432,12 @@
         ])
       ]));
     }
-    root.appendChild(form);
+    compBox.appendChild(form);
 
     const errMsg = el('p', { class: 'text-sm text-red-600 mt-3 hidden' },
       'One or more answers are incorrect. Please review the information above and try again.');
-    root.appendChild(errMsg);
+    compBox.appendChild(errMsg);
+    root.appendChild(compBox);
 
     // Correct answers: 1 = True, 2 = True, 3 = False
     const correct = { 1: true, 2: true, 3: false };
@@ -466,22 +481,23 @@
     box.appendChild(el('h2', { class: 'settings-section-title' }, p.heading));
     for (const para of p.intro) box.appendChild(el('p', { class: 'settings-section-helper' }, para));
     if (p.intro_offer) {
-      box.appendChild(el('p', { class: 'settings-section-helper font-bold text-red-500' },
+      box.appendChild(el('p', { class: 'settings-section-helper font-bold text-cyan-600 mt-4' },
         emphasize(p.intro_offer, ['Subscription Discount', 'Data Sharing Program'],
-          'font-bold underline text-red-500')));
+          'font-bold underline text-cyan-600')));
     }
-    const list = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-sm text-red-500 space-y-1' });
+    const list = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-cyan-600 space-y-1' });
     list.appendChild(el('li', {}, emphasize(p.collect_line, p.collect_emphasis)));
     list.appendChild(el('li', {}, emphasize(p.use_line, p.use_emphasis)));
     box.appendChild(list);
-    // Offer prose (below the two bullets; red, not a callout block), then decorative I-agree row.
+    // Offer prose (below the two bullets; cyan), then decorative I-agree row.
     if (p.offer_line) {
-      box.appendChild(el('p', { class: 'settings-section-helper mt-3 text-red-500' }, p.offer_line));
+      box.appendChild(el('p', { class: 'settings-section-helper mt-3 text-cyan-600' }, p.offer_line));
     }
     if (p.offer_agree) {
       const oa = p.offer_agree;
       const wrap = el('div', {
-        class: 'mt-6 space-y-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-slate-700'
+        class: 'mt-6 space-y-2 rounded-md border border-cyan-200 bg-cyan-50 px-3 pt-2 pb-4 text-slate-700',
+        'data-mock-agree': '1'
       });
       // Line 1: I agree + amount blank; line 2: I do not agree
       wrap.appendChild(el('div', { class: 'flex flex-wrap items-center gap-3' }, [
@@ -494,7 +510,7 @@
           el('input', {
             type: 'text', disabled: true, readonly: true,
             placeholder: oa.blank_placeholder || ' ',
-            class: 'w-16 rounded border border-slate-300 bg-white px-2 py-1 text-sm text-center'
+            class: 'w-16 rounded border border-slate-300 bg-white px-2 py-1 text-center'
           }),
           oa.blank_suffix ? el('span', {}, oa.blank_suffix) : null
         ].filter(Boolean))
@@ -508,20 +524,92 @@
     return box;
   }
 
+  // Floats outside the main content column (to the right), pointing at the mock I-agree UI.
+  // Does not take layout space, so the settings frame stays full-width as before.
+  // Vertically aligned to the mock agree box (shared by checkbox + slider pages).
+  function withMockAgreeCallout(frameEl) {
+    const wrap = el('div', {
+      class: 'mb-4',
+      style: 'position:relative;'
+    });
+    wrap.appendChild(frameEl);
+    const callout = el('div', {
+      class: 'text-sm text-cyan-600 font-medium',
+      style: [
+        'position:absolute',
+        'left:100%',
+        'top:0',
+        'margin-left:0.75rem',
+        'width:10.5rem',
+        'display:flex',
+        'align-items:center',
+        'gap:0.35rem',
+        'line-height:1.3',
+        'pointer-events:none',
+        'visibility:hidden'
+      ].join(';')
+    }, [
+      el('span', { style: 'font-size:1.5rem;line-height:1;' }, '←'),
+      el('span', {}, 'do not click on this, make your choices below!')
+    ]);
+    wrap.appendChild(callout);
+
+    function placeCallout() {
+      const mock = wrap.querySelector('[data-mock-agree]');
+      if (!mock) { callout.style.visibility = 'hidden'; return; }
+      const wrapRect = wrap.getBoundingClientRect();
+      const mockRect = mock.getBoundingClientRect();
+      const top = mockRect.top - wrapRect.top
+        + (mockRect.height - callout.offsetHeight) / 2
+        + 6; // slight nudge down from vertical center
+      callout.style.top = Math.max(0, top) + 'px';
+      callout.style.visibility = 'visible';
+    }
+    requestAnimationFrame(() => requestAnimationFrame(placeCallout));
+
+    return wrap;
+  }
+
+  // Discount: bold+cyan the "$X off / month", black for "(which means…)".
+  // Revenue share: bold+cyan only "X% of revenue", black for the surrounding text.
+  // Discount: bold+cyan only "$X off / month"; black for the rest.
+  // Revenue share: bold+cyan only "X% of the revenue"; black for the rest.
+  function scenarioTierLabelNodes(label) {
+    const s = String(label);
+    const discount = s.match(/^(.*?)(\$\d+ off \/ month)(.*)$/);
+    if (discount) {
+      return [
+        el('span', { class: 'text-slate-900 font-normal' }, discount[1]),
+        el('span', { class: 'font-bold text-cyan-600' }, discount[2]),
+        el('span', { class: 'text-slate-900 font-normal' }, discount[3])
+      ];
+    }
+    const share = s.match(/^(.*?)(\d+% of the revenue)(.*)$/);
+    if (share) {
+      return [
+        el('span', { class: 'text-slate-900 font-normal' }, share[1]),
+        el('span', { class: 'font-bold text-cyan-600' }, share[2]),
+        el('span', { class: 'text-slate-900 font-normal' }, share[3])
+      ];
+    }
+    return [el('span', { class: 'font-bold text-cyan-600' }, s)];
+  }
+
   // Bold question below the frame + multi-select checkboxes ("select all that apply")
   // with a mutually-exclusive "none". Continue enabled once ≥1 box or "none" is checked.
   function renderScenarioQuestion(p) {
-    root.appendChild(el('p', { class: 'font-bold text-slate-900 mt-4 mb-2' }, p.question));
+    root.appendChild(el('p', { class: 'font-bold text-slate-900 mt-6 mb-2' },
+      emphasize(p.question, ['select all that apply'], 'font-bold underline')));
     const form = el('div', { class: 'space-y-1' });
     for (const t of p.tiers) {
       form.appendChild(el('label', { class: 'label-radio' }, [
         el('input', { type: 'checkbox', name: 'tier_' + t.value, value: t.value, 'data-tier': '1' }),
-        el('span', {}, t.label)
+        el('span', {}, scenarioTierLabelNodes(t.label))
       ]));
     }
     form.appendChild(el('label', { class: 'label-radio' }, [
       el('input', { type: 'checkbox', name: 'scn_none', id: 'scn_none' }),
-      el('span', {}, p.none_label)
+      el('span', { class: 'font-bold text-cyan-600' }, p.none_label)
     ]));
     root.appendChild(form);
 
@@ -535,7 +623,13 @@
       body[p.submit.none] = noneBox.checked;
       submit(p.screen, body);
     }, 'Continue');
-    root.appendChild(btn);
+    root.appendChild(el('div', { class: 'flex items-center gap-3 mt-6' }, [
+      btn,
+      el('span', { class: 'text-sm text-slate-500' },
+        '(Once you click, you will not be able to return to this page)')
+    ]));
+    // continueBtn already has mt-6; drop it so the row controls spacing.
+    btn.classList.remove('mt-6');
 
     function refresh() {
       tierBoxes.forEach(b => {
@@ -550,19 +644,147 @@
     refresh();
   }
 
-  function renderScenarioPlain(p) {
-    for (const line of p.lead_in) {
-      root.appendChild(el('p', { class: 'text-2xl font-bold text-blue-500 mt-6 mb-6' },
-        emphasize(line, ['Subscription Discount', 'Data Sharing Program'],
-          'font-bold underline text-blue-500')));
+  // Same page chrome as the checkbox scenario, but response is a range slider + none.
+  function discountMeansSuffix(n) {
+    const remaining = 20 - n;
+    if (remaining <= 0) return '(which means my subscription is Free)';
+    return '(which means my subscription is less than $' + remaining + '/mo)';
+  }
+
+  function formatSliderValue(p, n) {
+    if (p.slider.format === 'percent') {
+      return 'I would agree to Data Sharing if I receive at least ' + n + '% of revenue';
     }
+    return 'I would accept if I receive at least $' + n + ' off / month ' + discountMeansSuffix(n);
+  }
+
+  function setSliderValueLabel(node, p, n) {
+    clear(node);
+    if (p.slider.format === 'percent') {
+      node.appendChild(el('span', { class: 'text-slate-900 font-normal' },
+        'I would agree to Data Sharing if I receive at least '));
+      node.appendChild(el('span', { class: 'font-bold text-cyan-600' }, n + '% of revenue'));
+      return;
+    }
+    node.appendChild(el('span', { class: 'text-slate-900 font-normal' },
+      'I would accept if I receive at least '));
+    node.appendChild(el('span', { class: 'font-bold text-cyan-600' }, '$' + n + ' off / month'));
+    node.appendChild(el('span', { class: 'text-slate-900 font-normal' }, ' ' + discountMeansSuffix(n)));
+  }
+
+  // Fill right of thumb (amounts at/above the threshold).
+  function paintSliderTrack(slider, p) {
+    const min = Number(slider.min);
+    const max = Number(slider.max);
+    const val = Number(slider.value);
+    const pct = max === min ? 0 : ((val - min) / (max - min)) * 100;
+    const fill = '#0891b2'; // cyan-600
+    const empty = '#e2e8f0'; // slate-200
+    slider.style.background =
+      'linear-gradient(to right, ' + empty + ' 0%, ' + empty + ' ' + pct + '%, '
+      + fill + ' ' + pct + '%, ' + fill + ' 100%)';
+  }
+
+  function renderScenarioSlider(p) {
+    root.appendChild(el('p', { class: 'font-bold text-slate-900 mt-4 mb-2' }, p.question));
+    const form = el('div', { class: 'mt-4' });
+    const valueLabel = el('p', {
+      class: 'text-slate-900 mb-3 text-center'
+    }, 'Move the slider to select a value');
+    const slider = el('input', {
+      type: 'range',
+      min: String(p.slider.min),
+      max: String(p.slider.max),
+      step: String(p.slider.step),
+      value: String(Math.round((p.slider.min + p.slider.max) / 2)),
+      class: 'scenario-slider'
+    });
+    const endLo = p.slider.format === 'percent' ? '0%' : ('$' + p.slider.min + ' off');
+    const endHi = p.slider.format === 'percent' ? '100%' : ('$' + p.slider.max + ' off');
+    const ends = el('div', { class: 'flex text-sm text-slate-500 mb-4' }, [
+      el('span', { class: 'flex-1' }, endLo),
+      el('span', { class: 'flex-1', style: 'text-align:right' }, endHi)
+    ]);
+    form.appendChild(valueLabel);
+    form.appendChild(slider);
+    form.appendChild(ends);
+    form.appendChild(el('label', { class: 'label-radio' }, [
+      el('input', { type: 'checkbox', name: 'scn_none', id: 'scn_none' }),
+      el('span', { class: 'font-bold text-cyan-600' }, p.none_label)
+    ]));
+    root.appendChild(form);
+
+    const noneBox = form.querySelector('#scn_none');
+    let touched = false;
+
+    const btn = continueBtn(() => {
+      const body = {};
+      if (noneBox.checked) {
+        body[p.submit.value] = null;
+        body[p.submit.none] = true;
+      } else {
+        body[p.submit.value] = parseInt(slider.value, 10);
+        body[p.submit.none] = false;
+      }
+      submit(p.screen, body);
+    }, 'Continue');
+    root.appendChild(el('div', { class: 'flex items-center gap-3 mt-6' }, [
+      btn,
+      el('span', { class: 'text-sm text-slate-500' },
+        '(Once you click, you will not be able to return to this page)')
+    ]));
+    btn.classList.remove('mt-6');
+
+    function refresh() {
+      paintSliderTrack(slider, p);
+      if (noneBox.checked) {
+        slider.disabled = true;
+        valueLabel.textContent = '—';
+      } else {
+        slider.disabled = false;
+        if (touched) setSliderValueLabel(valueLabel, p, parseInt(slider.value, 10));
+        else valueLabel.textContent = 'Move the slider to select a value';
+      }
+      btn.disabled = !(noneBox.checked || touched);
+    }
+    noneBox.addEventListener('change', refresh);
+    slider.addEventListener('input', () => {
+      touched = true;
+      noneBox.checked = false;
+      refresh();
+    });
+    refresh();
+  }
+
+  function renderScenarioResponse(p) {
+    if (p.response_format === 'slider') renderScenarioSlider(p);
+    else renderScenarioQuestion(p);
+  }
+
+  function appendScenarioLeadIn(p) {
+    const lines = p.lead_in || [];
+    lines.forEach((line, i) => {
+      const top = i === 0 ? ' mt-12' : ' mt-2';
+      const bot = i === lines.length - 1 ? ' mb-12' : ' mb-2';
+      root.appendChild(el('p', { class: 'text-2xl font-bold text-slate-900' + top + bot }, [
+        ...(i === 0 ? ['👉 '] : []),
+        ...emphasize(line, ['Subscription Discount', 'Data Sharing Program'],
+          'font-bold underline text-slate-900')
+      ]));
+    });
+  }
+
+  function renderScenarioPlain(p) {
+    appendScenarioLeadIn(p);
     const box = scenarioContentBox(p);
-    box.className = 'border border-slate-200 rounded p-4 mb-4';
-    root.appendChild(box);
-    renderScenarioQuestion(p);
+    box.className = 'border border-slate-200 rounded p-4';
+    root.appendChild(withMockAgreeCallout(box));
+    renderScenarioResponse(p);
   }
   RENDERERS.scenario_1 = renderScenarioPlain;
   RENDERERS.scenario_2 = renderScenarioPlain;
+  RENDERERS.scenario_1_slider = renderScenarioPlain;
+  RENDERERS.scenario_2_slider = renderScenarioPlain;
 
   // One post-scenario question per screen. `p.item` carries the question; the
   // screen id (postq_<n>) in p.screen is the submit target. The attention check
@@ -675,10 +897,11 @@
       placeholder: 'Type your response here…'
     });
     root.appendChild(ta);
-    root.appendChild(el('p', { class: 'text-xs text-slate-500 mt-1' }, 'This question is optional.'));
     const btn = continueBtn(() => submit('open_response', { [p.field]: ta.value.trim() }), 'Continue');
-    btn.disabled = false; // optional — no gating
     root.appendChild(btn);
+    function refresh() { btn.disabled = ta.value.trim().length === 0; }
+    ta.addEventListener('input', refresh);
+    refresh();
   };
 
   RENDERERS.ai_usage = function (p) {
@@ -831,11 +1054,7 @@
 
   // ===== Scenarios (settings mode) — shared browser frame for scenario_1 & _2 =====
   function renderScenarioSettings(p) {
-    for (const line of p.lead_in) {
-      root.appendChild(el('p', { class: 'text-2xl font-bold text-blue-500 mt-6 mb-6' },
-        emphasize(line, ['Subscription Discount', 'Data Sharing Program'],
-          'font-bold underline text-blue-500')));
-    }
+    appendScenarioLeadIn(p);
     const frame = el('div', { class: 'browser-frame' });
     frame.appendChild(browserChrome(p.frame_url));
     const body = el('div', { class: 'browser-body' });
@@ -844,11 +1063,13 @@
     content.className = 'settings-content';
     body.appendChild(content);
     frame.appendChild(body);
-    root.appendChild(frame);
-    renderScenarioQuestion(p);
+    root.appendChild(withMockAgreeCallout(frame));
+    renderScenarioResponse(p);
   }
   SETTINGS_RENDERERS.scenario_1 = renderScenarioSettings;
   SETTINGS_RENDERERS.scenario_2 = renderScenarioSettings;
+  SETTINGS_RENDERERS.scenario_1_slider = renderScenarioSettings;
+  SETTINGS_RENDERERS.scenario_2_slider = renderScenarioSettings;
 
   // ===== Boot =====
   async function boot() {

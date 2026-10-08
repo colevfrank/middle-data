@@ -172,7 +172,7 @@ A6: "If you found out your [DATA TYPE] had been released publicly without your k
 AC (attention check): "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1)." (1–5, labeled "not important to me at all" to "extremely important to me"; correct response = 1). Records attention_check_pass (boolean); failing is recorded but does not end the survey.
 
 Screen 22: Open-Ended Response
-Its own screen, after the post-scenario battery and before AI usage. Optional free-text box (stored in open_data_revenue; blank allowed).
+Its own screen, after the post-scenario battery and before AI usage. Required free-text box (stored in open_data_revenue).
 "A lot of companies rely on user data. Sometimes, selling user data is a major revenue stream. Or user data may be critical to their main product so that their revenue stream indirectly depends on user data. How do you feel about your online data being a source of revenue for companies? Does your answer change if your data is being used to train AI tools?"
 [Open-ended response text box]
 

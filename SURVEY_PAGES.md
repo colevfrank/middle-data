@@ -11,6 +11,8 @@ Page-by-page text as currently assembled from `server/content.js` and `server/sc
 
 Scenario order (Subscription Discount vs Data Sharing Program) is randomized. Block B questions are randomized within Block B; Block A questions (plus the attention check) are randomized within Block A. Block B is always shown before Block A.
 
+**Optional slider follow-ups:** When `ENABLE_SCENARIO_SLIDER_FOLLOWUPS` is `true` in `server/surveyFeatures.js`, each scenario is immediately followed by an identical page that asks for a minimum acceptable amount via a slider instead of checkboxes. Set that flag to `false` to remove both pages.
+
 ---
 
 ## Page 1 — Consent
@@ -86,7 +88,13 @@ Click "Continue" when you are ready to begin.
 
 **Heading:** Imagine you're a frequent user of App Z!
 
-App Z is an online service that you use often. You currently pay $20 per month for App Z.
+App Z is an online service that you use often.
+
+**Pricing**
+
+You currently pay $20 per month for App Z.
+
+**Privacy**
 
 By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service. App Z does not sell your information, and App Z also deletes any data it holds after one year.
 
@@ -167,7 +175,9 @@ App Z would like to access your `{inline}` to `{data_use}`.
 
 *(Order of this page vs. Data Sharing Program is randomized; a transition page sits between them.)*
 
-**Heading:** We’d like you to imagine: You open App Z and it offers you the option to receive a Subscription Discount *(program name underlined)*
+**Heading:**
+
+👉 We’d like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to receive a Subscription Discount: *(program name underlined)*
 
 **Settings frame — Subscription**
 
@@ -217,13 +227,39 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 **Question:** Please select what discount you would be willing to accept (select all that apply):
 
-- $1 off / month ($19/mo)
-- $3 off / month ($17/mo)
-- $5 off / month ($15/mo)
-- $8 off / month ($12/mo)
-- $12 off / month ($8/mo)
-- $20 off / month (Free)
-- I will not share this data regardless of the discount amount *(mutually exclusive)*
+- I would accept if I receive $1 off / month (which means my subscription is $19/mo)
+- I would accept if I receive $3 off / month (which means my subscription is $17/mo)
+- I would accept if I receive $5 off / month (which means my subscription is $15/mo)
+- I would accept if I receive $8 off / month (which means my subscription is $12/mo)
+- I would accept if I receive $12 off / month (which means my subscription is $8/mo)
+- I would accept if I receive $20 off / month (which means my subscription is Free)
+- I would not share this data regardless of the discount amount *(mutually exclusive)*
+
+**Button:** Continue
+
+---
+
+## Page 4b / 6b — Scenario slider follow-up *(optional)*
+
+*Shown only when `ENABLE_SCENARIO_SLIDER_FOLLOWUPS` is true. Same settings frame and lead-in as the scenario above; only the response control differs.*
+
+**Subscription Discount slider**
+
+**Question:** Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:
+
+- Slider: $0 – $20 / month off (step $1)
+- I would not share this data regardless of the discount amount *(mutually exclusive)*
+
+Stored: `s1_slider_value` (0–20) + `s1_slider_none` (boolean)
+
+**Data Sharing Program slider**
+
+**Question:** Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:
+
+- Slider: 0% – 99% (step 1)
+- I would not share this data regardless of the percentage *(mutually exclusive)*
+
+Stored: `s2_slider_value` (0–99) + `s2_slider_none` (boolean)
 
 **Button:** Continue
 
@@ -241,7 +277,9 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 *(Same randomization note as Subscription Discount.)*
 
-**Heading:** We’d like you to imagine: You open App Z and it offers you the option to join a Data Sharing Program *(program name underlined)*
+**Heading:**
+
+👉 We’d like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to join a Data Sharing Program: *(program name underlined)*
 
 **Settings frame — Data Sharing Program**
 
@@ -291,13 +329,13 @@ Because your data will increase our revenue, we would like to offer to pay you a
 
 **Question:** Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):
 
-- 1%
-- 10%
-- 25%
-- 50%
-- 75%
-- 99%
-- I will not share this data regardless of the percentage *(mutually exclusive)*
+- I would agree if I receive 1% of the revenue attributed to my data
+- I would agree if I receive 10% of the revenue attributed to my data
+- I would agree if I receive 25% of the revenue attributed to my data
+- I would agree if I receive 50% of the revenue attributed to my data
+- I would agree if I receive 75% of the revenue attributed to my data
+- I would agree if I receive 99% of the revenue attributed to my data
+- I would not share this data regardless of the percentage *(mutually exclusive)*
 
 **Button:** Continue
 
@@ -579,7 +617,7 @@ This is an attention check. To show you are reading carefully, please select the
 
 Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data? Does your answer change if your data is being used to train AI models or AI agents?
 
-*(Optional free-text field)*
+*(Required free-text field)*
 
 **Button:** Continue
 

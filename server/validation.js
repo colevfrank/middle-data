@@ -106,6 +106,26 @@ function validateScenario2(body) {
   return validateMultiSelect(body, S2_TIERS, 's2_accepted_shares', 's2_none');
 }
 
+// Slider follow-up: integer value in [min, max], or mutually-exclusive "none".
+function validateScenarioSlider(body, valueKey, noneKey, min, max) {
+  const b = body || {};
+  const declined = b[noneKey] === true;
+  if (declined) {
+    return { ok: true, fields: { [valueKey]: null, [noneKey]: true } };
+  }
+  const n = toInt(b[valueKey]);
+  if (!isInt(n, min, max)) return { ok: false, error: `${valueKey}_invalid` };
+  return { ok: true, fields: { [valueKey]: n, [noneKey]: false } };
+}
+
+function validateScenario1Slider(body) {
+  return validateScenarioSlider(body, 's1_slider_value', 's1_slider_none', 0, 20);
+}
+
+function validateScenario2Slider(body) {
+  return validateScenarioSlider(body, 's2_slider_value', 's2_slider_none', 0, 99);
+}
+
 // Validate a single post-scenario question screen (postq_<id>).
 function validatePostQuestion(body, screenId) {
   const b = body || {};
@@ -154,12 +174,12 @@ function validatePostQuestion(body, screenId) {
   return { ok: true, fields };
 }
 
-// Open-ended response — optional free text (a blank answer is allowed).
+// Open-ended response — required free text.
 function validateOpenResponse(body) {
   const b = body || {};
   const v = b[OPEN_RESPONSE.key];
   if (v == null || (typeof v === 'string' && v.trim() === '')) {
-    return { ok: true, fields: { [OPEN_RESPONSE.key]: null } };
+    return { ok: false, error: 'open_response_required' };
   }
   if (!isStr(v, MAX_OPEN_TEXT)) return { ok: false, error: 'open_response_invalid' };
   return { ok: true, fields: { [OPEN_RESPONSE.key]: v.trim() } };
@@ -205,6 +225,8 @@ const VALIDATORS = {
   intro: validateIntro,
   scenario_1: validateScenario1,
   scenario_2: validateScenario2,
+  scenario_1_slider: validateScenario1Slider,
+  scenario_2_slider: validateScenario2Slider,
   scenario_transition: validateScenarioTransition,
   post_scenario_intro: validatePostScenarioIntro,
   block_a_intro: validateBlockAIntro,

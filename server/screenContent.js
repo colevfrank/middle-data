@@ -7,6 +7,7 @@ const {
   forBlockB
 } = require('./content');
 const { shuffle } = require('./randomization');
+const { ENABLE_SCENARIO_SLIDER_FOLLOWUPS } = require('./surveyFeatures');
 
 function getDataType(p) {
   return DATA_TYPES.find(d => d.id === p.data_type);
@@ -60,20 +61,23 @@ function thisIncludesSentence(dt) {
 function scenarioPayload(p, screenId) {
   const dt = getDataType(p);
   const uc = getUseCase(p);
+  const isSlider = screenId.endsWith('_slider');
+  const baseId = isSlider ? screenId.replace(/_slider$/, '') : screenId;
   const common = {
+    response_format: isSlider ? 'slider' : 'checkboxes',
     intro: [
       'You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.'
     ],
-    collect_line: `We will access or ask you to provide your ${dt.inline}. ${thisIncludesSentence(dt)}`,
+    collect_line: `We will access or give you instructions on how to provide your ${dt.inline}. ${thisIncludesSentence(dt)}`,
     collect_emphasis: [dt.inline],
     use_line: `We will use this information to ${uc.scenario_use}`,
     use_emphasis: [uc.scenario_use]
   };
-  if (screenId === 'scenario_1') {
-    return Object.assign({
-      screen: 'scenario_1',
+  if (baseId === 'scenario_1') {
+    const payload = Object.assign({
+      screen: screenId,
       lead_in: [
-        "We'd like you to imagine: You open App Z and it offers you the option to receive a Subscription Discount"
+        "We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to receive a Subscription Discount:"
       ],
       frame_url: 'appz.com/settings/subscription',
       sidebar_active: 'subscription',
@@ -88,16 +92,26 @@ function scenarioPayload(p, screenId) {
         blank_suffix: ' / month discount',
         blank_placeholder: ''
       },
-      question: 'Please select what discount you would be willing to accept (select all that apply):',
-      tiers: S1_TIERS,
-      none_label: 'I will not share this data regardless of the discount amount',
-      submit: { accepted: 's1_accepted_discounts', none: 's1_none' }
+      none_label: 'I would not share this data regardless of the discount amount'
     }, common);
+    if (isSlider) {
+      payload.question = 'Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:';
+      payload.slider = {
+        min: 0, max: 20, step: 1,
+        format: 'dollars', // display as "$N / month off"
+      };
+      payload.submit = { value: 's1_slider_value', none: 's1_slider_none' };
+    } else {
+      payload.question = 'Please select what discount you would be willing to accept (select all that apply):';
+      payload.tiers = S1_TIERS;
+      payload.submit = { accepted: 's1_accepted_discounts', none: 's1_none' };
+    }
+    return payload;
   }
-  return Object.assign({
-    screen: 'scenario_2',
+  const payload = Object.assign({
+    screen: screenId,
     lead_in: [
-      "We'd like you to imagine: You open App Z and it offers you the option to join a Data Sharing Program"
+      "We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to join a Data Sharing Program:"
     ],
     frame_url: 'appz.com/settings/data-sharing',
     sidebar_active: 'data_sharing',
@@ -111,11 +125,21 @@ function scenarioPayload(p, screenId) {
       blank_suffix: '% of revenue',
       blank_placeholder: ''
     },
-    question: 'Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):',
-    tiers: S2_TIERS,
-    none_label: 'I will not share this data regardless of the percentage',
-    submit: { accepted: 's2_accepted_shares', none: 's2_none' }
+    none_label: 'I would not share this data regardless of the percentage'
   }, common);
+  if (isSlider) {
+    payload.question = 'Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:';
+    payload.slider = {
+      min: 0, max: 99, step: 1,
+      format: 'percent', // display as "N% of revenue"
+    };
+    payload.submit = { value: 's2_slider_value', none: 's2_slider_none' };
+  } else {
+    payload.question = 'Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):';
+    payload.tiers = S2_TIERS;
+    payload.submit = { accepted: 's2_accepted_shares', none: 's2_none' };
+  }
+  return payload;
 }
 
 // Payload for a single post-scenario question screen (postq_<id>). The attention
@@ -199,11 +223,20 @@ function screenPayload(p, screenId, extra = {}) {
     case 'intro': {
       return {
         screen: 'intro',
-        setup: [
-          "Imagine you're a frequent user of App Z!",
-          'App Z is an online service that you use often. You currently pay $20 per month for App Z.',
-          'By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service. App Z does not sell your information, and App Z also deletes any data it holds after one year.'
-        ],
+        setup: {
+          heading: "Imagine you're a frequent user of App Z!",
+          lead: 'App Z is an online service that you use often.',
+          sections: [
+            {
+              heading: 'Pricing',
+              body: 'You currently pay $20 per month for App Z.'
+            },
+            {
+              heading: 'Privacy',
+              body: 'By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service. App Z does not sell your information, and App Z also deletes any data it holds after one year.'
+            }
+          ]
+        },
         change_heading: 'But there has been a recent change',
         change: [
           `Earlier this year, App Z became interested in ${dt.data_type_description}.`,
@@ -238,6 +271,8 @@ function screenPayload(p, screenId, extra = {}) {
 
     case 'scenario_1':
     case 'scenario_2':
+    case 'scenario_1_slider':
+    case 'scenario_2_slider':
       return scenarioPayload(p, screenId);
 
     case 'scenario_transition': {
@@ -324,7 +359,12 @@ function screenPayload(p, screenId, extra = {}) {
 
 function progressFor(screenId, participant) {
   const order = ['consent', 'welcome', 'intro'];
-  order.push(`scenario_${participant.scenario_order[0]}`, 'scenario_transition', `scenario_${participant.scenario_order[1]}`);
+  const first = `scenario_${participant.scenario_order[0]}`;
+  const second = `scenario_${participant.scenario_order[1]}`;
+  order.push(first);
+  if (ENABLE_SCENARIO_SLIDER_FOLLOWUPS) order.push(`${first}_slider`);
+  order.push('scenario_transition', second);
+  if (ENABLE_SCENARIO_SLIDER_FOLLOWUPS) order.push(`${second}_slider`);
   order.push('post_scenario_intro');
   for (const qid of participant.block_b_order) order.push(`postq_${qid}`);
   order.push('block_a_intro');

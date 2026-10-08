@@ -112,21 +112,21 @@ const USE_CASES = {
 };
 
 const S1_TIERS = [
-  { value: '1off',  label: '$1 off / month ($19/mo)' },
-  { value: '3off',  label: '$3 off / month ($17/mo)' },
-  { value: '5off',  label: '$5 off / month ($15/mo)' },
-  { value: '8off',  label: '$8 off / month ($12/mo)' },
-  { value: '12off', label: '$12 off / month ($8/mo)' },
-  { value: '20off', label: '$20 off / month (Free)' }
+  { value: '1off',  label: 'I would accept if I receive $1 off / month (which means my subscription is $19/mo)' },
+  { value: '3off',  label: 'I would accept if I receive $3 off / month (which means my subscription is $17/mo)' },
+  { value: '5off',  label: 'I would accept if I receive $5 off / month (which means my subscription is $15/mo)' },
+  { value: '8off',  label: 'I would accept if I receive $8 off / month (which means my subscription is $12/mo)' },
+  { value: '12off', label: 'I would accept if I receive $12 off / month (which means my subscription is $8/mo)' },
+  { value: '20off', label: 'I would accept if I receive $20 off / month (which means my subscription is Free)' }
 ];
 
 const S2_TIERS = [
-  { value: '1',  label: '1%' },
-  { value: '10', label: '10%' },
-  { value: '25', label: '25%' },
-  { value: '50', label: '50%' },
-  { value: '75', label: '75%' },
-  { value: '99', label: '99%' }
+  { value: '1',  label: 'I would agree if I receive 1% of the revenue attributed to my data' },
+  { value: '10', label: 'I would agree if I receive 10% of the revenue attributed to my data' },
+  { value: '25', label: 'I would agree if I receive 25% of the revenue attributed to my data' },
+  { value: '50', label: 'I would agree if I receive 50% of the revenue attributed to my data' },
+  { value: '75', label: 'I would agree if I receive 75% of the revenue attributed to my data' },
+  { value: '99', label: 'I would agree if I receive 99% of the revenue attributed to my data' }
 ];
 
 const YESNO_UNSURE_CARE = [

@@ -1,5 +1,7 @@
 // State machine: given a participant row and their current screen, compute the next screen id.
 
+const { ENABLE_SCENARIO_SLIDER_FOLLOWUPS } = require('./surveyFeatures');
+
 const FIXED_ORDER = [
   'consent',
   'welcome',
@@ -21,6 +23,10 @@ function isScenario(screenId) {
   return /^scenario_[12]$/.test(screenId);
 }
 
+function isScenarioSlider(screenId) {
+  return /^scenario_[12]_slider$/.test(screenId);
+}
+
 function isPostQuestion(screenId) {
   return /^postq_\d+$/.test(screenId);
 }
@@ -28,10 +34,23 @@ function isPostQuestion(screenId) {
 // After a successful submit of `currentScreen`, what's next?
 function nextAfter(participant, currentScreen) {
   if (isScenario(currentScreen)) {
+    // Optional slider re-ask (see server/surveyFeatures.js).
+    if (ENABLE_SCENARIO_SLIDER_FOLLOWUPS) {
+      return `${currentScreen}_slider`;
+    }
     const num = parseInt(currentScreen.split('_')[1], 10);
     const idx = participant.scenario_order.indexOf(num);
     if (idx < participant.scenario_order.length - 1) {
       return 'scenario_transition'; // beat between the two scenarios
+    }
+    return 'post_scenario_intro';
+  }
+
+  if (isScenarioSlider(currentScreen)) {
+    const num = parseInt(currentScreen.split('_')[1], 10);
+    const idx = participant.scenario_order.indexOf(num);
+    if (idx < participant.scenario_order.length - 1) {
+      return 'scenario_transition';
     }
     return 'post_scenario_intro';
   }
@@ -94,4 +113,4 @@ function resumeScreen(participant) {
   return participant.current_screen;
 }
 
-module.exports = { nextAfter, resumeScreen, isScenario, isPostQuestion };
+module.exports = { nextAfter, resumeScreen, isScenario, isScenarioSlider, isPostQuestion };
