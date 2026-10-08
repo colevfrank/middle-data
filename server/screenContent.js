@@ -16,41 +16,11 @@ function getUseCase(p) {
   return USE_CASES[p.use_case];
 }
 
-// Examples clause from the intro description (text after ", including ").
-function dataTypeExamples(dt) {
-  const d = dt.data_type_description;
-  const marker = ', including ';
-  const i = d.indexOf(marker);
-  if (i < 0) return '';
-  return d.slice(i + marker.length).replace(/\.$/, '');
-}
-
-// Rewrite third-person example copy for "your …" contexts (Blocks A/B, scenarios).
-// Intro narrative keeps the original "users/their" wording.
-function examplesAsYours(text) {
-  return text
-    .replace(/\ba user's\b/g, 'your')
-    .replace(/\busers'\b/g, 'your')
-    .replace(/\btheir\b/g, 'your')
-    .replace(/\bthey\b/g, 'you')
-    .replace(/\busers\b/g, 'you');
-}
-
-function examplesForYou(dt) {
-  return examplesAsYours(dataTypeExamples(dt) || dt.inline);
-}
-
-// Block A reminder, e.g. "Financial information includes…" / "…documents include…".
-function dataTypeIncludesHeader(dt) {
-  const examples = examplesForYou(dt);
-  const name = dt.inline.charAt(0).toUpperCase() + dt.inline.slice(1);
-  const verb = dt.plural ? 'include' : 'includes';
-  return `${name} ${verb} ${examples}.`;
-}
-
-// Block B / scenario reminder (avoids repeating the data-type name).
-function thisIncludesSentence(dt) {
-  return `This includes ${examplesForYou(dt)}.`;
+// "By financial information, we mean records of your money and accounts, …"
+// The definition is shown verbatim apart from lower-casing its first letter.
+function definitionSentence(dt) {
+  const d = dt.definition;
+  return `By ${dt.inline}, we mean ${d.charAt(0).toLowerCase()}${d.slice(1)}`;
 }
 
 // The two scenarios share one voice-neutral, first-person design: a bold lead-in,
@@ -64,8 +34,10 @@ function scenarioPayload(p, screenId) {
     intro: [
       'You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.'
     ],
-    collect_line: `We will access or ask you to provide your ${dt.inline}. ${thisIncludesSentence(dt)}`,
+    collect_line: `We will access or ask you to provide your ${dt.inline}.`,
     collect_emphasis: [dt.inline],
+    // Same bullet, unemphasized (so the repeated name isn't bolded twice).
+    collect_definition: definitionSentence(dt),
     use_line: `We will use this information to ${uc.scenario_use}`,
     use_emphasis: [uc.scenario_use]
   };
@@ -129,18 +101,17 @@ function postQuestionPayload(p, screenId) {
   const dtForPrompt = (q.block === 'A' || q.block === 'B') ? forBlockB(dt) : dt;
   const item = { id: q.id, key: q.key, type: q.type, prompt: q.prompt(dtForPrompt, uc) };
   if (q.prompt_emphasis) item.prompt_emphasis = q.prompt_emphasis;
-  // Block B: use-case context. Block A: data-type description reminder.
+  // Block B: use-case context + definition. Block A: definition reminder.
   // Attention check: no header.
   if (q.block === 'B') {
-    // Short name + use, then "This includes …".
+    // Short name + use, then "By <name>, we mean …".
     // Some items: "wants to collect" (hypothetical intent); others: "collects".
     const wantsToCollect = q.key === 'postq_coworker_sells_feel'
       || q.key === 'postq_concerns';
     const verb = wantsToCollect ? 'wants to collect' : 'collects';
-    // No comma before "to …" — the includes clause is a separate sentence.
-    item.header = `Suppose App Z ${verb} your ${dtForPrompt.inline} to ${uc.data_use}. ${thisIncludesSentence(dt)}`;
+    item.header = `Suppose App Z ${verb} your ${dtForPrompt.inline} to ${uc.data_use}. ${definitionSentence(dtForPrompt)}`;
   } else if (q.block === 'A') {
-    item.header = dataTypeIncludesHeader(dtForPrompt);
+    item.header = definitionSentence(dtForPrompt);
   }
   if (q.type === 'likert5' || q.type === 'attention') {
     item.anchors = q.anchors;
@@ -206,15 +177,11 @@ function screenPayload(p, screenId, extra = {}) {
         ],
         change_heading: 'But there has been a recent change',
         change: [
-          `Earlier this year, App Z became interested in ${dt.data_type_description}.`,
+          `Earlier this year, App Z became interested in its users' ${dt.inline}. ${definitionSentence(dt)}`,
           uc.intro_sentences(dt)
         ],
-        // Bold+underline the core data-type phrase (before ", including …"),
-        // e.g. "how its users cook" or "users' financial information".
-        data_type_bold: (() => {
-          const core = dt.data_type_description.split(', including ')[0];
-          return core.startsWith('its ') ? core.slice(4) : core;
-        })(),
+        // Bold+underline the data-type phrase in the first change sentence.
+        data_type_bold: `users' ${dt.inline}`,
         // Phrases bold+underlined in setup; `access_line` is the full intro
         // sentence (second change para) styled separately as bold+underline.
         access_line: uc.intro_sentences(dt),

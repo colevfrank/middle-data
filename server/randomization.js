@@ -1,11 +1,11 @@
 const { withClient } = require('./db');
 const { POST_QUESTIONS } = require('./content');
 
-const TARGET_N = 4000;
-const CELLS_PER_BLOCK = 40; // 20 data types × 2 use cases
+const TARGET_N = 3200;
+const CELLS_PER_BLOCK = 32; // 16 data types × 2 use cases
 const PER_CELL_TARGET = Math.floor(TARGET_N / CELLS_PER_BLOCK); // 100
 
-const NUM_DATA_TYPES = 20;
+const NUM_DATA_TYPES = 16;
 
 const ADVISORY_LOCK_KEY = 4242;
 

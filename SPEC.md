@@ -51,44 +51,41 @@ env var is missing.
 
 Two between-subjects factors, assigned once at session start and stored server-side only.
 
-### Factor 1 — data type (20 levels)
+### Factor 1 — data type (16 levels)
 
-Each data type belongs to one of six internal categories (never shown to participants) and carries:
+Each data type carries:
 
-- `data_type_description` — the fuller third-person phrase used in the intro narrative
-  ("its users' financial information, including bank statements and investment portfolios")
 - `inline` — the short mid-sentence name used in the intro, comprehension check and scenarios
 - `inline_b` — an alternate short name for Blocks A and B, where the bare noun would read oddly
   as a possessive ("communications" → "communications data"). Falls back to `inline`.
-- `plural` / `plural_b` — grammatical number, so is/are, it/them and includes/include agree
+- `plural` / `plural_b` — grammatical number, so is/are, it/them and its/their agree
+- `definition` — a second-person definition, shown verbatim (first letter lower-cased) as
+  "By [name], we mean [definition]" in the intro, both scenarios, and every Block A/B header.
+  Blocks A/B use `inline_b` as the name.
 
-The examples clause after ", including …" is reused as a reminder sentence in the scenarios and
-Blocks A/B, rewritten from third to second person ("their" → "your").
+| # | `inline` | `inline_b` (if different) |
+| --- | --- | --- |
+| 1 | demographic information | — |
+| 2 | government IDs | government ID data |
+| 3 | voice data | — |
+| 4 | financial information | — |
+| 5 | communications | communications data |
+| 6 | contacts and social media connections | — |
+| 7 | location history | location history data |
+| 8 | web browsing history | web browsing history data |
+| 9 | photo library | photo library data |
+| 10 | email management behavior data | — |
+| 11 | administrative task behavior data | — |
+| 12 | document edit history | document edit history data |
+| 13 | work process recordings | — |
+| 14 | streaming preferences | streaming preferences data |
+| 15 | screen usage patterns | screen usage data |
+| 16 | device motion sensor data | — |
 
-| # | `inline` | `inline_b` (if different) | Category |
-| --- | --- | --- | --- |
-| 1 | demographic information | — | Demographic/Identity |
-| 2 | government IDs | government ID data | Demographic/Identity |
-| 3 | voice data | — | Demographic/Identity |
-| 4 | health information and medical records | — | Sensitive Personal |
-| 5 | financial information | — | Sensitive Personal |
-| 6 | communications | communications data | Relational/Communicative |
-| 7 | social network | social network data | Relational/Communicative |
-| 8 | contacts | contacts data | Relational/Communicative |
-| 9 | location history | location history data | Behavioral/Preference |
-| 10 | web browsing history | web browsing history data | Behavioral/Preference |
-| 11 | purchase history | purchase history data | Behavioral/Preference |
-| 12 | professional or educational documents | — | Expressive |
-| 13 | photo library | photo library data | Expressive |
-| 14 | email management behavior data | — | Process |
-| 15 | administrative task behavior data | — | Process |
-| 16 | cooking behavior data | — | Process |
-| 17 | music preferences | music preferences data | Behavioral/Preference |
-| 18 | streaming preferences | streaming preferences data | Behavioral/Preference |
-| 19 | screen usage data | — | Behavioral/Preference |
-| 20 | exercise activities data | — | Behavioral/Preference |
+Full `definition` values: `SURVEY_PAGES.md`, Page 3.
 
-Full `data_type_description` values: `SURVEY_PAGES.md`, Page 3.
+Ids were renumbered when the design went from 20 back to 16 types (2026-10); any rows collected
+before then use the old numbering.
 
 ### Factor 2 — use case (2 levels)
 
@@ -111,7 +108,7 @@ options are shuffled per render with "Other" pinned last.
 
 ### Sample size
 
-Block randomization across 20 × 2 = **40 cells**, target **100 per cell** (`TARGET_N = 4000`).
+Block randomization across 16 × 2 = **32 cells**, target **100 per cell** (`TARGET_N = 3200`).
 `server/randomization.js` keeps a shuffled bag of the assignments still needed to reach the
 per-cell target, refilling it from live counts under a Postgres advisory lock; once every cell
 is full it falls back to uniform random assignment.
@@ -151,7 +148,7 @@ a settings-page frame (browser chrome, App Z sidebar, program description), then
 below the frame with multi-select checkboxes. Inside the frame: the current price and default
 no-collection/no-sale/one-year-deletion policy (generic "your information", *not* the assigned
 data type), then what would change — "We will access or ask you to provide your [DATA TYPE]"
-plus the examples reminder, "We will use this information to [USE]", and the offer. The frame
+plus the definition ("By [DATA TYPE], we mean …"), "We will use this information to [USE]", and the offer. The frame
 also carries a decorative "I agree / I do not agree" row with a blank amount; it is settings-UI
 mock, not the participant's response.
 
@@ -173,7 +170,7 @@ with accepted tiers, duplicates, and unknown tier codes.
 ### Block B — compensation for the use case (7 questions)
 
 Every Block B screen repeats the same header before the bolded question: "Suppose App Z
-collects your [DATA TYPE] to [USE CASE]. This includes [examples]." Two items use "wants to
+collects your [DATA TYPE] to [USE CASE]. By [DATA TYPE], we mean [definition]." Two items use "wants to
 collect" instead of "collects", since they describe a hypothetical rather than the stipulated
 collection: `postq_coworker_sells_feel` and `postq_concerns`.
 
@@ -190,8 +187,8 @@ collection: `postq_coworker_sells_feel` and `postq_concerns`.
 ### Block A — about the data type (10 questions + attention check)
 
 No use case is mentioned anywhere in Block A. Each screen shows a one-line reminder header
-("Financial information includes bank statements and investment portfolios.") before the bolded
-question. The attention check has no header.
+("By financial information, we mean records of your money and accounts, such as …") before the
+bolded question. The attention check has no header.
 
 | id | Column | Question | Scale |
 | --- | --- | --- | --- |
@@ -252,7 +249,7 @@ Two tables (`migrations/0001_init.sql`, `migrations/0002_survey_copy_update.sql`
 attrition still yields usable partial rows:
 
 - Identity: `id`, `participant_id` (unique), `assignment_id`, `project_id`, `session_token` (UUID, unique)
-- Condition (server-only): `data_type SMALLINT CHECK (1–20)`, `use_case CHAR(2) CHECK ('B1','B2')`
+- Condition (server-only): `data_type SMALLINT CHECK (1–16)`, `use_case CHAR(2) CHECK ('B1','B2')`
 - Orders: `scenario_order INT[]`, `block_b_order INT[]`, `block_a_order INT[]`
 - State: `current_screen TEXT`
 - Comprehension: `comp_check_1/2/3_wrong_count`, `comp_check_fail_count` (SMALLINT)
