@@ -226,7 +226,7 @@ function screenPayload(p, screenId, extra = {}) {
           'after one year'
         ],
         comprehension: {
-          instruction: '',
+          instruction: 'Based on the information above, indicate whether each statement is True or False.',
           statements: [
             { id: 1, text: `App Z would like to access its users' ${dt.inline}.` },
             { id: 2, text: `App Z would use your data to ${uc.comp_use}.` },

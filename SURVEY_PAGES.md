@@ -52,7 +52,7 @@ Engineering and Public Policy
 sarahcen@andrew.cmu.edu
 If you have questions later, desire additional information, or wish to withdraw your participation please contact the Principal Investigator by e-mail in accordance with the contact information listed above.
 
-If you have questions pertaining to your rights as a research participant; or to report concerns to this study, you should contact the Office of Research integrity and Compliance at Carnegie Mellon University (email: irb-review@andrew.cmu.edu. phone: 412-268-4721).
+If you have questions pertaining to your rights as a research participant; or to report concerns to this study, you should contact the Office of Research Integrity and Compliance at Carnegie Mellon University (email: irb-review@andrew.cmu.edu; phone: 412-268-4721).
 
 #### Voluntary Participation
 Your participation in this research is voluntary.  You may discontinue participation at any time during the research activity by closing the browser window.  You may print a copy of this consent form for your records.
@@ -150,6 +150,8 @@ App Z would like to access your `{inline}` to `{data_use}`.
 2. train App Z's AI models and AI agents to improve its services
 
 **Comprehension check**
+
+Based on the information above, indicate whether each statement is True or False.
 
 1. App Z would like to access its users' `{inline}`. *(True)*
 2. App Z would use your data to `{data_use}`. *(True)*
@@ -668,7 +670,7 @@ A few questions about the tools you use.
 
 Thank you for completing this study.
 
-The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for, particularly when it is used to train AI models or AI agents versus to improve a company's services more generally.
+The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train AI models or AI agents versus to improve a company's services more generally.
 
 The "App Z" service in this survey was hypothetical. No company called App Z accessed or collected any of your information, and your responses to the scenarios will not be shared with any third party.
 
@@ -677,3 +679,35 @@ Your responses will help inform policy discussions about data governance in the 
 IRB Protocol: STUDY2026_00000225 — Carnegie Mellon University
 
 **Button:** *(completes study / redirects to CloudResearch)*
+
+---
+
+## Appendix — client-side chrome
+
+Participant-facing strings that live in `public/app.js` (and `server/routes/start.js`) rather than
+in the screen payload, so they don't appear page-by-page above.
+
+**Page headings and framing added by the client**
+
+- Consent: heading **Informed Consent**; each statement is answered with Yes / No radios.
+- Intro: the opener ("Imagine you're a frequent user of App Z!") is rendered as the page heading; the comprehension section is introduced by the heading **Comprehension check**.
+- Intro, on a failed comprehension attempt: *One or more answers are incorrect. Please review the information above and try again.*
+- Welcome: "you will not be able to return to previous pages" is bolded.
+- Scenario pages: the data-type name in "We will access or ask you to provide your …" is bold + underlined; the program name is bold + underlined in both the lead-in and "We are now offering you the option to …".
+- Block A / Block B pages: header and question share one paragraph; the question is bold + blue. The attention check has no header and uses plain bold.
+- Demographics: heading **About you**; *These questions help us describe the participant pool.*
+- Debrief: heading **Thank you**; button **Complete study**.
+
+**Settings frame (default presentation; `?mode=plain` drops the frame and keeps the copy)**
+
+- Fake URL bar: `appz.com/settings/subscription` · `appz.com/settings/data-sharing`
+- Sidebar brand **App Z**, nav items: Account · Subscription · Premium features · Privacy · Data Sharing Program · Notifications · Billing (the scenario's own row is highlighted).
+
+**Terminal / error states**
+
+- After the final submit: *Thank you — your responses have been recorded.* (shown only if the CloudResearch redirect is unavailable).
+- After consent refusal: *Survey ended.* (likewise).
+- Session could not be restored: *Your session could not be loaded. Please return to CloudResearch and re-enter the study using the original link.*
+- Bad or missing `participantId`: *Invalid or missing participant ID. Please return to CloudResearch and try again.*
+- Returning after finishing: *You have already completed this study. Thank you.*
+- IP throttle tripped: *Too many sessions started recently. Please return to CloudResearch and try again later.*

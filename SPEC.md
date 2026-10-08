@@ -1,273 +1,324 @@
-## Project: Survey Experiment Website
-Build a web-based survey experiment for a research study on data sharing preferences. The survey will be hosted on Railway and participants will be recruited via CloudResearch Connect.
-Tech Stack
+# Survey Experiment — Design Spec
 
-Frontend: HTML/CSS/JS (vanilla or lightweight framework), Tailwind CSS for styling
-Backend: Node.js with Express
-Database: PostgreSQL (Railway provides this as an add-on)
-Hosting: Railway
+A web-based survey experiment on data-sharing preferences: how people value different
+types of personal data, and whether that changes with what the data will be used for
+(AI training vs. general service improvement). Hosted on Railway, participants recruited
+via CloudResearch Connect.
 
-### CloudResearch Connect Integration
+This document covers **design, conditions, flow, instrumentation, and schema**.
 
-Participants arrive via CloudResearch Connect with URL parameters: ?participantId={id} (optionally &assignmentId={aid}&projectId={pid})
-Store `participantId` as the unique participant identifier; store `assignmentId`/`projectId` alongside the response data when present.
-On survey completion, redirect to the study's CloudResearch end-of-study redirect URL (copied from the Create-a-Study wizard and set verbatim via the `CLOUDRESEARCH_COMPLETE_URL` env var). Reaching this URL is what marks the participant complete in Connect.
-On consent refusal, redirect to `CLOUDRESEARCH_TERMINATE_URL` if set (a separate termination/screen-out landing URL), otherwise fall back to `CLOUDRESEARCH_COMPLETE_URL`. (The comprehension check no longer screens anyone out — it is pass-required with unlimited retries.)
+**Exact participant-facing wording is not duplicated here** — it lives in one place:
 
-**TODO (before go-live): configure a dedicated screen-out landing URL.** Currently consent refusals fall back to the completion redirect when `CLOUDRESEARCH_TERMINATE_URL` is unset. Set `CLOUDRESEARCH_TERMINATE_URL` to a Connect termination landing URL so screened-out participants are recorded separately (and can be paid a small screen-out fee). This is already wired in server/routes/screen.js and server/routes/start.js — it just needs the env var populated.
+| Document | Holds |
+| --- | --- |
+| `SURVEY_PAGES.md` | All participant-facing copy, page by page, with condition placeholders and their value lists; plus an appendix of client-side chrome. Source of truth for wording. |
+| `CONSENT.md` | The consent text, read from disk at request time and rendered on Screen 1. |
+| `COMPREHENSION.md` | The three comprehension items and their pass rule. |
+| `RESOLVE.md` | Resolved methodology decisions (randomization, rate limiting, validation, latency granularity). Historical — where it conflicts with this spec, this spec is current. |
+| `migrations/*.sql` | Authoritative column list. |
 
-### Randomization
-Each participant is randomly assigned to one cell at the start of the session. Two between-subjects factors:
+When copy changes, update `server/content.js` / `server/screenContent.js` and `SURVEY_PAGES.md`;
+only update this file if the *design* changed (items added or removed, conditions, flow, schema).
 
-Data type (16 levels — assign one per participant)
-Use case (2 levels — assign one per participant)
+## Tech stack
 
-Also randomize:
+- Frontend: vanilla HTML/CSS/JS (`public/app.js` renders every screen from a JSON payload), Tailwind CSS
+- Backend: Node.js + Express (`server/`)
+- Database: PostgreSQL (Railway add-on); migrations applied by `server/migrate.js`, run as Railway's
+  pre-deploy command (`npm run migrate` locally)
+- Hosting: Railway (`Procfile`, `railway.json`)
 
-Order of Scenarios 1 and 2
-Order of the Block B questions (7) and, separately, the Block A questions (6 + attention check); Block B is shown first, then Block A, each randomized within its own block; each question on its own screen
+## CloudResearch Connect integration
 
-Target N = 3,200 — block-randomized to 100 participants per cell across the 16 × 2 = 32 cells.
+Participants arrive at `/start` with `?participantId={id}` (optionally `&assignmentId={aid}&projectId={pid}`).
+`participantId` is the unique participant identifier; `assignmentId` / `projectId` are stored alongside
+the response data when present.
 
-Store all assignments in the database row for this participant.
+- On completion, redirect to the study's CloudResearch end-of-study redirect URL — copied from the
+  Create-a-Study wizard and set verbatim via `CLOUDRESEARCH_COMPLETE_URL`. Reaching this URL is what
+  marks the participant complete in Connect.
+- On consent refusal, redirect to `CLOUDRESEARCH_TERMINATE_URL` if set, otherwise fall back to
+  `CLOUDRESEARCH_COMPLETE_URL`. Nothing else screens anyone out: the comprehension check is
+  pass-required with unlimited retries, and a failed attention check is recorded but does not end the survey.
 
-### Data Types (16)
-Each data type belongs to one of six data categories and has both a short description and a longer description (with examples). On the intro screen (Screen 3) the longer description is shown inline ("By [DATA TYPE], we mean …"); the short description is used in the comprehension check. The data category is internal and never shown to participants:
+**TODO (before go-live): configure a dedicated screen-out landing URL.** Consent refusals currently
+fall back to the completion redirect when `CLOUDRESEARCH_TERMINATE_URL` is unset. Point it at a Connect
+termination landing URL so screened-out participants are recorded separately (and can be paid a
+screen-out fee). Already wired in `server/routes/screen.js` and `server/routes/start.js` — only the
+env var is missing.
 
-| Data Type | Short Description | Longer Description | Category |
+## Experimental design
+
+Two between-subjects factors, assigned once at session start and stored server-side only.
+
+### Factor 1 — data type (20 levels)
+
+Each data type belongs to one of six internal categories (never shown to participants) and carries:
+
+- `data_type_description` — the fuller third-person phrase used in the intro narrative
+  ("its users' financial information, including bank statements and investment portfolios")
+- `inline` — the short mid-sentence name used in the intro, comprehension check and scenarios
+- `inline_b` — an alternate short name for Blocks A and B, where the bare noun would read oddly
+  as a possessive ("communications" → "communications data"). Falls back to `inline`.
+- `plural` / `plural_b` — grammatical number, so is/are, it/them and includes/include agree
+
+The examples clause after ", including …" is reused as a reminder sentence in the scenarios and
+Blocks A/B, rewritten from third to second person ("their" → "your").
+
+| # | `inline` | `inline_b` (if different) | Category |
 | --- | --- | --- | --- |
-| Demographic info | Name, age, gender, ZIP code, marital status | Basic identifying and demographic information such as your full name, date of birth, sex or gender, home ZIP code, and marital status. | Demographic/Identity |
-| Social security number | Your 9-digit SSN | Your Social Security number, used for tax reporting, credit checks, and identity verification. | Demographic/Identity |
-| Fingerprint and voice recording data | Biometric data from your body | Your stored fingerprints, such as from unlocking your phone, and recordings of your voice, such as from voice assistants or phone calls. | Demographic/Identity |
-| Health information | Medical records and prescriptions | Information about your health, including doctor's appointments, lab and test results, diagnosed conditions, and prescription medications. | Sensitive Personal |
-| Financial information | Bank statements, taxes, transactions | Your financial records, including bank and credit card statements, tax documents, and transaction history. | Sensitive Personal |
-| Password and login credential data | Passwords, PINs, and security keys | The passwords, PINs, and security credentials you use to log in to websites, apps, and accounts. | Sensitive Personal |
-| Text message and email content | Content of your private communications | The actual content of your text messages, emails, and direct messages — what you wrote and what you received. | Relational/Communicative |
-| Contact info of friends and family | Names, numbers, and emails of people you know | The names, phone numbers, email addresses, and other contact details of people stored in your phone or email contacts. | Relational/Communicative |
-| Location history | A record of where you've been | A log of your physical locations over time, based on GPS, Wi-Fi, or cell tower data from your phone or other devices. | Behavioral/Preference |
-| Browsing and search history | Websites visited and searches made | A record of the websites you've visited, links you've clicked, and queries you've typed into search engines. | Behavioral/Preference |
-| Shopping and purchase history | What you've bought and where | A record of your purchases — what you bought, when, where, and how much you paid — across online and in-store transactions. | Behavioral/Preference |
-| Document, note, and report data | Files you've written for work or school | Documents, notes, essays, reports, and other files you've created for professional or academic purposes. | Expressive |
-| Photo and video data | Images and recordings from your camera | Photos and videos you've personally captured and stored on your device or uploaded to cloud services. | Expressive |
-| Email triage behavior | How you sort, flag, and manage your inbox | Behavioral patterns in how you manage email — the order you open messages, what you archive versus flag versus defer, and how you edit drafts before sending, but not the content of the emails themselves. | Process |
-| Search and decision trajectory data | How you research and make decisions online | The sequence of steps you take when researching a decision online, such as the tabs you open, options you compare, filters you apply, and how long you spend before choosing when booking flights, shopping, or comparing services. | Process |
-| Writing and editing process | How you draft, revise, and re-write | The sequence of keystrokes, deletions, rewrites, and pauses as you compose a document or message, including what you typed and then deleted, how long you paused between sentences, and how many times you revised a paragraph, but not the final version itself. | Process |
+| 1 | demographic information | — | Demographic/Identity |
+| 2 | government IDs | government ID data | Demographic/Identity |
+| 3 | voice data | — | Demographic/Identity |
+| 4 | health information and medical records | — | Sensitive Personal |
+| 5 | financial information | — | Sensitive Personal |
+| 6 | communications | communications data | Relational/Communicative |
+| 7 | social network | social network data | Relational/Communicative |
+| 8 | contacts | contacts data | Relational/Communicative |
+| 9 | location history | location history data | Behavioral/Preference |
+| 10 | web browsing history | web browsing history data | Behavioral/Preference |
+| 11 | purchase history | purchase history data | Behavioral/Preference |
+| 12 | professional or educational documents | — | Expressive |
+| 13 | photo library | photo library data | Expressive |
+| 14 | email management behavior data | — | Process |
+| 15 | administrative task behavior data | — | Process |
+| 16 | cooking behavior data | — | Process |
+| 17 | music preferences | music preferences data | Behavioral/Preference |
+| 18 | streaming preferences | streaming preferences data | Behavioral/Preference |
+| 19 | screen usage data | — | Behavioral/Preference |
+| 20 | exercise activities data | — | Behavioral/Preference |
 
-### Use Case Conditions (2)
+Full `data_type_description` values: `SURVEY_PAGES.md`, Page 3.
 
-Two between-subjects conditions — B1 (Personalization) and B2 (GenAI Training). Each is expressed in four forms across the survey (all templated with the assigned data type where relevant):
+### Factor 2 — use case (2 levels)
 
-B1 — Personalization
-- Intro screen (Screen 3), the primary framing: "App Z would like to use your [DATA TYPE] to improve its personalization algorithm. Using your [DATA TYPE] would allow it to provide content that is more targeted to you."
-- Comprehension statement 2: "App Z would use your data to improve its personalization algorithm."
-- Scenario frame ("We will use this information to [USE]", first person): "improve our personalization algorithm"
-- Block B header + post-scenario intro (data_use form, "…for [DATA USE]"): "improving a personalization algorithm"
+One phrase per condition, used identically everywhere the use case appears (intro sentence,
+comprehension statement 2, scenario "We will use this information to …", Block B header,
+post-scenario intro):
 
-B2 — GenAI Training
-- Intro screen (Screen 3), the primary framing: "App Z would like to use your [DATA TYPE] to improve its generative AI system. Using your [DATA TYPE] would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator)."
-- Comprehension statement 2: "App Z would use your data to improve its generative AI system."
-- Scenario frame ("We will use this information to [USE]", first person): "improve our generative AI system"
-- Block B header + post-scenario intro (data_use form): "training and improving a generative AI system (like a chatbot, writing assistant, or image generator)"
+- **B1 — service improvement:** "improve App Z's services"
+- **B2 — AI training:** "train App Z's AI models and AI agents to improve its services"
 
-### Survey Flow
-Screen 1: Consent
-Display the consent information (I'll provide the full text separately). Three checkboxes at the bottom, all must be Yes to proceed:
+### Within-participant randomization
 
-"I am age 18 or older"
-"I have read and understand the information above"
-"I want to participate in this research and continue with the survey"
+- Order of the two scenarios (Subscription Discount, Data Sharing Program) — `scenario_order`
+- Order of the 7 Block B questions — `block_b_order`
+- Order of the 11 Block A items (10 questions + the attention check, pooled) — `block_a_order`
 
-If any checkbox is No, show a message and redirect to the CloudResearch termination/return URL (`CLOUDRESEARCH_TERMINATE_URL`, falling back to `CLOUDRESEARCH_COMPLETE_URL`).
+Blocks are never interleaved: Block B is always shown in full before Block A.
+Response options stay in their listed order, except the Block B concerns multi-select, whose
+options are shuffled per render with "Other" pinned last.
 
-Screen 2: Welcome
-"Welcome!"
-"This survey has multiple-choice and checkbox questions, with one open-ended response question. Once you advance, you will not be able to return to previous places, so please consider each question carefully before clicking next."
-"Click "Continue" when you are ready to begin."
+### Sample size
 
-Screen 3: Intro (App Z setup + data type + use case + comprehension) — one screen
-Formatting: the opener ("Imagine you're a frequent user of App Z!"), "But there's been a recent change.", and "Comprehension check" are shown as larger bold headings. These phrases are bold + underlined inline: "$20 per month", "does not record or store", "does not sell", "deletes", "after one year", the [DATA TYPE] label, and the "to improve its …" use-case phrase.
-Setup (paragraphs):
-"Imagine you're a frequent user of App Z!"
-"App Z is an online service that you use often."
-"You currently pay $20 per month for App Z."
-"By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service."
-"App Z does not sell your information, and App Z also deletes any data it holds after one year."
-The recent change (paragraphs, templated per condition):
-"But there's been a recent change."
-"Earlier this year, App Z became interested in collecting the [DATA TYPE] of its users."
-"By [DATA TYPE], we mean [longer description with examples]." (no "Learn more" expansion — shown inline)
-Use-case sentence (per condition):
-- B1: "App Z would like to use your [DATA TYPE] to improve its personalization algorithm. Using your [DATA TYPE] would allow it to provide content that is more targeted to you."
-- B2: "App Z would like to use your [DATA TYPE] to improve its generative AI system. Using your [DATA TYPE] would allow it to train a generative AI system (like a chatbot, writing assistant, or image generator)."
-Comprehension check (same screen, below the narrative): "Based on the information above, indicate whether each statement is True or False." Three True/False statements (see COMPREHENSION.md):
-- (data type — TRUE) "The data you would share with App Z is: [assigned data type's short description]."
-- (use case — TRUE) "App Z would use your data to [use-case phrase matching the narrative — B1: 'improve its personalization algorithm'; B2: 'improve its generative AI system']."
-- (FALSE — same for everyone) "App Z guarantees that your data will be permanently deleted after 30 days."
-Continue does not advance until all three are correct (T, T, F); participants may retry unlimited times. Record how many times each item was answered wrong before passing (comp_check_1/2/3_wrong_count) and the overall number of failed attempts (comp_check_fail_count — incremented once per Continue click with any wrong answer). No comprehension screen-out.
+Block randomization across 20 × 2 = **40 cells**, target **100 per cell** (`TARGET_N = 4000`).
+`server/randomization.js` keeps a shuffled bag of the assignments still needed to reach the
+per-cell target, refilling it from live counts under a Postgres advisory lock; once every cell
+is full it falls back to uniform random assignment.
 
-Screens 4–6: Scenarios 1 and 2 (order randomized), with a transition screen between them
-(The "Scenario 1 / Scenario 2" labels below are internal identifiers only. Because the order is randomized, each is shown to participants with a neutral, unnumbered "Scenario" heading — no copy may imply that one comes before another.)
-Transition screen (Screen 5, shown after the first scenario and before the second): "Now we'd like you to imagine that App Z took a different approach." with a button labeled "See this approach on the next page". No data recorded.
+## Survey flow (31 screens)
 
-Shared layout (both scenarios): a bold lead-in line at the top, then a settings-page frame (browser chrome + side panel, as in the settings-mode UI), then a bold question below the frame with multi-select checkboxes ("select all that apply"). Within the frame: the section heading is bold; "We will collect your [DATA TYPE]" is bold + underlined; the offer line is highlighted/prominent. The "By default…" line describes information as a whole (generic "your information"), NOT the assigned data type. The use line is per-condition, first person ("our"): B1 → "improve our personalization algorithm", B2 → "improve our generative AI system".
+One question or scenario per screen, no back button. `current_screen` on the participant row is
+the screen they should see next, so a reload or a returning link resumes exactly where they left off.
 
-Scenario 1 — Subscription Discount:
-Lead-in (bold): "Imagine App Z offers you the option to receive a Subscription Discount:"
-Settings frame — heading (bold): "Subscription"
-- "You currently pay $20 per month for our app."
-- "By default, we do not record or store your information; we do not sell your information; and we delete all information after one year."
-- "We are now offering you the option to receive a Subscription Discount. If you agree:"
-  - "We will collect your [DATA TYPE]" (bold + underlined)
-  - "We will use this information to [USE — B1: improve our personalization algorithm / B2: improve our generative AI system]"
-  - (highlighted) "We would like to offer you a monthly discount on your subscription for sharing this data."
-Below the frame (bold): "Please select what discount you would be willing to accept (select all that apply):"
-Multi-select checkboxes: $1 off / month ($19/mo) · $3 off ($17/mo) · $5 off ($15/mo) · $8 off ($12/mo) · $12 off ($8/mo) · $20 off (Free) · "I would not accept any discount" (mutually exclusive — clears the others).
-Stored: s1_accepted_discounts (TEXT[] of accepted tier codes '1off'…'20off') + s1_none (boolean, declined).
+| # | Screen id | Content | Recorded |
+| --- | --- | --- | --- |
+| 1 | `consent` | Consent text + three Yes/No statements | `consent_age_ok`, `consent_read`, `consent_participate` |
+| 2 | `welcome` | Orientation; no back navigation warning | — |
+| 3 | `intro` | App Z setup, the recent change (data type + use case), then the comprehension check on the same screen | `comp_check_1/2/3_wrong_count`, `comp_check_fail_count` |
+| 4 | `scenario_1` \| `scenario_2` | First scenario (per `scenario_order`) | scenario response |
+| 5 | `scenario_transition` | "App Z took a different approach" beat | — |
+| 6 | `scenario_2` \| `scenario_1` | Second scenario | scenario response |
+| 7 | `post_scenario_intro` | Frames the Block B battery (data type + use case) | — |
+| 8–14 | `postq_<id>` | Block B, 7 questions in `block_b_order` | one column per question |
+| 15 | `block_a_intro` | Frames Block A ("regardless of its use") | — |
+| 16–26 | `postq_<id>` | Block A, 11 items in `block_a_order` (10 questions + attention check) | one column per question |
+| 27 | `open_response` | Optional free text | `open_data_revenue` |
+| 28 | `about_you_intro` | Transition into the about-you section | — |
+| 29 | `ai_usage` | AI / social media / search frequency + two tech-sector items | 5 columns |
+| 30 | `demographics` | Age, gender (+ other), education | 4 columns |
+| 31 | `debrief` | Debrief + IRB protocol; button completes the study | sets `completed`, `completed_at` |
 
-Scenario 2 — Data Sharing Program:
-Lead-in (bold): "We'd like you to imagine… … One day, you open App Z and it offers you the option to join a Data Sharing Program:"
-Settings frame — heading (bold): "Data Sharing Program"
-- "You currently pay $20 per month for our app."
-- "By default, we do not record or store your information; we do not sell your information; and we delete all information after one year."
-- "We are now offering you the option to join a Data Sharing Program. If you opt in:"
-  - "We will collect your [DATA TYPE]" (bold + underlined)
-  - "We will use this information to [USE — B1: improve our personalization algorithm / B2: improve our generative AI system]"
-  - (highlighted) "Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data."
-Below the frame (bold): "Please select what percentages you would be willing to accept (select all that apply):"
-Multi-select checkboxes: 1% · 10% · 25% · 50% · 75% · 99% · "I would not agree to this program" (mutually exclusive — clears the others).
-Stored: s2_accepted_shares (TEXT[] of accepted percentages '1'/'10'/'25'/'50'/'75'/'99') + s2_none (boolean, declined). No decline follow-up.
+Consent refusal sends `current_screen` to `returned` and redirects out; completion sends it to
+`complete`. Both clear the session cookie.
 
-Both scenarios render in one voice-neutral, first-person design (no researcher/AppX-voice split). ?mode=plain shows the same content without the browser frame; ?voice=appx no longer changes scenario copy.
+## Items
 
-Screen 7: Post-Scenario Intro
-"Now, we'd like to understand how you feel about App Z collecting your [DATA TYPE] for [USE CASE]." ([DATA TYPE] = inline; [USE CASE] = the data_use form)
-"On the following pages, we'll ask you a series of questions."
-[ Continue ]
+### Scenarios
 
-Screens 8–21: Post-Scenario Questions — Block B first (Screens 8–14), then Block A (Screens 15–21)
-Each question on its own screen. Block B (7 questions) is shown first, randomized within the block (block_b_order); then Block A (6 questions + the attention check = 7 items), randomized within the block (block_a_order). No "About:" label on any screen. For Likert (1–5) items, each endpoint label is prefixed with its scale number (e.g., "1: Not at all" … "5: Extremely"). Response options appear in the order listed (no within-question option randomization).
+Both scenarios share one voice-neutral, first-person design: a bold lead-in naming the program,
+a settings-page frame (browser chrome, App Z sidebar, program description), then a bold question
+below the frame with multi-select checkboxes. Inside the frame: the current price and default
+no-collection/no-sale/one-year-deletion policy (generic "your information", *not* the assigned
+data type), then what would change — "We will access or ask you to provide your [DATA TYPE]"
+plus the examples reminder, "We will use this information to [USE]", and the offer. The frame
+also carries a decorative "I agree / I do not agree" row with a blank amount; it is settings-UI
+mock, not the participant's response.
 
-Block B — about compensation for the use case (Screens 8–14)
-Each Block B screen shows an unbolded header — "Suppose App Z collects your [DATA TYPE] for [USE CASE]" ([DATA TYPE] = inline, [USE CASE] = data_use) — with the bolded question below. The questions are trimmed (the use-case context lives in the header):
-B1: "Should you be compensated based on how much of your data was used?" (Yes / No / Unsure)
-B2: "Should you be compensated each time your data is used?" (Yes / No / Unsure)
-B3: "Should you be compensated based on how hard it was to generate this data?" (Yes / No / Unsure)
-B4: "Should you be compensated for how original your data is relative to others'?" (Yes / No / Unsure)
-B5: "Suppose a coworker got hold of this data and sold it to another company for the same use. How would you feel?" (Very upset / A little upset / Confused / Don't care at all / Happy for them)
-B6: "Should you receive credit or acknowledgement for this data when it is used?" (1–5, labeled "Not at all" to "Completely")
-B7: "What is/are your main concern(s) about sharing this data? (Please check all that apply)" (checkboxes, multi-select): I'm not concerned / It's too personal or sensitive / It could be used to manipulate me / It could be used to impersonate or represent me / I don't trust the company to protect it / I'm not sure
+Because the order is randomized, neither scenario is ever numbered for participants — the
+"Scenario 1 / 2" labels below are internal identifiers.
 
-Block A — about the data type (Screens 15–21; no use case mentioned)
-Just the bolded question (no header). The attention check is randomized in among A1–A6.
-A1: "Is [DATA TYPE] important to you?" (1–5, labeled "not important to me at all" to "extremely important to me")
-A2: "Do you consider [DATA TYPE] sensitive data?" (1–5, labeled "not sensitive at all" to "extremely sensitive")
-A3: "Do you feel ownership over [DATA TYPE]?" (1–5, labeled "I do not feel ownership over this type of data" to "I feel strong ownership over it")
-A4: "Would you ever share your [DATA TYPE] publicly – for example with a room of people you have never met before? Choose the option that best describes how far you'd be willing to go:"
-  - No — I would never share it publicly. (0)
-  - Maybe — it would depend on the situation. (1)
-  - Yes, but only without my name attached (anonymously). (2)
-  - Yes, including with my name attached. (3)
-A5: "Is it appropriate to buy and sell your [DATA TYPE]?" (1–5, labeled "Completely inappropriate" to "Completely appropriate")
-A6: "If you found out your [DATA TYPE] had been released publicly without your knowledge, how upset would you be?" (1–5, labeled "not at all" to "Extremely")
-AC (attention check): "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1)." (1–5, labeled "not important to me at all" to "extremely important to me"; correct response = 1). Records attention_check_pass (boolean); failing is recorded but does not end the survey.
+**Scenario 1 — Subscription Discount.** Tiers offered as "select all that apply":
+$1 off ($19/mo) · $3 off ($17/mo) · $5 off ($15/mo) · $8 off ($12/mo) · $12 off ($8/mo) · $20 off (Free),
+plus a mutually exclusive decline that clears the others.
+Stored: `s1_accepted_discounts TEXT[]` of tier codes `1off`…`20off`, and `s1_none BOOLEAN`.
 
-Screen 22: Open-Ended Response
-Its own screen, after the post-scenario battery and before AI usage. Optional free-text box (stored in open_data_revenue; blank allowed).
-"A lot of companies rely on user data. Sometimes, selling user data is a major revenue stream. Or user data may be critical to their main product so that their revenue stream indirectly depends on user data. How do you feel about your online data being a source of revenue for companies? Does your answer change if your data is being used to train AI tools?"
-[Open-ended response text box]
+**Scenario 2 — Data Sharing Program.** Revenue shares offered as "select all that apply":
+1% · 10% · 25% · 50% · 75% · 99%, plus a mutually exclusive decline.
+Stored: `s2_accepted_shares TEXT[]` of `1`/`10`/`25`/`50`/`75`/`99`, and `s2_none BOOLEAN`.
 
-Screen 23: About-You Intro
-"In the last part of this survey, we have a few questions about you." with a "Next" button. No data recorded.
+At least one box (or the decline) is required; the server rejects a decline submitted together
+with accepted tiers, duplicates, and unknown tier codes.
 
-Screen 24: AI Usage & Literacy
-How often do you use AI tools (where AI is the core feature), such as AI chatbots, AI email composition, AI writing assistants, AI schedulers, or AI image generators? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
+### Block B — compensation for the use case (7 questions)
 
-How often do you use social media apps, like Instagram, Facebook, TikTok, Reddit, Snapchat, Retro, and others? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
+Every Block B screen repeats the same header before the bolded question: "Suppose App Z
+collects your [DATA TYPE] to [USE CASE]. This includes [examples]." Two items use "wants to
+collect" instead of "collects", since they describe a hypothetical rather than the stipulated
+collection: `postq_coworker_sells_feel` and `postq_concerns`.
 
-How often do you use search engines, like Google, Bing, DuckDuckGo, Baidu, Ecosia, and Yahoo search? ◯ More than once a day ◯ Daily ◯ A few times a week ◯ Weekly ◯ Between weekly and monthly ◯ Tried once or twice ◯ Never
+| id | Column | Question | Options |
+| --- | --- | --- | --- |
+| 7 | `postq_comp_by_amount` | Compensation based on **how much** of the data was used | Yes / No / Unsure / I don't care |
+| 8 | `postq_comp_per_use` | Compensation each time the data is used | Yes / No / Unsure / I don't care |
+| 9 | `postq_comp_by_effort` | Compensation based on **how much effort** it took to generate or provide | Yes / No / Unsure / I don't care |
+| 10 | `postq_comp_by_originality` | Compensation for **how unique or original** the data is relative to others' | Yes / No / Unsure / I don't care |
+| 11 | `postq_coworker_sells_feel` | Phone manufacturer collected the data and sold it to App Z — how would you feel? | Very upset / A little upset / Confused / Don't care at all / Happy for them |
+| 12 | `postq_credit_ack` | Should you receive **credit or acknowledgement** when it is used? | 1–5, each labeled ("1: I definitely do not want to receive credit" … "5: I absolutely should receive credit") |
+| 13 | `postq_concerns` | Main concern(s) about sharing this data with App Z | Multi-select, 8 options incl. "Other" + free text; order shuffled, "Other" last. Also writes `postq_concerns_other` |
 
-Do you currently work in the technology sector? ◯ Yes ◯ No ◯ Prefer not to answer
+### Block A — about the data type (10 questions + attention check)
 
-Have you ever worked in the technology sector? ◯ Yes ◯ No ◯ Prefer not to answer
+No use case is mentioned anywhere in Block A. Each screen shows a one-line reminder header
+("Financial information includes bank statements and investment portfolios.") before the bolded
+question. The attention check has no header.
 
-Screen 25: Demographics
-All questions include "Prefer not to answer" as an option.
+| id | Column | Question | Scale |
+| --- | --- | --- | --- |
+| 1 | `postq_importance` | Is this data important? | 1–5: not important to me at all → extremely important to me |
+| 2 | `postq_sensitivity` | Is this data sensitive? | 1–5: not sensitive at all → extremely sensitive |
+| 3 | `postq_ownership` | Do you feel ownership over it? | 1–5: I do not feel ownership over this type of data → I feel strong ownership over it |
+| 4 | `postq_share_public` | Would you ever share it publicly? | 4 options, stored 0–3 (never → yes, with my name attached) |
+| 5 | `postq_buy_sell_appropriate` | Is it appropriate to buy and sell it? | 1–5: Completely inappropriate → Completely appropriate |
+| 6 | `postq_upset_if_leaked` | Released publicly without your knowledge — how would you feel? | 6 categorical options (not upset · a little uncomfortable · upset if named · upset even if anonymous · very upset either way · not sure) |
+| 15 | `postq_identifiability` | How identifiable (traceable to you) is it? | 1–5: not identifiable at all → extremely identifiable |
+| 16 | `postq_usefulness` | How useful is it to companies? | 1–5: not useful at all → extremely useful |
+| 17 | `postq_replaceability` | How common or replaceable is it across people? | 1–5: unique to me / hard to replace → very common / easily replaceable |
+| 18 | `postq_control` | How much control do you feel you have over it? | 1–5: no control at all → complete control |
+| 14 | `attention_check` | Instructed-response item: select the lowest option (1) | 1–5, same anchors as `postq_importance`; stored as `attention_check_value` + `attention_check_pass` |
 
-Age: 18–24 / 25–34 / 35–44 / 45–54 / 55–64 / 65+ / Prefer not to answer
-Gender: Man / Woman / Non-binary / Other [text] / Prefer not to answer
-Education: Less than high school / High school / Some college / Bachelor's degree / Graduate degree / Prefer not to answer
+Likert endpoints are prefixed with their scale number ("1: not sensitive at all" … "5: extremely sensitive");
+the middle points are unlabeled.
 
-Screen 26: Debrief
-"Thank you for completing this study."
-"The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train generative AI systems versus more traditional uses like advertising and recommendations.
-The "App Z" service in this survey was hypothetical. No company called App Z collected any of your information, and your responses to the scenarios will not be shared with any third party."
-"Your responses will help inform policy discussions about data governance in the age of AI. If you have questions, please contact Sarah Cen at sarahcen@andrew.cmu.edu."
-"IRB Protocol: STUDY2026_00000225 — Carnegie Mellon University"
-[Button: "Complete study" → redirects to the CloudResearch completion redirect URL]
+### Other measures
 
-### Security
-- On first visit, validate that participantId is present and not 
-  already in the database. Generate a server-side session token 
-  (UUID) and store it with the participant record. Use this token 
-  to authenticate all subsequent requests.
-- Condition assignments (data type, use case) are stored 
-  server-side only. The client never receives or transmits 
-  condition identifiers.
-- Reject duplicate participantIds.
-- Rate limit: per-participant deduplication plus a soft IP throttle (max 15 new sessions per IP per hour). IPs are never persisted (hashed with a daily salt).
+- **Screen 27 — open response.** Optional free text (`open_data_revenue`, blank allowed, 5,000 char cap)
+  on companies using personal data as a revenue source, and whether AI training changes the answer.
+- **Screen 29 — AI usage & literacy.** Frequency of AI tools, social media, and search engines
+  (7-point: more than once a day → never), plus current and past tech-sector employment
+  (Yes / No / Prefer not to answer). Columns: `ai_tools_freq`, `social_media_freq`,
+  `search_engine_freq`, `tech_current`, `tech_ever`.
+- **Screen 30 — demographics.** Age band, gender (with "Other" free text → `gender_other`),
+  education. Every question offers "Prefer not to answer".
 
-### Data Tracking Requirements
-For every screen/question, record:
+## Comprehension check (Screen 3)
 
-participant_id (CloudResearch participantId)
-screen_id (which screen)
-timestamp_shown (when the screen was displayed)
-timestamp_submitted (when the participant clicked Continue/submitted)
-response_latency_ms (difference between shown and submitted)
+Three True/False statements below the narrative, introduced by "Based on the information above,
+indicate whether each statement is True or False.":
 
-Additional tracking:
+1. (TRUE) App Z would like to access its users' [DATA TYPE].
+2. (TRUE) App Z would use your data to [USE CASE].
+3. (FALSE, identical for everyone) App Z guarantees that your data will be permanently deleted after 30 days.
 
-comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count (integer — wrong attempts per T/F item before passing; comprehension requires passing, so everyone ends correct)
-comp_check_fail_count (integer — overall failed attempts before passing)
-scenario_order (array, e.g., [2,1])
-block_b_order (randomized order of the 7 Block B questions); block_a_order (randomized order of the 6 Block A questions + attention check)
-attention_check_pass (boolean — did they select the instructed response)
+Continue does not advance until the pattern is T, T, F; retries are unlimited and an incorrect
+attempt shows an inline error. Recorded per item: `comp_check_1/2/3_wrong_count`, plus
+`comp_check_fail_count` — incremented once per Continue click with any wrong answer. The server
+re-verifies the pattern on submit as a safety net. **No comprehension screen-out.**
 
-### Database Schema
-Two tables:
-participants — one row per participant:
+## Instrumentation
 
-id (primary key)
-participant_id, assignment_id, project_id
-data_type (1–16)
-use_case (B1 or B2)
-scenario_order (Postgres integer array, INT[])
-block_b_order, block_a_order (Postgres integer arrays, INT[])
-comp_check_1_wrong_count, comp_check_2_wrong_count, comp_check_3_wrong_count, comp_check_fail_count (SMALLINT)
-completed (boolean)
-created_at, completed_at (timestamps)
-All response fields (Scenario 1 accepted discounts (s1_accepted_discounts) + s1_none; Scenario 2 accepted revenue shares (s2_accepted_shares) + s2_none; the 13 post-scenario responses — Block A A1–A6 and Block B B1–B7, with B7 stored as a multi-select; the attention-check response + attention_check_pass flag; the open-ended response (open_data_revenue); the Screen 24 AI/social-media/search usage-frequency items plus the two tech-sector employment items; all demographics)
+Per screen, one `events` row: `screen_id`, `timestamp_shown`, `timestamp_submitted`,
+`latency_ms` (the difference), and `input_events` — a JSONB log of individual input
+selections timestamped client-side, for finer-grained response dynamics.
 
-events — one row per screen view, for latency tracking:
+On the participant row: condition assignment, the three randomized orders, the comprehension
+counts, `attention_check_pass`, and every response column.
 
-id (primary key)
-participant_id (foreign key)
-screen_id (string)
-timestamp_shown, timestamp_submitted (timestamps)
-latency_ms (integer)
+## Database schema
 
-### Design Guidelines
+Two tables (`migrations/0001_init.sql`, `migrations/0002_survey_copy_update.sql`).
 
-Clean, professional, minimal design. This is an academic survey, not a product.
-One question or scenario per screen. Clear "Continue" button at the bottom.
-Progress bar at the top showing completion percentage.
-Mobile-responsive (some CloudResearch participants use phones).
-No back button — participants cannot revisit previous screens.
-All radio buttons must be selected before "Continue" is enabled (except optional text fields).
+**`participants`** — one row per participant, written incrementally on every Continue so
+attrition still yields usable partial rows:
 
-### Environment Variables
+- Identity: `id`, `participant_id` (unique), `assignment_id`, `project_id`, `session_token` (UUID, unique)
+- Condition (server-only): `data_type SMALLINT CHECK (1–20)`, `use_case CHAR(2) CHECK ('B1','B2')`
+- Orders: `scenario_order INT[]`, `block_b_order INT[]`, `block_a_order INT[]`
+- State: `current_screen TEXT`
+- Comprehension: `comp_check_1/2/3_wrong_count`, `comp_check_fail_count` (SMALLINT)
+- Consent: `consent_age_ok`, `consent_read`, `consent_participate`
+- Scenarios: `s1_accepted_discounts TEXT[]`, `s1_none`, `s2_accepted_shares TEXT[]`, `s2_none`
+- Block A: `postq_importance`, `postq_sensitivity`, `postq_ownership`, `postq_share_public`,
+  `postq_buy_sell_appropriate`, `postq_upset_if_leaked`, `postq_identifiability`,
+  `postq_usefulness`, `postq_replaceability`, `postq_control`
+- Block B: `postq_comp_by_amount`, `postq_comp_per_use`, `postq_comp_by_effort`,
+  `postq_comp_by_originality`, `postq_coworker_sells_feel`, `postq_credit_ack`,
+  `postq_concerns TEXT[]`, `postq_concerns_other`
+- Attention check: `attention_check_value`, `attention_check_pass`
+- Open response: `open_data_revenue`
+- AI usage: `ai_tools_freq`, `social_media_freq`, `search_engine_freq`, `tech_current`, `tech_ever`
+- Demographics: `age_band`, `gender`, `gender_other`, `education`
+- Lifecycle: `completed`, `created_at`, `completed_at`
 
-DATABASE_URL (Railway Postgres)
-CLOUDRESEARCH_COMPLETE_URL (study's end-of-study redirect URL)
-CLOUDRESEARCH_TERMINATE_URL (optional; screen-out/consent-refusal landing URL)
-PORT
+**`events`** — one row per screen submission: `id`, `participant_id` (FK, cascade),
+`screen_id`, `timestamp_shown`, `timestamp_submitted`, `latency_ms`, `input_events JSONB`.
+
+## Security
+
+- On first visit, `participantId` is format-validated and rejected if already present in the
+  database (no duplicate participation). A server-side UUID session token is generated, stored
+  on the participant row, and set as an httpOnly, SameSite=Lax cookie (`sid`, Secure in production).
+- Condition assignments never leave the server. The client receives only rendered strings —
+  no data-type number, no use-case code. `server/screenContent.js` is the boundary.
+- CSRF: POSTs must carry the session token in an `X-Session-Token` header matching the cookie;
+  the client fetches it from `GET /session-token`.
+- A POST whose screen id does not match the participant's `current_screen` is rejected (409), so
+  responses cannot arrive for the wrong screen.
+- Server-side validation on every submit: unexpected radio/checkbox values rejected, free text
+  capped (100 chars for "other" fields, 5,000 for the open response), JSON body capped at 64kb.
+- Rate limit: per-participant deduplication plus a soft IP throttle — 15 new sessions per IP per
+  rolling hour. **IPs are never persisted**: they are SHA-256 hashed with an in-memory salt that
+  rotates daily, and only the hash is held in memory.
+- Response headers: `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`,
+  restrictive `Permissions-Policy`, and HSTS in production.
+
+## Presentation
+
+- Clean, professional, minimal — an academic survey, not a product.
+- One question or scenario per screen, with a Continue button at the bottom, disabled until every
+  required input on the screen is answered (optional text fields excepted).
+- Progress bar at the top, computed from the participant's own expanded screen order.
+- No back button; participants cannot revisit previous screens.
+- Mobile-responsive (some CloudResearch participants use phones).
+- The scenarios render inside a settings-page frame by default; `?mode=plain` shows the same copy
+  in a plain academic card (persisted in `sessionStorage` for the session). `?voice=appx` is
+  accepted and forwarded but no longer changes any copy.
+
+## Environment variables
+
+| Variable | Purpose |
+| --- | --- |
+| `DATABASE_URL` | Railway Postgres |
+| `CLOUDRESEARCH_COMPLETE_URL` | Study's end-of-study redirect URL |
+| `CLOUDRESEARCH_TERMINATE_URL` | Optional screen-out / consent-refusal landing URL (falls back to the completion URL) |
+| `ADMIN_PASSWORD` | HTTP basic auth for the admin exports; unset disables them |
+| `NODE_ENV` | `production` enables Secure cookies and HSTS |
+| `PORT` | Server port (default 3000) |
+
+`SESSION_SECRET` appears in `.env.example` but is not read by the application.
+
+## Admin endpoints
+
+Behind HTTP basic auth (`admin` / `ADMIN_PASSWORD`):
+`GET /admin/export.csv` (participants), `GET /admin/events.csv` (events),
+`GET /admin/stats` (started and completed counts per cell — use this to watch cell fill).
