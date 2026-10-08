@@ -4,7 +4,7 @@ Page-by-page text as currently assembled from `server/content.js` and `server/sc
 
 **Placeholders** (curly braces) mark text that varies by assigned condition. Under each page that uses them, possible values are listed.
 
-- `{data_type_description}` — fuller phrase (intro first sentence only)
+- `{definition}` — second-person definition, shown as “By `{inline}`, we mean `{definition}`” (first letter lower-cased) in the intro, scenarios, and Block A/B headers
 - `{inline}` — short mid-sentence data-type name (intro, scenarios, …)
 - `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. communications data)
 - `{data_use}` — use-case phrase (same wording as `comp_use` / `scenario_use` in code)
@@ -54,7 +54,7 @@ Engineering and Public Policy
 sarahcen@andrew.cmu.edu
 If you have questions later, desire additional information, or wish to withdraw your participation please contact the Principal Investigator by e-mail in accordance with the contact information listed above.
 
-If you have questions pertaining to your rights as a research participant; or to report concerns to this study, you should contact the Office of Research integrity and Compliance at Carnegie Mellon University (email: irb-review@andrew.cmu.edu. phone: 412-268-4721).
+If you have questions pertaining to your rights as a research participant; or to report concerns to this study, you should contact the Office of Research Integrity and Compliance at Carnegie Mellon University (email: irb-review@andrew.cmu.edu; phone: 412-268-4721).
 
 #### Voluntary Participation
 Your participation in this research is voluntary.  You may discontinue participation at any time during the research activity by closing the browser window.  You may print a copy of this consent form for your records.
@@ -100,33 +100,29 @@ By default, App Z does not record or store any of your information beyond what i
 
 **But there has been a recent change**
 
-Earlier this year, App Z became interested in `{data_type_description}`.
-*(Core data-type phrase before “including …” is bold + underlined — e.g. “how its users cook”.)*
+Earlier this year, App Z became interested in its users' `{inline}`. By `{inline}`, we mean `{definition}`
+*(“users' `{inline}`” is bold + underlined.)*
 
 App Z would like to access your `{inline}` to `{data_use}`.
 
-`{data_type_description}`:
+`{definition}`:
 
-1. its users' demographic information, including their age, gender, race, zip code, marital status, income, and level of education
-2. its users' government IDs, including their driver's license or passport information
-3. its users' voice data, including voice notes, recordings, and voice-to-text commands
-4. its users' health information and medical records, including doctors' visit notes, test results, prescribed medication, and vaccination history
-5. its users' financial information, including bank statements and investment portfolios
-6. its users' communications, including text messages, social media messages, and emails
-7. its users' social network, including the names of friends, coworkers, and family members
-8. its users' contacts, including the names, emails, and phone numbers of contacts on a user's device
-9. its users' location history, including where users go and at what times
-10. its users' web browsing history, including websites users visit and the timestamps of each visit
-11. its users' purchase history, including what users purchase from which vendors and at what times
-12. its users' professional or educational documents, including notes, essays, and reports used for work or education but not including financial, government, or otherwise sensitive documents
-13. its users' photo library, including photo or video data stored on their device
-14. how its users manage their emails, including detailed behavioral data of how users respond, sort, delete, and search their email
-15. how its users perform basic administrative tasks, including detailed behavioral data of how users book flights, pay bills, search for restaurants, or plan a party
-16. how its users cook, including detailed behavioral data of what users cook, what ingredients they use, whether they follow recipes, and how long they spend cooking
-17. its users' music preferences, including the songs and artists users listen to as well as users' rating, like, and skip behaviors
-18. its users' streaming preferences, including the shows and movies users watch, whether users finish each video, and how users rate the videos
-19. its users' screen usage, including when and how long users open their devices and use each application
-20. its users' exercise activities, including what forms of exercise users engage in and when they exercise
+1. Basic facts about who you are, such as your age, gender, and level of education.
+2. Official identification documents and numbers issued to you, such as your driver's license, passport, or Social Security number.
+3. Recordings of your voice, such as audio from voice assistants, dictation, or voice messages you've sent.
+4. Records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history.
+5. The contents of your private messages, such as your emails, text messages, and direct messages.
+6. The list of people you're connected to, such as the contacts in your phone and the people you follow or friend on social media.
+7. A record of the places you've been, such as where you live, work, travel, and shop, and when you were there.
+8. A record of the websites you visit and the terms you search for online.
+9. The photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places.
+10. A record of how you handle your inbox, such as which emails you open, archive, delete, or leave unread, and how quickly you reply.
+11. A record of how you carry out routine tasks, such as scheduling meetings, filling out forms, filing documents, and managing your calendar.
+12. A record of how a document, presentation, or code file came together, such as the drafts, edits, deletions, and revisions you made along the way.
+13. Screen or video recordings of you doing your work, showing the steps you take to complete a task from start to finish.
+14. A record of what you watch and listen to, such as the shows, movies, and music you choose and how you rate them.
+15. A record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them.
+16. Readings from your phone's motion sensors that capture how you physically move and handle your device, such as walking, driving, or picking it up.
 
 
 `{inline}`:
@@ -134,23 +130,19 @@ App Z would like to access your `{inline}` to `{data_use}`.
 1. demographic information
 2. government IDs
 3. voice data
-4. health information and medical records
-5. financial information
-6. communications
-7. social network
-8. contacts
-9. location history
-10. web browsing history
-11. purchase history
-12. professional or educational documents
-13. photo library
-14. email management behavior data
-15. administrative task behavior data
-16. cooking behavior data
-17. music preferences
-18. streaming preferences
-19. screen usage data
-20. exercise activities data
+4. financial information
+5. communications
+6. contacts and social media connections
+7. location history
+8. web browsing history
+9. photo library
+10. email management behavior data
+11. administrative task behavior data
+12. document edit history
+13. work process recordings
+14. streaming preferences
+15. screen usage patterns
+16. device motion sensor data
 
 `{data_use}`:
 
@@ -158,6 +150,8 @@ App Z would like to access your `{inline}` to `{data_use}`.
 2. train App Z's AI models and AI agents to improve its services
 
 **Comprehension check**
+
+Based on the information above, indicate whether each statement is True or False.
 
 1. App Z would like to access its users' `{inline}`. *(True)*
 2. App Z would use your data to `{data_use}`. *(True)*
@@ -185,9 +179,9 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-We will access or ask you to provide your `{inline}`. This includes `{examples}`.
+We will access or ask you to provide your `{inline}`. By `{inline}`, we mean `{definition}`
 
-Example: We will access or ask you to provide your health information and medical records. This includes doctors' visit notes, test results, prescribed medication, and vaccination history.
+Example: We will access or ask you to provide your financial information. By financial information, we mean records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history.
 
 We will use this information to `{data_use}` *(data use underlined)*
 
@@ -202,23 +196,19 @@ We would like to offer you a monthly discount on your subscription for sharing t
 1. demographic information
 2. government IDs
 3. voice data
-4. health information and medical records
-5. financial information
-6. communications
-7. social network
-8. contacts
-9. location history
-10. web browsing history
-11. purchase history
-12. professional or educational documents
-13. photo library
-14. email management behavior data
-15. administrative task behavior data
-16. cooking behavior data
-17. music preferences
-18. streaming preferences
-19. screen usage data
-20. exercise activities data
+4. financial information
+5. communications
+6. contacts and social media connections
+7. location history
+8. web browsing history
+9. photo library
+10. email management behavior data
+11. administrative task behavior data
+12. document edit history
+13. work process recordings
+14. streaming preferences
+15. screen usage patterns
+16. device motion sensor data
 
 `{data_use}`:
 
@@ -287,9 +277,9 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-We will access or ask you to provide your `{inline}`. This includes `{examples}`.
+We will access or ask you to provide your `{inline}`. By `{inline}`, we mean `{definition}`
 
-Example: We will access or ask you to provide your health information and medical records. This includes doctors' visit notes, test results, prescribed medication, and vaccination history.
+Example: We will access or ask you to provide your financial information. By financial information, we mean records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history.
 
 We will use this information to `{data_use}` *(data use underlined)*
 
@@ -304,23 +294,19 @@ Because your data will increase our revenue, we would like to offer to pay you a
 1. demographic information
 2. government IDs
 3. voice data
-4. health information and medical records
-5. financial information
-6. communications
-7. social network
-8. contacts
-9. location history
-10. web browsing history
-11. purchase history
-12. professional or educational documents
-13. photo library
-14. email management behavior data
-15. administrative task behavior data
-16. cooking behavior data
-17. music preferences
-18. streaming preferences
-19. screen usage data
-20. exercise activities data
+4. financial information
+5. communications
+6. contacts and social media connections
+7. location history
+8. web browsing history
+9. photo library
+10. email management behavior data
+11. administrative task behavior data
+12. document edit history
+13. work process recordings
+14. streaming preferences
+15. screen usage patterns
+16. device motion sensor data
 
 `{data_use}`:
 
@@ -352,23 +338,19 @@ On the following pages, we'll ask you a series of questions.
 1. demographic information
 2. government IDs
 3. voice data
-4. health information and medical records
-5. financial information
-6. communications
-7. social network
-8. contacts
-9. location history
-10. web browsing history
-11. purchase history
-12. professional or educational documents
-13. photo library
-14. email management behavior data
-15. administrative task behavior data
-16. cooking behavior data
-17. music preferences
-18. streaming preferences
-19. screen usage data
-20. exercise activities data
+4. financial information
+5. communications
+6. contacts and social media connections
+7. location history
+8. web browsing history
+9. photo library
+10. email management behavior data
+11. administrative task behavior data
+12. document edit history
+13. work process recordings
+14. streaming preferences
+15. screen usage patterns
+16. device motion sensor data
 
 `{data_use}`:
 
@@ -385,32 +367,28 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue):**
 
-Suppose App Z collects your `{inline_b}` to `{data_use}.` This includes `{examples as "you/your"}.` **`{question}`**
+Suppose App Z collects your `{inline_b}` to `{data_use}`. By `{inline_b}`, we mean `{definition}` **`{question}`**
 
-Example: Suppose App Z wants to collect your email management behavior data to improve App Z's services. This includes detailed behavioral data of how you respond, sort, delete, and search your email. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
+Example: Suppose App Z wants to collect your email management behavior data to improve App Z's services. By email management behavior data, we mean a record of how you handle your inbox, such as which emails you open, archive, delete, or leave unread, and how quickly you reply. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
 
 `{inline_b}` *(Block A and Block B; intro/scenarios use `{inline}`)*:
 
 1. demographic information
 2. government ID data
 3. voice data
-4. health information and medical records
-5. financial information
-6. communications data
-7. social network data
-8. contacts data
-9. location history data
-10. web browsing history data
-11. purchase history data
-12. professional or educational documents
-13. photo library data
-14. email management behavior data
-15. administrative task behavior data
-16. cooking behavior data
-17. music preferences data
-18. streaming preferences data
-19. screen usage data
-20. exercise activities data
+4. financial information
+5. communications data
+6. contacts and social media connections
+7. location history data
+8. web browsing history data
+9. photo library data
+10. email management behavior data
+11. administrative task behavior data
+12. document edit history data
+13. work process recordings
+14. streaming preferences data
+15. screen usage data
+16. device motion sensor data
 
 `{data_use}`:
 
@@ -512,10 +490,9 @@ On the following pages, we'll ask you a series of questions.
 
 **Header + question (same paragraph; question bold + blue; not shown on attention check):**
 
-`{Inline_b capitalized} {includes/include} {examples from data_type_description}.` **`{question}`**
+By `{inline_b}`, we mean `{definition}` **`{question}`**
 
-Example: Financial information includes bank statements and investment portfolios. **Do you consider financial information to be important?**
-*(Plural names use “include”, e.g. “Professional or educational documents include…”.)*
+Example: By financial information, we mean records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history. **Do you consider financial information to be important?**
 
 ### A1 — Importance
 
@@ -706,7 +683,7 @@ A few questions about the tools you use.
 
 Thank you for completing this study.
 
-The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for, particularly when it is used to train AI models or AI agents versus to improve a company's services more generally.
+The purpose of this study is to understand how people value different types of personal data, and whether their preferences change depending on what the data will be used for—particularly when it is used to train AI models or AI agents versus to improve a company's services more generally.
 
 The "App Z" service in this survey was hypothetical. No company called App Z accessed or collected any of your information, and your responses to the scenarios will not be shared with any third party.
 
@@ -715,3 +692,35 @@ Your responses will help inform policy discussions about data governance in the 
 IRB Protocol: STUDY2026_00000225 — Carnegie Mellon University
 
 **Button:** *(completes study / redirects to CloudResearch)*
+
+---
+
+## Appendix — client-side chrome
+
+Participant-facing strings that live in `public/app.js` (and `server/routes/start.js`) rather than
+in the screen payload, so they don't appear page-by-page above.
+
+**Page headings and framing added by the client**
+
+- Consent: heading **Informed Consent**; each statement is answered with Yes / No radios.
+- Intro: the opener ("Imagine you're a frequent user of App Z!") is rendered as the page heading; the comprehension section is introduced by the heading **Comprehension check**.
+- Intro, on a failed comprehension attempt: *One or more answers are incorrect. Please review the information above and try again.*
+- Welcome: "you will not be able to return to previous pages" is bolded.
+- Scenario pages: the data-type name in "We will access or ask you to provide your …" is bold + underlined; the program name is bold + underlined in both the lead-in and "We are now offering you the option to …".
+- Block A / Block B pages: header and question share one paragraph; the question is bold + blue. The attention check has no header and uses plain bold.
+- Demographics: heading **About you**; *These questions help us describe the participant pool.*
+- Debrief: heading **Thank you**; button **Complete study**.
+
+**Settings frame (default presentation; `?mode=plain` drops the frame and keeps the copy)**
+
+- Fake URL bar: `appz.com/settings/subscription` · `appz.com/settings/data-sharing`
+- Sidebar brand **App Z**, nav items: Account · Subscription · Premium features · Privacy · Data Sharing Program · Notifications · Billing (the scenario's own row is highlighted).
+
+**Terminal / error states**
+
+- After the final submit: *Thank you — your responses have been recorded.* (shown only if the CloudResearch redirect is unavailable).
+- After consent refusal: *Survey ended.* (likewise).
+- Session could not be restored: *Your session could not be loaded. Please return to CloudResearch and re-enter the study using the original link.*
+- Bad or missing `participantId`: *Invalid or missing participant ID. Please return to CloudResearch and try again.*
+- Returning after finishing: *You have already completed this study. Thank you.*
+- IP throttle tripped: *Too many sessions started recently. Please return to CloudResearch and try again later.*

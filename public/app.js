@@ -486,7 +486,8 @@
           'font-bold underline text-cyan-600')));
     }
     const list = el('ul', { class: 'list-disc list-outside ml-5 mt-2 text-cyan-600 space-y-1' });
-    list.appendChild(el('li', {}, emphasize(p.collect_line, p.collect_emphasis)));
+    list.appendChild(el('li', {}, emphasize(p.collect_line, p.collect_emphasis)
+      .concat(p.collect_definition ? [' ' + p.collect_definition] : [])));
     list.appendChild(el('li', {}, emphasize(p.use_line, p.use_emphasis)));
     box.appendChild(list);
     // Offer prose (below the two bullets; cyan), then decorative I-agree row.

@@ -146,10 +146,10 @@ async function runTests() {
 }
 
 section('content');
-test('20 data types each with inline, data_type_description, category, plural', () => {
-  assert.equal(content.DATA_TYPES.length, 20);
+test('16 data types each with inline, definition, plural', () => {
+  assert.equal(content.DATA_TYPES.length, 16);
   for (const d of content.DATA_TYPES) {
-    assert.ok(d.inline && d.data_type_description && d.category);
+    assert.ok(d.inline && d.definition);
     assert.equal(typeof d.plural, 'boolean');
   }
 });
@@ -184,11 +184,11 @@ test('generateAllOrderings returns valid permutations', () => {
   assert.deepEqual([...o.block_b_order].sort((a, b) => a - b), [7, 8, 9, 10, 11, 12, 13]);
   assert.deepEqual([...o.block_a_order].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 14, 15, 16, 17, 18]);
 });
-test('assignCell yields a valid cell (dt 1..20, uc B1/B2)', async () => {
+test('assignCell yields a valid cell (dt 1..16, uc B1/B2)', async () => {
   mockState.participants.clear();
   mockState.byPid.clear();
   const cell = await assignCell();
-  assert.ok(cell.data_type >= 1 && cell.data_type <= 20);
+  assert.ok(cell.data_type >= 1 && cell.data_type <= 16);
   assert.ok(['B1', 'B2'].includes(cell.use_case));
 });
 
@@ -331,7 +331,7 @@ section('state machine');
 const fakeParticipant = {
   scenario_order: [2, 1],
   current_screen: 'consent',
-  data_type: 5, use_case: 'B1',
+  data_type: 4, use_case: 'B1',
   block_b_order: [9, 7, 13, 11, 8, 12, 10],   // Block B ids (7-13)
   block_a_order: [4, 1, 14, 2, 5, 3, 6, 15, 16, 17, 18] // Block A + AC
 };
@@ -381,7 +381,8 @@ test('post-scenarios sequence', () => {
 });
 
 section('screen content');
-const dt5 = content.DATA_TYPES.find(d => d.id === 5);
+const dtFin = content.DATA_TYPES.find(d => d.id === 4);
+const FIN_DEF = 'By financial information, we mean records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history.';
 test('welcome screen carries intro copy', () => {
   const p = screenPayload(fakeParticipant, 'welcome');
   assert.equal(p.screen, 'welcome');
@@ -398,13 +399,13 @@ test('intro screen: App Z setup + data type (longer def inline) + use case + com
   assert.ok(pricing && pricing.body.includes('$20 per month'));
   assert.ok(privacy && privacy.body.includes('deletes any data it holds after one year'));
   const change = p.change.join(' ');
-  assert.ok(change.includes(dt5.data_type_description));       // full description in first sentence
-  assert.ok(change.includes(dt5.inline));                      // short name in use-case sentence
+  assert.ok(change.includes(`Earlier this year, App Z became interested in its users' financial information. ${FIN_DEF}`));
+  assert.ok(change.includes(dtFin.inline));                      // short name in use-case sentence
   assert.ok(change.includes("improve App Z's services"));     // B1 use-case wording
-  assert.equal(p.data_type_bold, "users' financial information"); // core phrase (no including…)
+  assert.equal(p.data_type_bold, "users' financial information");
   // Comprehension bundled on the same screen
   assert.equal(p.comprehension.statements.length, 3);
-  assert.ok(p.comprehension.statements[0].text.includes(dt5.inline)); // short name in check
+  assert.ok(p.comprehension.statements[0].text.includes(dtFin.inline)); // short name in check
   assert.ok(p.comprehension.statements[1].text.includes("improve App Z's services")); // matches narrative
   assert.ok(p.comprehension.statements[2].text.includes('permanently deleted after 30 days'));
   assert.ok(p.comprehension.statements[0].text.startsWith("App Z would like to access its users'"));
@@ -413,18 +414,18 @@ test('intro screen B2 uses the AI-training use-case wording', () => {
   const p = screenPayload({ ...fakeParticipant, use_case: 'B2' }, 'intro');
   assert.ok(p.change.join(' ').includes("train App Z's AI models and AI agents to improve its services"));
 });
-test('intro data_type_bold is core phrase for process types', () => {
-  const p = screenPayload({ ...fakeParticipant, data_type: 16 }, 'intro');
-  assert.equal(p.data_type_bold, 'how its users cook');
+test('intro data_type_bold is the short name for process types', () => {
+  const p = screenPayload({ ...fakeParticipant, data_type: 10 }, 'intro');
+  assert.equal(p.data_type_bold, "users' email management behavior data");
 });
 test('scenario_1 (Subscription Discount): settings-frame payload + first-person use', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1');
   assert.equal(p.heading, 'Subscription');
   assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
   assert.ok(!p.lead_in.join(' ').includes('One day'));
-  assert.equal(p.collect_line,
-    `We will access or give you instructions on how to provide your ${dt5.inline}. This includes bank statements and investment portfolios.`);
-  assert.deepEqual(p.collect_emphasis, [dt5.inline]);
+  assert.equal(p.collect_line, `We will access or ask you to provide your ${dtFin.inline}.`);
+  assert.deepEqual(p.collect_emphasis, [dtFin.inline]);
+  assert.equal(p.collect_definition, FIN_DEF);
   assert.ok(p.use_line.includes("improve App Z's services"));
   assert.deepEqual(p.tiers, content.S1_TIERS);
   assert.equal(p.none_label, 'I would not share this data regardless of the discount amount');
@@ -466,10 +467,9 @@ test('post-question Block A payload: description header + data-type prompt', () 
   assert.equal(p.screen, 'postq_1');
   assert.equal(p.item.key, 'postq_importance');
   assert.equal(p.item.type, 'likert5');
-  assert.ok(p.item.prompt.includes(dt5.inline));
+  assert.ok(p.item.prompt.includes(dtFin.inline));
   assert.ok(p.item.prompt.startsWith('Do you consider'));
-  assert.equal(p.item.header,
-    'Financial information includes bank statements and investment portfolios.');
+  assert.equal(p.item.header, FIN_DEF);
   assert.equal(p.data_label, undefined);    // "About:" label removed
 });
 test('attention-check has no Block A description header', () => {
@@ -479,47 +479,40 @@ test('attention-check has no Block A description header', () => {
 test('post-question Block B payload: use-case header + trimmed prompt', () => {
   const p = screenPayload(fakeParticipant, 'postq_7');
   assert.equal(p.item.key, 'postq_comp_by_amount');
-  assert.ok(p.item.header.startsWith(`Suppose App Z collects your ${dt5.inline} to `));
+  assert.ok(p.item.header.startsWith(`Suppose App Z collects your ${dtFin.inline} to `));
   assert.ok(p.item.header.includes(` to ${content.USE_CASES.B1.data_use}.`));
   assert.ok(!p.item.header.includes(`, to ${content.USE_CASES.B1.data_use}.`));
-  assert.ok(p.item.header.includes('This includes bank statements and investment portfolios.'));
-  assert.ok(p.item.prompt.includes(dt5.inline));                        // short data name in question
+  assert.ok(p.item.header.endsWith(`. ${FIN_DEF}`));
+  assert.ok(p.item.prompt.includes(dtFin.inline));                        // short data name in question
   assert.ok(!p.item.prompt.includes(content.USE_CASES.B1.data_use));    // use case NOT repeated in the question
 });
-test('Block B process-type header uses short name + includes (not "your how you…")', () => {
-  const p = screenPayload({ ...fakeParticipant, data_type: 16 }, 'postq_11');
-  assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your cooking behavior data to '));
-  assert.ok(p.item.header.includes('This includes detailed behavioral data'));
-  assert.ok(!p.item.header.includes('your how you'));
-  assert.ok(!p.item.header.includes('Cooking behavior data includes'));
+test('Block B process-type header uses short name + definition', () => {
+  const p = screenPayload({ ...fakeParticipant, data_type: 10 }, 'postq_11');
+  assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your email management behavior data to '));
+  assert.ok(p.item.header.includes('By email management behavior data, we mean a record of how you handle your inbox'));
 });
 test('Blocks A/B use inline_b where set; intro/scenarios keep inline', () => {
-  const b = screenPayload({ ...fakeParticipant, data_type: 6 }, 'postq_7');
-  assert.ok(b.item.header.includes('communications data'));
+  const b = screenPayload({ ...fakeParticipant, data_type: 5 }, 'postq_7');
+  assert.ok(b.item.header.includes('By communications data, we mean the contents of your private messages'));
   assert.ok(b.item.prompt.includes('communications data is used'));
-  const a = screenPayload({ ...fakeParticipant, data_type: 6 }, 'postq_1');
+  const a = screenPayload({ ...fakeParticipant, data_type: 5 }, 'postq_1');
   assert.equal(a.item.prompt, 'Do you consider communications data to be important?');
-  assert.ok(a.item.header.startsWith('Communications data includes'));
-  const introA = screenPayload({ ...fakeParticipant, data_type: 6 }, 'block_a_intro');
+  assert.ok(a.item.header.startsWith('By communications data, we mean '));
+  const introA = screenPayload({ ...fakeParticipant, data_type: 5 }, 'block_a_intro');
   assert.ok(introA.body.join(' ').includes('communications data'));
-  const scen = screenPayload({ ...fakeParticipant, data_type: 6 }, 'scenario_1');
+  const scen = screenPayload({ ...fakeParticipant, data_type: 5 }, 'scenario_1');
   assert.ok(scen.collect_line.includes('your communications.'));
-  assert.ok(!scen.collect_line.includes('communications data'));
-  const histA = screenPayload({ ...fakeParticipant, data_type: 9 }, 'postq_1');
+  assert.ok(scen.collect_definition.startsWith('By communications, we mean '));
+  const histA = screenPayload({ ...fakeParticipant, data_type: 7 }, 'postq_1');
   assert.equal(histA.item.prompt, 'Do you consider location history data to be important?');
-  const prefB = screenPayload({ ...fakeParticipant, data_type: 17 }, 'postq_8');
-  assert.ok(prefB.item.prompt.includes('music preferences data is used'));
-  const docs = screenPayload({ ...fakeParticipant, data_type: 12 }, 'postq_1');
-  assert.ok(docs.item.header.startsWith('Professional or educational documents include '));
-  const docsIntro = screenPayload({ ...fakeParticipant, data_type: 12 }, 'block_a_intro');
-  assert.ok(docsIntro.body[0].includes('regardless of their use'));
+  const prefB = screenPayload({ ...fakeParticipant, data_type: 14 }, 'postq_8');
+  assert.ok(prefB.item.prompt.includes('streaming preferences data is used'));
+  const rec = screenPayload({ ...fakeParticipant, data_type: 13 }, 'postq_1');
+  assert.ok(rec.item.header.startsWith('By work process recordings, we mean screen or video recordings'));
+  const recIntro = screenPayload({ ...fakeParticipant, data_type: 13 }, 'block_a_intro');
+  assert.ok(recIntro.body[0].includes('regardless of their use'));
   const share = screenPayload(fakeParticipant, 'postq_4');
   assert.ok(share.item.options[0].label.includes('share this publicly'));
-  const demo = screenPayload({ ...fakeParticipant, data_type: 1 }, 'postq_7');
-  assert.ok(demo.item.header.includes('This includes your age, gender'));
-  assert.ok(!demo.item.header.includes('their age'));
-  const ex = screenPayload({ ...fakeParticipant, data_type: 20 }, 'postq_7');
-  assert.ok(ex.item.header.includes('what forms of exercise you engage in and when you exercise'));
   const leak = screenPayload(fakeParticipant, 'postq_6');
   assert.ok(leak.item.options.some(o => /the data was released anonymously/.test(o.label)));
 });
@@ -534,7 +527,7 @@ test('selected Block B headers use "wants to collect"', () => {
 test('Block B prompts use short data name instead of generic "your data"', () => {
   for (const id of [7, 8, 9, 10, 11, 12, 13]) {
     const p = screenPayload(fakeParticipant, `postq_${id}`);
-    assert.ok(p.item.prompt.includes(dt5.inline), `postq_${id}`);
+    assert.ok(p.item.prompt.includes(dtFin.inline), `postq_${id}`);
     assert.ok(!/\byour data\b/.test(p.item.prompt), `postq_${id}`);
     assert.ok(!/\bthis data\b/.test(p.item.prompt), `postq_${id}`);
   }
@@ -542,9 +535,9 @@ test('Block B prompts use short data name instead of generic "your data"', () =>
 test('prompts use is/are agreement from data-type plural flag', () => {
   const singular = screenPayload(fakeParticipant, 'postq_16'); // financial information
   assert.ok(singular.item.prompt.includes('financial information is to companies'));
-  const pluralP = { ...fakeParticipant, data_type: 4 };
+  const pluralP = { ...fakeParticipant, data_type: 6 };
   const plural = screenPayload(pluralP, 'postq_16');
-  assert.ok(plural.item.prompt.includes('health information and medical records are to companies'));
+  assert.ok(plural.item.prompt.includes('contacts and social media connections are to companies'));
   const creditPlural = screenPayload(pluralP, 'postq_12');
   assert.ok(creditPlural.item.prompt.includes('when they are used by App Z'));
   const creditSing = screenPayload(fakeParticipant, 'postq_12');
@@ -574,13 +567,13 @@ test('attention-check payload (postq_14): plain Block-A item (no header)', () =>
 test('post_scenario_intro screen mentions data type + use case', () => {
   const p = screenPayload(fakeParticipant, 'post_scenario_intro');
   const text = p.body.join(' ');
-  assert.ok(text.includes(dt5.inline));
+  assert.ok(text.includes(dtFin.inline));
   assert.ok(text.includes(content.USE_CASES.B1.data_use));
 });
 test('block_a_intro screen mentions data type regardless of use', () => {
   const p = screenPayload(fakeParticipant, 'block_a_intro');
   const text = p.body.join(' ');
-  assert.ok(text.includes(dt5.inline));
+  assert.ok(text.includes(dtFin.inline));
   assert.ok(text.includes('regardless of its use'));
 });
 test('open_response screen carries the prompt + field key', () => {
