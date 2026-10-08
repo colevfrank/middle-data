@@ -3,11 +3,11 @@
 | Field | Value |
 |---|---|
 | Data type id | 2 |
-| Category | Demographic/Identity |
+| Category | undefined |
 | Use case | **B2** — train App Z's AI models and AI agents to improve its services |
 | `inline` (intro / scenarios) | government IDs |
-| `inline_b` (Blocks A & B) | government ID data |
-| Number (A/B prompts) | singular (is / it / its) |
+| `inline_b` (Blocks A & B) | government IDs |
+| Number (A/B prompts) | plural (are / them / their) |
 
 **Note:** In the live survey, scenario order and Block A/B question order are randomized. This preview uses a fixed order: Subscription Discount → Data Sharing Program; Block B then Block A questions by ascending id (attention check pooled in Block A).
 
@@ -35,21 +35,27 @@ Click "Continue" when you are ready to begin.
 
 ## Intro (App Z setup + recent change + comprehension)
 
-Imagine you're a frequent user of App Z!
+**Imagine you're a frequent user of App Z!**
 
-App Z is an online service that you use often. You currently pay $20 per month for App Z.
+App Z is an online service that you use often.
+
+**Pricing**
+
+You currently pay $20 per month for App Z.
+
+**Privacy**
 
 By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service. App Z does not sell your information, and App Z also deletes any data it holds after one year.
 
 **But there has been a recent change**
 
-Earlier this year, App Z became interested in its users' government IDs, including their driver's license or passport information.
+Earlier this year, App Z became interested in its users' government IDs. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa.
 
-App Z would like to access your government IDs to train App Z's AI models and AI agents to improve its services.
+App Z would like to use your government IDs to train App Z's AI models and AI agents to improve its services.
 
 **Comprehension check**
 
-1. App Z would like to access its users' government IDs.
+1. App Z would like to use its users' government IDs.
 
 - True
 - False
@@ -70,7 +76,7 @@ App Z would like to access your government IDs to train App Z's AI models and AI
 
 ## Scenario 1 — Subscription Discount
 
-**We'd like you to imagine: You open App Z and it offers you the option to receive a Subscription Discount**
+**We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to receive a Subscription Discount:**
 
 **Settings frame — Subscription**
 
@@ -78,7 +84,7 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-- We will access or ask you to provide your government IDs. This includes your driver's license or passport information.
+- We will access or walk you through instructions on how to provide your government IDs.
 - We will use this information to train App Z's AI models and AI agents to improve its services
 
 We would like to offer you a monthly discount on your subscription for sharing this data.
@@ -88,13 +94,40 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 **Please select what discount you would be willing to accept (select all that apply):**
 
-- $1 off / month ($19/mo)
-- $3 off / month ($17/mo)
-- $5 off / month ($15/mo)
-- $8 off / month ($12/mo)
-- $12 off / month ($8/mo)
-- $20 off / month (Free)
-- I will not share this data regardless of the discount amount
+- I would accept if I receive $1 off / month (which means my subscription is $19/mo)
+- I would accept if I receive $3 off / month (which means my subscription is $17/mo)
+- I would accept if I receive $5 off / month (which means my subscription is $15/mo)
+- I would accept if I receive $8 off / month (which means my subscription is $12/mo)
+- I would accept if I receive $12 off / month (which means my subscription is $8/mo)
+- I would accept if I receive $20 off / month (which means my subscription is Free)
+- I would not share this data regardless of the discount amount
+
+**Button:** Continue
+
+---
+
+## Scenario 1 slider follow-up
+
+**We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to receive a Subscription Discount:**
+
+**Settings frame — Subscription**
+
+You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.
+
+We are now offering you the option to receive a Subscription Discount. If you agree:
+
+- We will access or walk you through instructions on how to provide your government IDs.
+- We will use this information to train App Z's AI models and AI agents to improve its services
+
+We would like to offer you a monthly discount on your subscription for sharing this data.
+
+- I agree  `$____ / month discount`
+- I do not agree
+
+**Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:**
+
+- Slider: $0 – $20
+- I would not share this data regardless of the discount amount
 
 **Button:** Continue
 
@@ -112,7 +145,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 ## Scenario 2 — Data Sharing Program
 
-**We'd like you to imagine: You open App Z and it offers you the option to join a Data Sharing Program**
+**We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to join a Data Sharing Program:**
 
 **Settings frame — Data Sharing Program**
 
@@ -120,7 +153,7 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-- We will access or ask you to provide your government IDs. This includes your driver's license or passport information.
+- We will access or walk you through instructions on how to provide your government IDs.
 - We will use this information to train App Z's AI models and AI agents to improve its services
 
 Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
@@ -130,13 +163,40 @@ Because your data will increase our revenue, we would like to offer to pay you a
 
 **Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):**
 
-- 1%
-- 10%
-- 25%
-- 50%
-- 75%
-- 99%
-- I will not share this data regardless of the percentage
+- I would agree if I receive 1% of the revenue attributed to my data
+- I would agree if I receive 10% of the revenue attributed to my data
+- I would agree if I receive 25% of the revenue attributed to my data
+- I would agree if I receive 50% of the revenue attributed to my data
+- I would agree if I receive 75% of the revenue attributed to my data
+- I would agree if I receive 99% of the revenue attributed to my data
+- I would not share this data regardless of the percentage
+
+**Button:** Continue
+
+---
+
+## Scenario 2 slider follow-up
+
+**We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to join a Data Sharing Program:**
+
+**Settings frame — Data Sharing Program**
+
+You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.
+
+We are now offering you the option to join a Data Sharing Program. If you opt in:
+
+- We will access or walk you through instructions on how to provide your government IDs.
+- We will use this information to train App Z's AI models and AI agents to improve its services
+
+Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
+
+- I agree  `____% of revenue`
+- I do not agree
+
+**Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:**
+
+- Slider: 0% – 99%
+- I would not share this data regardless of the percentage
 
 **Button:** Continue
 
@@ -144,7 +204,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 
 ## Post-scenario intro (→ Block B)
 
-Now, we'd like to understand how you feel about App Z accessing your government IDs to train App Z's AI models and AI agents to improve its services.
+Now, we'd like to understand how you feel about App Z accessing or asking you to provide your government IDs to train App Z's AI models and AI agents to improve its services.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -154,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your government ID data to train App Z's AI models and AI agents to improve its services. This includes your driver's license or passport information. **Should you be compensated based on how much of your government ID data is used by App Z?**
+Suppose App Z collects your government IDs to train App Z's AI models and AI agents to improve its services. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Should you be compensated based on how much of your government IDs are used by App Z?**
 
 - Yes
 - No
@@ -167,7 +227,7 @@ Suppose App Z collects your government ID data to train App Z's AI models and AI
 
 ## Block B — postq_comp_per_use (id 8)
 
-Suppose App Z collects your government ID data to train App Z's AI models and AI agents to improve its services. This includes your driver's license or passport information. **Should you be compensated each time your government ID data is used by App Z?**
+Suppose App Z collects your government IDs to train App Z's AI models and AI agents to improve its services. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Should you be compensated each time your government IDs are used by App Z?**
 
 - Yes
 - No
@@ -180,7 +240,7 @@ Suppose App Z collects your government ID data to train App Z's AI models and AI
 
 ## Block B — postq_comp_by_effort (id 9)
 
-Suppose App Z collects your government ID data to train App Z's AI models and AI agents to improve its services. This includes your driver's license or passport information. **Should you be compensated based on how much effort it took for you to generate or provide your government ID data to App Z?**
+Suppose App Z collects your government IDs to train App Z's AI models and AI agents to improve its services. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Should you be compensated based on how much effort it took for you to generate or provide your government IDs to App Z?**
 
 - Yes
 - No
@@ -193,7 +253,7 @@ Suppose App Z collects your government ID data to train App Z's AI models and AI
 
 ## Block B — postq_comp_by_originality (id 10)
 
-Suppose App Z collects your government ID data to train App Z's AI models and AI agents to improve its services. This includes your driver's license or passport information. **Should you be compensated for how unique or original your government ID data is relative to others' on App Z?**
+Suppose App Z collects your government IDs to train App Z's AI models and AI agents to improve its services. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Should you be compensated for how unique or original your government IDs are relative to others' on App Z?**
 
 - Yes
 - No
@@ -206,7 +266,7 @@ Suppose App Z collects your government ID data to train App Z's AI models and AI
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your government ID data to train App Z's AI models and AI agents to improve its services. This includes your driver's license or passport information. **Suppose your phone manufacturer collected your government ID data and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your government IDs to train App Z's AI models and AI agents to improve its services. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Suppose your phone manufacturer collected your government IDs and sold them to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -220,7 +280,7 @@ Suppose App Z wants to collect your government ID data to train App Z's AI model
 
 ## Block B — postq_credit_ack (id 12)
 
-Suppose App Z collects your government ID data to train App Z's AI models and AI agents to improve its services. This includes your driver's license or passport information. **Should you receive credit or acknowledgement for your government ID data when it is used by App Z?**
+Suppose App Z collects your government IDs to train App Z's AI models and AI agents to improve its services. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Should you receive credit or acknowledgement for your government IDs when they are used by App Z?**
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -234,15 +294,15 @@ Suppose App Z collects your government ID data to train App Z's AI models and AI
 
 ## Block B — postq_concerns (id 13)
 
-Suppose App Z wants to collect your government ID data to train App Z's AI models and AI agents to improve its services. This includes your driver's license or passport information. **What is/are your main concern(s) about sharing your government ID data with App Z? (Please check all that apply)**
+Suppose App Z wants to collect your government IDs to train App Z's AI models and AI agents to improve its services. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **What is/are your main concern(s) about sharing your government IDs with App Z? (Please check all that apply)**
 
-- It's too personal or sensitive
-- It could be used to harm me
-- It could be used to impersonate or represent me
 - I don't trust App Z
-- I don't understand why App Z wants it
-- It could be used to manipulate me
+- It could be used to impersonate or represent me
+- It could be used to harm me
 - I'm not concerned
+- It could be used to manipulate me
+- I don't understand why App Z wants it
+- It's too personal or sensitive
 - Other
 
 **Button:** Continue
@@ -251,7 +311,7 @@ Suppose App Z wants to collect your government ID data to train App Z's AI model
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about government ID data, regardless of its use.
+Now, we'd like to understand how you feel about government IDs, regardless of their use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -261,7 +321,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block A — postq_importance (id 1)
 
-Government ID data includes your driver's license or passport information. **Do you consider government ID data to be important?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Do you consider your government IDs to be important?**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -271,7 +331,7 @@ Government ID data includes your driver's license or passport information. **Do 
 
 ## Block A — postq_sensitivity (id 2)
 
-Government ID data includes your driver's license or passport information. **Do you consider government ID data to be sensitive?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Do you consider your government IDs to be sensitive?**
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
@@ -281,7 +341,7 @@ Government ID data includes your driver's license or passport information. **Do 
 
 ## Block A — postq_ownership (id 3)
 
-Government ID data includes your driver's license or passport information. **Do you feel ownership over government ID data?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Do you feel ownership over your government IDs?**
 
 *(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
 
@@ -291,7 +351,7 @@ Government ID data includes your driver's license or passport information. **Do 
 
 ## Block A — postq_share_public (id 4)
 
-Government ID data includes your driver's license or passport information. **Would you ever share your government ID data publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Would you ever share your government IDs publicly? For example, would you share them with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.
@@ -304,7 +364,7 @@ Government ID data includes your driver's license or passport information. **Wou
 
 ## Block A — postq_buy_sell_appropriate (id 5)
 
-Government ID data includes your driver's license or passport information. **Is it appropriate to buy and sell your government ID data?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Is it appropriate to buy and sell your government IDs?**
 
 *(1–5 Likert)* 1: Completely inappropriate … 5: Completely appropriate
 
@@ -314,7 +374,7 @@ Government ID data includes your driver's license or passport information. **Is 
 
 ## Block A — postq_upset_if_leaked (id 6)
 
-Government ID data includes your driver's license or passport information. **If you found out your government ID data had been released publicly without your knowledge, which best describes how you would feel?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **If you found out your government IDs had been released publicly without your knowledge, which best describes how you would feel?**
 
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
@@ -339,7 +399,7 @@ Government ID data includes your driver's license or passport information. **If 
 
 ## Block A — postq_identifiability (id 15)
 
-Government ID data includes your driver's license or passport information. **How identifiable (traceable to you) do you think government ID data is?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **How identifiable (traceable to you) do you think your government IDs are?**
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -349,7 +409,7 @@ Government ID data includes your driver's license or passport information. **How
 
 ## Block A — postq_usefulness (id 16)
 
-Government ID data includes your driver's license or passport information. **How useful do you think government ID data is to companies?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **How useful do you think your government IDs are to companies?**
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -359,7 +419,7 @@ Government ID data includes your driver's license or passport information. **How
 
 ## Block A — postq_replaceability (id 17)
 
-Government ID data includes your driver's license or passport information. **How common or replaceable do you think government ID data is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **How common or replaceable do you think your government IDs are across people? In other words, if you didn't provide them, could someone else easily provide similar data?**
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
@@ -369,7 +429,7 @@ Government ID data includes your driver's license or passport information. **How
 
 ## Block A — postq_control (id 18)
 
-Government ID data includes your driver's license or passport information. **How much control do you feel you have over your government ID data in general?**
+By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **How much control do you feel you have over your government IDs in general?**
 
 *(1–5 Likert)* 1: no control at all … 5: complete control
 
@@ -379,9 +439,13 @@ Government ID data includes your driver's license or passport information. **How
 
 ## Open response
 
-**Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data? Does your answer change if your data is being used to train AI models or AI agents?**
+**Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data?**
 
-*(optional free text)*
+*(required free text)*
+
+**Does your answer change if your data is being used to train AI models or AI agents?**
+
+*(required free text)*
 
 **Button:** Continue
 

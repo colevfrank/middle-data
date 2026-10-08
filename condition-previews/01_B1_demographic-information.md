@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | Data type id | 1 |
-| Category | Demographic/Identity |
+| Category | undefined |
 | Use case | **B1** — improve App Z's services |
 | `inline` (intro / scenarios) | demographic information |
 | `inline_b` (Blocks A & B) | demographic information |
@@ -35,21 +35,27 @@ Click "Continue" when you are ready to begin.
 
 ## Intro (App Z setup + recent change + comprehension)
 
-Imagine you're a frequent user of App Z!
+**Imagine you're a frequent user of App Z!**
 
-App Z is an online service that you use often. You currently pay $20 per month for App Z.
+App Z is an online service that you use often.
+
+**Pricing**
+
+You currently pay $20 per month for App Z.
+
+**Privacy**
 
 By default, App Z does not record or store any of your information beyond what is strictly necessary to operate the service. App Z does not sell your information, and App Z also deletes any data it holds after one year.
 
 **But there has been a recent change**
 
-Earlier this year, App Z became interested in its users' demographic information, including their age, gender, race, zip code, marital status, income, and level of education.
+Earlier this year, App Z became interested in its users' demographic information. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence.
 
-App Z would like to access your demographic information to improve App Z's services.
+App Z would like to use your demographic information to improve App Z's services.
 
 **Comprehension check**
 
-1. App Z would like to access its users' demographic information.
+1. App Z would like to use its users' demographic information.
 
 - True
 - False
@@ -70,7 +76,7 @@ App Z would like to access your demographic information to improve App Z's servi
 
 ## Scenario 1 — Subscription Discount
 
-**We'd like you to imagine: You open App Z and it offers you the option to receive a Subscription Discount**
+**We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to receive a Subscription Discount:**
 
 **Settings frame — Subscription**
 
@@ -78,7 +84,7 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-- We will access or ask you to provide your demographic information. This includes your age, gender, race, zip code, marital status, income, and level of education.
+- We will access or walk you through instructions on how to provide your demographic information.
 - We will use this information to improve App Z's services
 
 We would like to offer you a monthly discount on your subscription for sharing this data.
@@ -88,13 +94,40 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 **Please select what discount you would be willing to accept (select all that apply):**
 
-- $1 off / month ($19/mo)
-- $3 off / month ($17/mo)
-- $5 off / month ($15/mo)
-- $8 off / month ($12/mo)
-- $12 off / month ($8/mo)
-- $20 off / month (Free)
-- I will not share this data regardless of the discount amount
+- I would accept if I receive $1 off / month (which means my subscription is $19/mo)
+- I would accept if I receive $3 off / month (which means my subscription is $17/mo)
+- I would accept if I receive $5 off / month (which means my subscription is $15/mo)
+- I would accept if I receive $8 off / month (which means my subscription is $12/mo)
+- I would accept if I receive $12 off / month (which means my subscription is $8/mo)
+- I would accept if I receive $20 off / month (which means my subscription is Free)
+- I would not share this data regardless of the discount amount
+
+**Button:** Continue
+
+---
+
+## Scenario 1 slider follow-up
+
+**We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to receive a Subscription Discount:**
+
+**Settings frame — Subscription**
+
+You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.
+
+We are now offering you the option to receive a Subscription Discount. If you agree:
+
+- We will access or walk you through instructions on how to provide your demographic information.
+- We will use this information to improve App Z's services
+
+We would like to offer you a monthly discount on your subscription for sharing this data.
+
+- I agree  `$____ / month discount`
+- I do not agree
+
+**Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:**
+
+- Slider: $0 – $20
+- I would not share this data regardless of the discount amount
 
 **Button:** Continue
 
@@ -112,7 +145,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 ## Scenario 2 — Data Sharing Program
 
-**We'd like you to imagine: You open App Z and it offers you the option to join a Data Sharing Program**
+**We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to join a Data Sharing Program:**
 
 **Settings frame — Data Sharing Program**
 
@@ -120,7 +153,7 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-- We will access or ask you to provide your demographic information. This includes your age, gender, race, zip code, marital status, income, and level of education.
+- We will access or walk you through instructions on how to provide your demographic information.
 - We will use this information to improve App Z's services
 
 Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
@@ -130,13 +163,40 @@ Because your data will increase our revenue, we would like to offer to pay you a
 
 **Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):**
 
-- 1%
-- 10%
-- 25%
-- 50%
-- 75%
-- 99%
-- I will not share this data regardless of the percentage
+- I would agree if I receive 1% of the revenue attributed to my data
+- I would agree if I receive 10% of the revenue attributed to my data
+- I would agree if I receive 25% of the revenue attributed to my data
+- I would agree if I receive 50% of the revenue attributed to my data
+- I would agree if I receive 75% of the revenue attributed to my data
+- I would agree if I receive 99% of the revenue attributed to my data
+- I would not share this data regardless of the percentage
+
+**Button:** Continue
+
+---
+
+## Scenario 2 slider follow-up
+
+**We'd like you to imagine that you open App Z one day and you see the window below. App Z is offering you the option to join a Data Sharing Program:**
+
+**Settings frame — Data Sharing Program**
+
+You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.
+
+We are now offering you the option to join a Data Sharing Program. If you opt in:
+
+- We will access or walk you through instructions on how to provide your demographic information.
+- We will use this information to improve App Z's services
+
+Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
+
+- I agree  `____% of revenue`
+- I do not agree
+
+**Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:**
+
+- Slider: 0% – 99%
+- I would not share this data regardless of the percentage
 
 **Button:** Continue
 
@@ -144,7 +204,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 
 ## Post-scenario intro (→ Block B)
 
-Now, we'd like to understand how you feel about App Z accessing your demographic information to improve App Z's services.
+Now, we'd like to understand how you feel about App Z accessing or asking you to provide your demographic information to improve App Z's services.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -154,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your demographic information to improve App Z's services. This includes your age, gender, race, zip code, marital status, income, and level of education. **Should you be compensated based on how much of your demographic information is used by App Z?**
+Suppose App Z collects your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Should you be compensated based on how much of your demographic information is used by App Z?**
 
 - Yes
 - No
@@ -167,7 +227,7 @@ Suppose App Z collects your demographic information to improve App Z's services.
 
 ## Block B — postq_comp_per_use (id 8)
 
-Suppose App Z collects your demographic information to improve App Z's services. This includes your age, gender, race, zip code, marital status, income, and level of education. **Should you be compensated each time your demographic information is used by App Z?**
+Suppose App Z collects your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Should you be compensated each time your demographic information is used by App Z?**
 
 - Yes
 - No
@@ -180,7 +240,7 @@ Suppose App Z collects your demographic information to improve App Z's services.
 
 ## Block B — postq_comp_by_effort (id 9)
 
-Suppose App Z collects your demographic information to improve App Z's services. This includes your age, gender, race, zip code, marital status, income, and level of education. **Should you be compensated based on how much effort it took for you to generate or provide your demographic information to App Z?**
+Suppose App Z collects your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Should you be compensated based on how much effort it took for you to generate or provide your demographic information to App Z?**
 
 - Yes
 - No
@@ -193,7 +253,7 @@ Suppose App Z collects your demographic information to improve App Z's services.
 
 ## Block B — postq_comp_by_originality (id 10)
 
-Suppose App Z collects your demographic information to improve App Z's services. This includes your age, gender, race, zip code, marital status, income, and level of education. **Should you be compensated for how unique or original your demographic information is relative to others' on App Z?**
+Suppose App Z collects your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Should you be compensated for how unique or original your demographic information is relative to others' on App Z?**
 
 - Yes
 - No
@@ -206,7 +266,7 @@ Suppose App Z collects your demographic information to improve App Z's services.
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your demographic information to improve App Z's services. This includes your age, gender, race, zip code, marital status, income, and level of education. **Suppose your phone manufacturer collected your demographic information and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Suppose your phone manufacturer collected your demographic information and sold it to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -220,7 +280,7 @@ Suppose App Z wants to collect your demographic information to improve App Z's s
 
 ## Block B — postq_credit_ack (id 12)
 
-Suppose App Z collects your demographic information to improve App Z's services. This includes your age, gender, race, zip code, marital status, income, and level of education. **Should you receive credit or acknowledgement for your demographic information when it is used by App Z?**
+Suppose App Z collects your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Should you receive credit or acknowledgement for your demographic information when it is used by App Z?**
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -234,15 +294,15 @@ Suppose App Z collects your demographic information to improve App Z's services.
 
 ## Block B — postq_concerns (id 13)
 
-Suppose App Z wants to collect your demographic information to improve App Z's services. This includes your age, gender, race, zip code, marital status, income, and level of education. **What is/are your main concern(s) about sharing your demographic information with App Z? (Please check all that apply)**
+Suppose App Z wants to collect your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **What is/are your main concern(s) about sharing your demographic information with App Z? (Please check all that apply)**
 
 - I don't understand why App Z wants it
-- It's too personal or sensitive
-- I'm not concerned
+- It could be used to manipulate me
 - It could be used to impersonate or represent me
 - I don't trust App Z
-- It could be used to manipulate me
+- It's too personal or sensitive
 - It could be used to harm me
+- I'm not concerned
 - Other
 
 **Button:** Continue
@@ -261,7 +321,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block A — postq_importance (id 1)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **Do you consider demographic information to be important?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Do you consider your demographic information to be important?**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -271,7 +331,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_sensitivity (id 2)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **Do you consider demographic information to be sensitive?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Do you consider your demographic information to be sensitive?**
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
@@ -281,7 +341,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_ownership (id 3)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **Do you feel ownership over demographic information?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Do you feel ownership over your demographic information?**
 
 *(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
 
@@ -291,7 +351,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_share_public (id 4)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **Would you ever share your demographic information publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Would you ever share your demographic information publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.
@@ -304,7 +364,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_buy_sell_appropriate (id 5)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **Is it appropriate to buy and sell your demographic information?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Is it appropriate to buy and sell your demographic information?**
 
 *(1–5 Likert)* 1: Completely inappropriate … 5: Completely appropriate
 
@@ -314,7 +374,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_upset_if_leaked (id 6)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **If you found out your demographic information had been released publicly without your knowledge, which best describes how you would feel?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **If you found out your demographic information had been released publicly without your knowledge, which best describes how you would feel?**
 
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
@@ -339,7 +399,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_identifiability (id 15)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **How identifiable (traceable to you) do you think demographic information is?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **How identifiable (traceable to you) do you think your demographic information is?**
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -349,7 +409,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_usefulness (id 16)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **How useful do you think demographic information is to companies?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **How useful do you think your demographic information is to companies?**
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -359,7 +419,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_replaceability (id 17)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **How common or replaceable do you think demographic information is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **How common or replaceable do you think your demographic information is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
@@ -369,7 +429,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Block A — postq_control (id 18)
 
-Demographic information includes your age, gender, race, zip code, marital status, income, and level of education. **How much control do you feel you have over your demographic information in general?**
+By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **How much control do you feel you have over your demographic information in general?**
 
 *(1–5 Likert)* 1: no control at all … 5: complete control
 
@@ -379,9 +439,13 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Open response
 
-**Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data? Does your answer change if your data is being used to train AI models or AI agents?**
+**Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data?**
 
-*(optional free text)*
+*(required free text)*
+
+**Does your answer change if your data is being used to train AI models or AI agents?**
+
+*(required free text)*
 
 **Button:** Continue
 

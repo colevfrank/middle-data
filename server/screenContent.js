@@ -38,7 +38,7 @@ function scenarioPayload(p, screenId) {
     intro: [
       'You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.'
     ],
-    collect_line: `We will access or ask you to provide your ${dt.inline}.`,
+    collect_line: `We will access or walk you through instructions on how to provide your ${dt.inline}.`,
     collect_emphasis: [dt.inline],
     // Same bullet, unemphasized (so the repeated name isn't bolded twice).
     collect_definition: definitionSentence(dt),
@@ -228,7 +228,7 @@ function screenPayload(p, screenId, extra = {}) {
         comprehension: {
           instruction: 'Based on the information above, indicate whether each statement is True or False.',
           statements: [
-            { id: 1, text: `App Z would like to access its users' ${dt.inline}.` },
+            { id: 1, text: `App Z would like to use its users' ${dt.inline}.` },
             { id: 2, text: `App Z would use your data to ${uc.comp_use}.` },
             { id: 3, text: 'App Z guarantees that your data will be permanently deleted after 30 days.' }
           ]
@@ -252,7 +252,7 @@ function screenPayload(p, screenId, extra = {}) {
     }
 
     case 'post_scenario_intro': {
-      const accessPhrase = `accessing your ${dt.inline} to ${uc.data_use}`;
+      const accessPhrase = `accessing or asking you to provide your ${dt.inline} to ${uc.data_use}`;
       return {
         screen: 'post_scenario_intro',
         body: [

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Generate condition-previews/*.md — one full page playthrough per
- * data-type × use-case cell (20 × 2 = 40), from live survey content.
+ * data-type × use-case cell (16 × 2 = 32), from live survey content.
  *
  * Usage: node scripts/generate-condition-previews.js
  */
@@ -223,10 +223,10 @@ function main() {
     if (f.endsWith('.md')) fs.unlinkSync(path.join(outDir, f));
   }
 
-  let index = '# Condition previews (20 × 2)\n\n';
+  let index = '# Condition previews (16 × 2)\n\n';
   index += 'Generated from live `server/content.js` + `server/screenContent.js`.\n\n';
   index += 'Each file is a full page-by-page playthrough for one cell of the factorial design ';
-  index += '(**20 data types × 2 use cases = 40 conditions**).\n\n';
+  index += '(**16 data types × 2 use cases = 32 conditions**).\n\n';
   index += 'Regenerate with:\n\n```bash\nnode scripts/generate-condition-previews.js\n```\n\n';
   index += 'Within a cell, scenario order and Block A/B question order are randomized for participants; ';
   index += 'these previews use a **fixed representative order** ';

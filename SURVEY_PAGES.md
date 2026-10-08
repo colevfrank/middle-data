@@ -6,7 +6,7 @@ Page-by-page text as currently assembled from `server/content.js` and `server/sc
 
 - `{definition}` — second-person definition, shown as “By `{inline}`, we mean `{definition}`” (first letter lower-cased) in the intro, scenarios, and Block A/B headers
 - `{inline}` — short mid-sentence data-type name (intro, scenarios, …)
-- `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. communications data)
+- `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. location history data)
 - `{data_use}` — use-case phrase (same wording as `comp_use` / `scenario_use` in code)
 
 Scenario order (Subscription Discount vs Data Sharing Program) is randomized. Block B questions are randomized within Block B; Block A questions (plus the attention check) are randomized within Block A. Block B is always shown before Block A.
@@ -103,26 +103,26 @@ By default, App Z does not record or store any of your information beyond what i
 Earlier this year, App Z became interested in its users' `{inline}`. By `{inline}`, we mean `{definition}`
 *(“users' `{inline}`” is bold + underlined.)*
 
-App Z would like to access your `{inline}` to `{data_use}`.
+App Z would like to use your `{inline}` to `{data_use}`.
 
 `{definition}`:
 
-1. Basic facts about who you are, such as your age, gender, and level of education.
-2. Official identification documents and numbers issued to you, such as your driver's license, passport, or Social Security number.
-3. Recordings of your voice, such as audio from voice assistants, dictation, or voice messages you've sent.
-4. Records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history.
-5. The contents of your private messages, such as your emails, text messages, and direct messages.
-6. The list of people you're connected to, such as the contacts in your phone and the people you follow or friend on social media.
-7. A record of the places you've been, such as where you live, work, travel, and shop, and when you were there.
-8. A record of the websites you visit and the terms you search for online.
+1. Basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence.
+2. Government-issued identification, such as your driver's license, passport, or visa.
+3. Recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants.
+4. Records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score.
+5. Emails, text messages, and direct messages on social media apps.
+6. The list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media.
+7. A record of where you travel and when, such as your path to work, home, and other places.
+8. A record of the URLs you visit online and timestamps of these visits.
 9. The photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places.
-10. A record of how you handle your inbox, such as which emails you open, archive, delete, or leave unread, and how quickly you reply.
-11. A record of how you carry out routine tasks, such as scheduling meetings, filling out forms, filing documents, and managing your calendar.
-12. A record of how a document, presentation, or code file came together, such as the drafts, edits, deletions, and revisions you made along the way.
-13. Screen or video recordings of you doing your work, showing the steps you take to complete a task from start to finish.
-14. A record of what you watch and listen to, such as the shows, movies, and music you choose and how you rate them.
-15. A record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them.
-16. Readings from your phone's motion sensors that capture how you physically move and handle your device, such as walking, driving, or picking it up.
+10. A record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails.
+11. Screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted).
+12. A record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised.
+13. Screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish.
+14. A record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them.
+15. A record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen.
+16. Readings from your phone's motion sensors that capture how you physically move and handle your device, such as when walking, driving, or picking it up.
 
 
 `{inline}`:
@@ -131,18 +131,18 @@ App Z would like to access your `{inline}` to `{data_use}`.
 2. government IDs
 3. voice data
 4. financial information
-5. communications
+5. personal communications data
 6. contacts and social media connections
 7. location history
 8. web browsing history
 9. photo library
-10. email management behavior data
-11. administrative task behavior data
-12. document edit history
-13. work process recordings
+10. email management data
+11. errand-related screen recordings
+12. document editing history
+13. work-related screen recordings
 14. streaming preferences
-15. screen usage patterns
-16. device motion sensor data
+15. screen usage data
+16. phone's motion sensor data
 
 `{data_use}`:
 
@@ -153,7 +153,7 @@ App Z would like to access your `{inline}` to `{data_use}`.
 
 Based on the information above, indicate whether each statement is True or False.
 
-1. App Z would like to access its users' `{inline}`. *(True)*
+1. App Z would like to use its users' `{inline}`. *(True)*
 2. App Z would use your data to `{data_use}`. *(True)*
 3. App Z guarantees that your data will be permanently deleted after 30 days. *(False)*
 
@@ -179,9 +179,9 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-We will access or ask you to provide your `{inline}`. By `{inline}`, we mean `{definition}`
+We will access or walk you through instructions on how to provide your `{inline}`. By `{inline}`, we mean `{definition}`
 
-Example: We will access or ask you to provide your financial information. By financial information, we mean records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history.
+Example: We will access or walk you through instructions on how to provide your financial information. By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score.
 
 We will use this information to `{data_use}` *(data use underlined)*
 
@@ -197,18 +197,18 @@ We would like to offer you a monthly discount on your subscription for sharing t
 2. government IDs
 3. voice data
 4. financial information
-5. communications
+5. personal communications data
 6. contacts and social media connections
 7. location history
 8. web browsing history
 9. photo library
-10. email management behavior data
-11. administrative task behavior data
-12. document edit history
-13. work process recordings
+10. email management data
+11. errand-related screen recordings
+12. document editing history
+13. work-related screen recordings
 14. streaming preferences
-15. screen usage patterns
-16. device motion sensor data
+15. screen usage data
+16. phone's motion sensor data
 
 `{data_use}`:
 
@@ -277,9 +277,9 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-We will access or ask you to provide your `{inline}`. By `{inline}`, we mean `{definition}`
+We will access or walk you through instructions on how to provide your `{inline}`. By `{inline}`, we mean `{definition}`
 
-Example: We will access or ask you to provide your financial information. By financial information, we mean records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history.
+Example: We will access or walk you through instructions on how to provide your financial information. By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score.
 
 We will use this information to `{data_use}` *(data use underlined)*
 
@@ -295,18 +295,18 @@ Because your data will increase our revenue, we would like to offer to pay you a
 2. government IDs
 3. voice data
 4. financial information
-5. communications
+5. personal communications data
 6. contacts and social media connections
 7. location history
 8. web browsing history
 9. photo library
-10. email management behavior data
-11. administrative task behavior data
-12. document edit history
-13. work process recordings
+10. email management data
+11. errand-related screen recordings
+12. document editing history
+13. work-related screen recordings
 14. streaming preferences
-15. screen usage patterns
-16. device motion sensor data
+15. screen usage data
+16. phone's motion sensor data
 
 `{data_use}`:
 
@@ -329,7 +329,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 
 ## Page 7 — Post-scenario intro
 
-Now, we'd like to understand how you feel about App Z accessing your `{inline}` to `{data_use}`.
+Now, we'd like to understand how you feel about App Z accessing or asking you to provide your `{inline}` to `{data_use}`.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -339,18 +339,18 @@ On the following pages, we'll ask you a series of questions.
 2. government IDs
 3. voice data
 4. financial information
-5. communications
+5. personal communications data
 6. contacts and social media connections
 7. location history
 8. web browsing history
 9. photo library
-10. email management behavior data
-11. administrative task behavior data
-12. document edit history
-13. work process recordings
+10. email management data
+11. errand-related screen recordings
+12. document editing history
+13. work-related screen recordings
 14. streaming preferences
-15. screen usage patterns
-16. device motion sensor data
+15. screen usage data
+16. phone's motion sensor data
 
 `{data_use}`:
 
@@ -369,26 +369,26 @@ On the following pages, we'll ask you a series of questions.
 
 Suppose App Z collects your `{inline_b}` to `{data_use}`. By `{inline_b}`, we mean `{definition}` **`{question}`**
 
-Example: Suppose App Z wants to collect your email management behavior data to improve App Z's services. By email management behavior data, we mean a record of how you handle your inbox, such as which emails you open, archive, delete, or leave unread, and how quickly you reply. **What is/are your main concern(s) about sharing your email management behavior data with App Z? (Please check all that apply)**
+Example: Suppose App Z wants to collect your email management data to improve App Z's services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **What is/are your main concern(s) about sharing your email management data with App Z? (Please check all that apply)**
 
 `{inline_b}` *(Block A and Block B; intro/scenarios use `{inline}`)*:
 
 1. demographic information
-2. government ID data
+2. government IDs
 3. voice data
 4. financial information
-5. communications data
+5. personal communications data
 6. contacts and social media connections
 7. location history data
 8. web browsing history data
 9. photo library data
-10. email management behavior data
-11. administrative task behavior data
-12. document edit history data
-13. work process recordings
+10. email management data
+11. errand-related screen recordings
+12. document editing history data
+13. work-related screen recordings
 14. streaming preferences data
 15. screen usage data
-16. device motion sensor data
+16. phone's motion sensor data
 
 `{data_use}`:
 
@@ -492,11 +492,11 @@ On the following pages, we'll ask you a series of questions.
 
 By `{inline_b}`, we mean `{definition}` **`{question}`**
 
-Example: By financial information, we mean records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history. **Do you consider financial information to be important?**
+Example: By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **Do you consider your financial information to be important?**
 
 ### A1 — Importance
 
-Do you consider `{inline_b}` to be important?
+Do you consider your `{inline_b}` to be important?
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -504,7 +504,7 @@ Do you consider `{inline_b}` to be important?
 
 ### A2 — Sensitivity
 
-Do you consider `{inline_b}` to be sensitive?
+Do you consider your `{inline_b}` to be sensitive?
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
@@ -512,7 +512,7 @@ Do you consider `{inline_b}` to be sensitive?
 
 ### A3 — Ownership
 
-Do you feel ownership over `{inline_b}`?
+Do you feel ownership over your `{inline_b}`?
 
 *(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
 
@@ -552,7 +552,7 @@ If you found out your `{inline_b}` had been released publicly without your knowl
 
 ### A7 — Identifiability
 
-How identifiable (traceable to you) do you think `{inline_b}` `{is/are}`?
+How identifiable (traceable to you) do you think your `{inline_b}` `{is/are}`?
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -560,7 +560,7 @@ How identifiable (traceable to you) do you think `{inline_b}` `{is/are}`?
 
 ### A8 — Usefulness to companies
 
-How useful do you think `{inline_b}` `{is/are}` to companies?
+How useful do you think your `{inline_b}` `{is/are}` to companies?
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -568,7 +568,7 @@ How useful do you think `{inline_b}` `{is/are}` to companies?
 
 ### A9 — Replaceability / commonness
 
-How common or replaceable do you think `{inline_b}` `{is/are}` across people? In other words, if you didn't provide `{it/them}`, could someone else easily provide similar data?
+How common or replaceable do you think your `{inline_b}` `{is/are}` across people? In other words, if you didn't provide `{it/them}`, could someone else easily provide similar data?
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
@@ -710,7 +710,7 @@ in the screen payload, so they don't appear page-by-page above.
 - Intro: the opener ("Imagine you're a frequent user of App Z!") is rendered as the page heading; the comprehension section is introduced by the heading **Comprehension check**.
 - Intro, on a failed comprehension attempt: *One or more answers are incorrect. Please review the information above and try again.*
 - Welcome: "you will not be able to return to previous pages" is bolded.
-- Scenario pages: the data-type name in "We will access or ask you to provide your …" is bold + underlined; the program name is bold + underlined in both the lead-in and "We are now offering you the option to …".
+- Scenario pages: the data-type name in "We will access or walk you through instructions on how to provide your …" is bold + underlined; the program name is bold + underlined in both the lead-in and "We are now offering you the option to …".
 - Block A / Block B pages: header and question share one paragraph; the question is bold + blue. The attention check has no header and uses plain bold.
 - Demographics: heading **About you**; *These questions help us describe the participant pool.*
 - Debrief: heading **Thank you**; button **Complete study**.

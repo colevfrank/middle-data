@@ -393,7 +393,7 @@ test('post-scenarios sequence', () => {
 
 section('screen content');
 const dtFin = content.DATA_TYPES.find(d => d.id === 4);
-const FIN_DEF = 'By financial information, we mean records of your money and accounts, such as your bank balances, credit card numbers, income, and credit history.';
+const FIN_DEF = 'By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score.';
 test('welcome screen carries intro copy', () => {
   const p = screenPayload(fakeParticipant, 'welcome');
   assert.equal(p.screen, 'welcome');
@@ -419,7 +419,7 @@ test('intro screen: App Z setup + data type (longer def inline) + use case + com
   assert.ok(p.comprehension.statements[0].text.includes(dtFin.inline)); // short name in check
   assert.ok(p.comprehension.statements[1].text.includes("improve App Z's services")); // matches narrative
   assert.ok(p.comprehension.statements[2].text.includes('permanently deleted after 30 days'));
-  assert.ok(p.comprehension.statements[0].text.startsWith("App Z would like to access its users'"));
+  assert.ok(p.comprehension.statements[0].text.startsWith("App Z would like to use its users'"));
 });
 test('intro screen B2 uses the AI-training use-case wording', () => {
   const p = screenPayload({ ...fakeParticipant, use_case: 'B2' }, 'intro');
@@ -427,14 +427,14 @@ test('intro screen B2 uses the AI-training use-case wording', () => {
 });
 test('intro data_type_bold is the short name for process types', () => {
   const p = screenPayload({ ...fakeParticipant, data_type: 10 }, 'intro');
-  assert.equal(p.data_type_bold, "users' email management behavior data");
+  assert.equal(p.data_type_bold, "users' email management data");
 });
 test('scenario_1 (Subscription Discount): settings-frame payload + first-person use', () => {
   const p = screenPayload(fakeParticipant, 'scenario_1');
   assert.equal(p.heading, 'Subscription');
   assert.ok(p.lead_in.join(' ').includes('Subscription Discount'));
   assert.ok(!p.lead_in.join(' ').includes('One day'));
-  assert.equal(p.collect_line, `We will access or ask you to provide your ${dtFin.inline}.`);
+  assert.equal(p.collect_line, `We will access or walk you through instructions on how to provide your ${dtFin.inline}.`);
   assert.deepEqual(p.collect_emphasis, [dtFin.inline]);
   assert.equal(p.collect_definition, FIN_DEF);
   assert.ok(p.use_line.includes("improve App Z's services"));
@@ -499,27 +499,34 @@ test('post-question Block B payload: use-case header + trimmed prompt', () => {
 });
 test('Block B process-type header uses short name + definition', () => {
   const p = screenPayload({ ...fakeParticipant, data_type: 10 }, 'postq_11');
-  assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your email management behavior data to '));
-  assert.ok(p.item.header.includes('By email management behavior data, we mean a record of how you handle your inbox'));
+  assert.ok(p.item.header.startsWith('Suppose App Z wants to collect your email management data to '));
+  assert.ok(p.item.header.includes('By email management data, we mean a record of how you manage your email inbox'));
 });
-test('Blocks A/B use inline_b where set; intro/scenarios keep inline', () => {
+test('Blocks A/B use inline_b where set; unified names otherwise', () => {
   const b = screenPayload({ ...fakeParticipant, data_type: 5 }, 'postq_7');
-  assert.ok(b.item.header.includes('By communications data, we mean the contents of your private messages'));
-  assert.ok(b.item.prompt.includes('communications data is used'));
+  assert.ok(b.item.header.includes('By personal communications data, we mean emails, text messages'));
+  assert.ok(b.item.prompt.includes('personal communications data is used'));
   const a = screenPayload({ ...fakeParticipant, data_type: 5 }, 'postq_1');
-  assert.equal(a.item.prompt, 'Do you consider communications data to be important?');
-  assert.ok(a.item.header.startsWith('By communications data, we mean '));
+  assert.equal(a.item.prompt, 'Do you consider your personal communications data to be important?');
+  assert.ok(a.item.header.startsWith('By personal communications data, we mean '));
   const introA = screenPayload({ ...fakeParticipant, data_type: 5 }, 'block_a_intro');
-  assert.ok(introA.body.join(' ').includes('communications data'));
+  assert.ok(introA.body.join(' ').includes('personal communications data'));
   const scen = screenPayload({ ...fakeParticipant, data_type: 5 }, 'scenario_1');
-  assert.ok(scen.collect_line.includes('your communications.'));
-  assert.ok(scen.collect_definition.startsWith('By communications, we mean '));
+  assert.ok(scen.collect_line.includes('your personal communications data.'));
+  assert.ok(scen.collect_definition.startsWith('By personal communications data, we mean '));
+  const gov = screenPayload({ ...fakeParticipant, data_type: 2 }, 'postq_1');
+  assert.equal(gov.item.prompt, 'Do you consider your government IDs to be important?');
+  assert.ok(gov.item.header.startsWith('By government IDs, we mean '));
+  const screenDt = screenPayload({ ...fakeParticipant, data_type: 15 }, 'scenario_1');
+  assert.ok(screenDt.collect_line.includes('your screen usage data.'));
+  const own = screenPayload(fakeParticipant, 'postq_3');
+  assert.equal(own.item.prompt, `Do you feel ownership over your ${dtFin.inline}?`);
   const histA = screenPayload({ ...fakeParticipant, data_type: 7 }, 'postq_1');
-  assert.equal(histA.item.prompt, 'Do you consider location history data to be important?');
+  assert.equal(histA.item.prompt, 'Do you consider your location history data to be important?');
   const prefB = screenPayload({ ...fakeParticipant, data_type: 14 }, 'postq_8');
   assert.ok(prefB.item.prompt.includes('streaming preferences data is used'));
   const rec = screenPayload({ ...fakeParticipant, data_type: 13 }, 'postq_1');
-  assert.ok(rec.item.header.startsWith('By work process recordings, we mean screen or video recordings'));
+  assert.ok(rec.item.header.startsWith('By work-related screen recordings, we mean screen or video recordings'));
   const recIntro = screenPayload({ ...fakeParticipant, data_type: 13 }, 'block_a_intro');
   assert.ok(recIntro.body[0].includes('regardless of their use'));
   const share = screenPayload(fakeParticipant, 'postq_4');
@@ -581,7 +588,7 @@ test('post_scenario_intro screen mentions data type + use case', () => {
   assert.ok(text.includes(dtFin.inline));
   assert.ok(text.includes(content.USE_CASES.B1.data_use));
   assert.deepEqual(p.emphasis, [
-    `accessing your ${dtFin.inline} to ${content.USE_CASES.B1.data_use}`
+    `accessing or asking you to provide your ${dtFin.inline} to ${content.USE_CASES.B1.data_use}`
   ]);
 });
 test('block_a_intro screen mentions data type regardless of use', () => {

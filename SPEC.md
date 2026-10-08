@@ -66,21 +66,21 @@ Each data type carries:
 | # | `inline` | `inline_b` (if different) |
 | --- | --- | --- |
 | 1 | demographic information | — |
-| 2 | government IDs | government ID data |
+| 2 | government IDs | — |
 | 3 | voice data | — |
 | 4 | financial information | — |
-| 5 | communications | communications data |
+| 5 | personal communications data | — |
 | 6 | contacts and social media connections | — |
 | 7 | location history | location history data |
 | 8 | web browsing history | web browsing history data |
 | 9 | photo library | photo library data |
-| 10 | email management behavior data | — |
-| 11 | administrative task behavior data | — |
-| 12 | document edit history | document edit history data |
-| 13 | work process recordings | — |
+| 10 | email management data | — |
+| 11 | errand-related screen recordings | — |
+| 12 | document editing history | document editing history data |
+| 13 | work-related screen recordings | — |
 | 14 | streaming preferences | streaming preferences data |
-| 15 | screen usage patterns | screen usage data |
-| 16 | device motion sensor data | — |
+| 15 | screen usage data | — |
+| 16 | phone's motion sensor data | — |
 
 Full `definition` values: `SURVEY_PAGES.md`, Page 3.
 
@@ -147,7 +147,7 @@ Both scenarios share one voice-neutral, first-person design: a bold lead-in nami
 a settings-page frame (browser chrome, App Z sidebar, program description), then a bold question
 below the frame with multi-select checkboxes. Inside the frame: the current price and default
 no-collection/no-sale/one-year-deletion policy (generic "your information", *not* the assigned
-data type), then what would change — "We will access or ask you to provide your [DATA TYPE]"
+data type), then what would change — "We will access or walk you through instructions on how to provide your [DATA TYPE]"
 plus the definition ("By [DATA TYPE], we mean …"), "We will use this information to [USE]", and the offer. The frame
 also carries a decorative "I agree / I do not agree" row with a blank amount; it is settings-UI
 mock, not the participant's response.
@@ -192,9 +192,9 @@ bolded question. The attention check has no header.
 
 | id | Column | Question | Scale |
 | --- | --- | --- | --- |
-| 1 | `postq_importance` | Is this data important? | 1–5: not important to me at all → extremely important to me |
-| 2 | `postq_sensitivity` | Is this data sensitive? | 1–5: not sensitive at all → extremely sensitive |
-| 3 | `postq_ownership` | Do you feel ownership over it? | 1–5: I do not feel ownership over this type of data → I feel strong ownership over it |
+| 1 | `postq_importance` | Do you consider your [DATA TYPE] to be important? | 1–5: not important to me at all → extremely important to me |
+| 2 | `postq_sensitivity` | Do you consider your [DATA TYPE] to be sensitive? | 1–5: not sensitive at all → extremely sensitive |
+| 3 | `postq_ownership` | Do you feel ownership over your [DATA TYPE]? | 1–5: I do not feel ownership over this type of data → I feel strong ownership over it |
 | 4 | `postq_share_public` | Would you ever share it publicly? | 4 options, stored 0–3 (never → yes, with my name attached) |
 | 5 | `postq_buy_sell_appropriate` | Is it appropriate to buy and sell it? | 1–5: Completely inappropriate → Completely appropriate |
 | 6 | `postq_upset_if_leaked` | Released publicly without your knowledge — how would you feel? | 6 categorical options (not upset · a little uncomfortable · upset if named · upset even if anonymous · very upset either way · not sure) |
@@ -226,7 +226,7 @@ the middle points are unlabeled.
 Three True/False statements below the narrative, introduced by "Based on the information above,
 indicate whether each statement is True or False.":
 
-1. (TRUE) App Z would like to access its users' [DATA TYPE].
+1. (TRUE) App Z would like to use its users' [DATA TYPE].
 2. (TRUE) App Z would use your data to [USE CASE].
 3. (FALSE, identical for everyone) App Z guarantees that your data will be permanently deleted after 30 days.
 

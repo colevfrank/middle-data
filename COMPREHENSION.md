@@ -2,7 +2,7 @@ Comprehension Check (shown on the merged intro screen — Screen 3)
 "Based on the information above, indicate whether each statement is True or False."
 
 Statement 1 (data type — TRUE):
-"App Z would like to access its users' [their assigned data type's inline name]."
+"App Z would like to use its users' [assigned data type's inline name]."
 ◯ True ◯ False
 
 Statement 2 (use case — TRUE):

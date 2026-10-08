@@ -1,12 +1,12 @@
-# Condition 3 × B1
+# Condition 10 × B2
 
 | Field | Value |
 |---|---|
-| Data type id | 3 |
+| Data type id | 10 |
 | Category | undefined |
-| Use case | **B1** — improve App Z's services |
-| `inline` (intro / scenarios) | voice data |
-| `inline_b` (Blocks A & B) | voice data |
+| Use case | **B2** — train App Z's AI models and AI agents to improve its services |
+| `inline` (intro / scenarios) | email management data |
+| `inline_b` (Blocks A & B) | email management data |
 | Number (A/B prompts) | singular (is / it / its) |
 
 **Note:** In the live survey, scenario order and Block A/B question order are randomized. This preview uses a fixed order: Subscription Discount → Data Sharing Program; Block B then Block A questions by ascending id (attention check pooled in Block A).
@@ -49,18 +49,18 @@ By default, App Z does not record or store any of your information beyond what i
 
 **But there has been a recent change**
 
-Earlier this year, App Z became interested in its users' voice data. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants.
+Earlier this year, App Z became interested in its users' email management data. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails.
 
-App Z would like to use your voice data to improve App Z's services.
+App Z would like to use your email management data to train App Z's AI models and AI agents to improve its services.
 
 **Comprehension check**
 
-1. App Z would like to use its users' voice data.
+1. App Z would like to use its users' email management data.
 
 - True
 - False
 
-2. App Z would use your data to improve App Z's services.
+2. App Z would use your data to train App Z's AI models and AI agents to improve its services.
 
 - True
 - False
@@ -84,8 +84,8 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-- We will access or walk you through instructions on how to provide your voice data.
-- We will use this information to improve App Z's services
+- We will access or walk you through instructions on how to provide your email management data.
+- We will use this information to train App Z's AI models and AI agents to improve its services
 
 We would like to offer you a monthly discount on your subscription for sharing this data.
 
@@ -116,8 +116,8 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to receive a Subscription Discount. If you agree:
 
-- We will access or walk you through instructions on how to provide your voice data.
-- We will use this information to improve App Z's services
+- We will access or walk you through instructions on how to provide your email management data.
+- We will use this information to train App Z's AI models and AI agents to improve its services
 
 We would like to offer you a monthly discount on your subscription for sharing this data.
 
@@ -153,8 +153,8 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-- We will access or walk you through instructions on how to provide your voice data.
-- We will use this information to improve App Z's services
+- We will access or walk you through instructions on how to provide your email management data.
+- We will use this information to train App Z's AI models and AI agents to improve its services
 
 Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
 
@@ -185,8 +185,8 @@ You currently pay $20 per month for our app. By default, we do not record or sto
 
 We are now offering you the option to join a Data Sharing Program. If you opt in:
 
-- We will access or walk you through instructions on how to provide your voice data.
-- We will use this information to improve App Z's services
+- We will access or walk you through instructions on how to provide your email management data.
+- We will use this information to train App Z's AI models and AI agents to improve its services
 
 Because your data will increase our revenue, we would like to offer to pay you a percentage of the revenue attributed to your data for sharing this data.
 
@@ -204,7 +204,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 
 ## Post-scenario intro (→ Block B)
 
-Now, we'd like to understand how you feel about App Z accessing or asking you to provide your voice data to improve App Z's services.
+Now, we'd like to understand how you feel about App Z accessing or asking you to provide your email management data to train App Z's AI models and AI agents to improve its services.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -214,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your voice data to improve App Z's services. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Should you be compensated based on how much of your voice data is used by App Z?**
+Suppose App Z collects your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Should you be compensated based on how much of your email management data is used by App Z?**
 
 - Yes
 - No
@@ -227,7 +227,7 @@ Suppose App Z collects your voice data to improve App Z's services. By voice dat
 
 ## Block B — postq_comp_per_use (id 8)
 
-Suppose App Z collects your voice data to improve App Z's services. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Should you be compensated each time your voice data is used by App Z?**
+Suppose App Z collects your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Should you be compensated each time your email management data is used by App Z?**
 
 - Yes
 - No
@@ -240,7 +240,7 @@ Suppose App Z collects your voice data to improve App Z's services. By voice dat
 
 ## Block B — postq_comp_by_effort (id 9)
 
-Suppose App Z collects your voice data to improve App Z's services. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Should you be compensated based on how much effort it took for you to generate or provide your voice data to App Z?**
+Suppose App Z collects your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Should you be compensated based on how much effort it took for you to generate or provide your email management data to App Z?**
 
 - Yes
 - No
@@ -253,7 +253,7 @@ Suppose App Z collects your voice data to improve App Z's services. By voice dat
 
 ## Block B — postq_comp_by_originality (id 10)
 
-Suppose App Z collects your voice data to improve App Z's services. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Should you be compensated for how unique or original your voice data is relative to others' on App Z?**
+Suppose App Z collects your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Should you be compensated for how unique or original your email management data is relative to others' on App Z?**
 
 - Yes
 - No
@@ -266,7 +266,7 @@ Suppose App Z collects your voice data to improve App Z's services. By voice dat
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your voice data to improve App Z's services. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Suppose your phone manufacturer collected your voice data and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Suppose your phone manufacturer collected your email management data and sold it to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -280,7 +280,7 @@ Suppose App Z wants to collect your voice data to improve App Z's services. By v
 
 ## Block B — postq_credit_ack (id 12)
 
-Suppose App Z collects your voice data to improve App Z's services. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Should you receive credit or acknowledgement for your voice data when it is used by App Z?**
+Suppose App Z collects your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Should you receive credit or acknowledgement for your email management data when it is used by App Z?**
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -294,15 +294,15 @@ Suppose App Z collects your voice data to improve App Z's services. By voice dat
 
 ## Block B — postq_concerns (id 13)
 
-Suppose App Z wants to collect your voice data to improve App Z's services. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **What is/are your main concern(s) about sharing your voice data with App Z? (Please check all that apply)**
+Suppose App Z wants to collect your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **What is/are your main concern(s) about sharing your email management data with App Z? (Please check all that apply)**
 
-- I don't trust App Z
-- It could be used to impersonate or represent me
-- I don't understand why App Z wants it
 - I'm not concerned
 - It could be used to manipulate me
-- It's too personal or sensitive
+- I don't trust App Z
 - It could be used to harm me
+- I don't understand why App Z wants it
+- It could be used to impersonate or represent me
+- It's too personal or sensitive
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your voice data to improve App Z's services. By v
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about voice data, regardless of its use.
+Now, we'd like to understand how you feel about email management data, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -321,7 +321,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block A — postq_importance (id 1)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Do you consider your voice data to be important?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Do you consider your email management data to be important?**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -331,7 +331,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_sensitivity (id 2)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Do you consider your voice data to be sensitive?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Do you consider your email management data to be sensitive?**
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
@@ -341,7 +341,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_ownership (id 3)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Do you feel ownership over your voice data?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Do you feel ownership over your email management data?**
 
 *(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
 
@@ -351,7 +351,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_share_public (id 4)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Would you ever share your voice data publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Would you ever share your email management data publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.
@@ -364,7 +364,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_buy_sell_appropriate (id 5)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Is it appropriate to buy and sell your voice data?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Is it appropriate to buy and sell your email management data?**
 
 *(1–5 Likert)* 1: Completely inappropriate … 5: Completely appropriate
 
@@ -374,7 +374,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_upset_if_leaked (id 6)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **If you found out your voice data had been released publicly without your knowledge, which best describes how you would feel?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **If you found out your email management data had been released publicly without your knowledge, which best describes how you would feel?**
 
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
@@ -399,7 +399,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_identifiability (id 15)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **How identifiable (traceable to you) do you think your voice data is?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **How identifiable (traceable to you) do you think your email management data is?**
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -409,7 +409,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_usefulness (id 16)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **How useful do you think your voice data is to companies?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **How useful do you think your email management data is to companies?**
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -419,7 +419,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_replaceability (id 17)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **How common or replaceable do you think your voice data is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **How common or replaceable do you think your email management data is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
@@ -429,7 +429,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 ## Block A — postq_control (id 18)
 
-By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **How much control do you feel you have over your voice data in general?**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **How much control do you feel you have over your email management data in general?**
 
 *(1–5 Likert)* 1: no control at all … 5: complete control
 
