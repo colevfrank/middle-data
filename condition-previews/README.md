@@ -44,7 +44,7 @@ Within a cell, scenario order and Block A/B question order are randomized for pa
 | 14 | B2 | streaming preferences | [14_B2_streaming-preferences.md](./14_B2_streaming-preferences.md) |
 | 15 | B1 | screen usage data | [15_B1_screen-usage-data.md](./15_B1_screen-usage-data.md) |
 | 15 | B2 | screen usage data | [15_B2_screen-usage-data.md](./15_B2_screen-usage-data.md) |
-| 16 | B1 | phone's motion sensor data | [16_B1_phone-s-motion-sensor-data.md](./16_B1_phone-s-motion-sensor-data.md) |
-| 16 | B2 | phone's motion sensor data | [16_B2_phone-s-motion-sensor-data.md](./16_B2_phone-s-motion-sensor-data.md) |
+| 16 | B1 | phone motion sensor data | [16_B1_phone-motion-sensor-data.md](./16_B1_phone-motion-sensor-data.md) |
+| 16 | B2 | phone motion sensor data | [16_B2_phone-motion-sensor-data.md](./16_B2_phone-motion-sensor-data.md) |
 
 _Total condition files: 32_

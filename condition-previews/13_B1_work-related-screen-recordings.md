@@ -124,7 +124,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 - I agree  `$____ / month discount`
 - I do not agree
 
-**Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:**
+**Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not accept any discount:**
 
 - Slider: $0 – $20
 - I would not share this data regardless of the discount amount
@@ -193,7 +193,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 - I agree  `____% of revenue`
 - I do not agree
 
-**Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:**
+**Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not accept any percentage:**
 
 - Slider: 0% – 99%
 - I would not share this data regardless of the percentage
@@ -296,13 +296,13 @@ Suppose App Z collects your work-related screen recordings to improve App Z's se
 
 Suppose App Z wants to collect your work-related screen recordings to improve App Z's services. By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **What is/are your main concern(s) about sharing your work-related screen recordings with App Z? (Please check all that apply)**
 
+- I don't understand why App Z wants it
+- It could be used to manipulate me
+- It could be used to harm me
+- It could be used to impersonate or represent me
 - I don't trust App Z
 - It's too personal or sensitive
-- It could be used to manipulate me
-- It could be used to impersonate or represent me
-- It could be used to harm me
 - I'm not concerned
-- I don't understand why App Z wants it
 - Other
 
 **Button:** Continue

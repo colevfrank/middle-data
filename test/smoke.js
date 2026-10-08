@@ -522,7 +522,7 @@ test('Blocks A/B use inline_b where set; unified names otherwise', () => {
   const own = screenPayload(fakeParticipant, 'postq_3');
   assert.equal(own.item.prompt, `Do you feel ownership over your ${dtFin.inline}?`);
   const histA = screenPayload({ ...fakeParticipant, data_type: 7 }, 'postq_1');
-  assert.equal(histA.item.prompt, 'Do you consider your location history data to be important?');
+  assert.equal(histA.item.prompt, 'Do you consider your location history to be important?');
   const prefB = screenPayload({ ...fakeParticipant, data_type: 14 }, 'postq_8');
   assert.ok(prefB.item.prompt.includes('streaming preferences data is used'));
   const rec = screenPayload({ ...fakeParticipant, data_type: 13 }, 'postq_1');
@@ -560,6 +560,17 @@ test('prompts use is/are agreement from data-type plural flag', () => {
   assert.ok(creditPlural.item.prompt.includes('when they are used by App Z'));
   const creditSing = screenPayload(fakeParticipant, 'postq_12');
   assert.ok(creditSing.item.prompt.includes('when it is used by App Z'));
+});
+test('postq_comp_by_amount uses "information from" for government IDs and contacts', () => {
+  const gov = screenPayload({ ...fakeParticipant, data_type: 2 }, 'postq_7');
+  assert.equal(gov.item.prompt,
+    'Should you be compensated based on how much information from your government IDs is used by App Z?');
+  const contacts = screenPayload({ ...fakeParticipant, data_type: 6 }, 'postq_7');
+  assert.equal(contacts.item.prompt,
+    'Should you be compensated based on how much information from your contacts and social media connections is used by App Z?');
+  const fin = screenPayload(fakeParticipant, 'postq_7'); // financial information (default)
+  assert.equal(fin.item.prompt,
+    'Should you be compensated based on how much of your financial information is used by App Z?');
 });
 test('postq_concerns options: randomized order, Other always last', () => {
   const q = content.POST_QUESTIONS.find(x => x.key === 'postq_concerns');

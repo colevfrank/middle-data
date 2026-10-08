@@ -6,7 +6,7 @@ Page-by-page text as currently assembled from `server/content.js` and `server/sc
 
 - `{definition}` — second-person definition, shown as “By `{inline}`, we mean `{definition}`” (first letter lower-cased) in the intro, scenarios, and Block A/B headers
 - `{inline}` — short mid-sentence data-type name (intro, scenarios, …)
-- `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. location history data)
+- `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. streaming preferences data)
 - `{data_use}` — use-case phrase (same wording as `comp_use` / `scenario_use` in code)
 
 Scenario order (Subscription Discount vs Data Sharing Program) is randomized. Block B questions are randomized within Block B; Block A questions (plus the attention check) are randomized within Block A. Block B is always shown before Block A.
@@ -112,7 +112,7 @@ App Z would like to use your `{inline}` to `{data_use}`.
 3. Recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants.
 4. Records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score.
 5. Emails, text messages, and direct messages on social media apps.
-6. The list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media.
+6. The list of people in your phone contacts and your connections on social media (friends, followers, followed accounts).
 7. A record of where you travel and when, such as your path to work, home, and other places.
 8. A record of the URLs you visit online and timestamps of these visits.
 9. The photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places.
@@ -142,7 +142,7 @@ App Z would like to use your `{inline}` to `{data_use}`.
 13. work-related screen recordings
 14. streaming preferences
 15. screen usage data
-16. phone's motion sensor data
+16. phone motion sensor data
 
 `{data_use}`:
 
@@ -208,7 +208,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 13. work-related screen recordings
 14. streaming preferences
 15. screen usage data
-16. phone's motion sensor data
+16. phone motion sensor data
 
 `{data_use}`:
 
@@ -235,7 +235,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 **Subscription Discount slider**
 
-**Question:** Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:
+**Question:** Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not accept any discount:
 
 - Slider: $0 – $20 / month off (step $1)
 - I would not share this data regardless of the discount amount *(mutually exclusive)*
@@ -244,7 +244,7 @@ Stored: `s1_slider_value` (0–20) + `s1_slider_none` (boolean)
 
 **Data Sharing Program slider**
 
-**Question:** Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:
+**Question:** Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not accept any percentage:
 
 - Slider: 0% – 99% (step 1)
 - I would not share this data regardless of the percentage *(mutually exclusive)*
@@ -306,7 +306,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 13. work-related screen recordings
 14. streaming preferences
 15. screen usage data
-16. phone's motion sensor data
+16. phone motion sensor data
 
 `{data_use}`:
 
@@ -350,7 +350,7 @@ On the following pages, we'll ask you a series of questions.
 13. work-related screen recordings
 14. streaming preferences
 15. screen usage data
-16. phone's motion sensor data
+16. phone motion sensor data
 
 `{data_use}`:
 
@@ -379,16 +379,16 @@ Example: Suppose App Z wants to collect your email management data to improve Ap
 4. financial information
 5. personal communications data
 6. contacts and social media connections
-7. location history data
-8. web browsing history data
-9. photo library data
+7. location history
+8. web browsing history
+9. photo library
 10. email management data
 11. errand-related screen recordings
-12. document editing history data
+12. document editing history
 13. work-related screen recordings
 14. streaming preferences data
 15. screen usage data
-16. phone's motion sensor data
+16. phone motion sensor data
 
 `{data_use}`:
 
@@ -398,6 +398,10 @@ Example: Suppose App Z wants to collect your email management data to improve Ap
 ### B1 — Compensated by amount
 
 Should you be compensated based on how much of your `{inline_b}` `{is/are}` used by App Z?
+
+Exceptions (government IDs; contacts and social media connections):
+
+Should you be compensated based on how much information from your `{inline_b}` is used by App Z?
 
 - Yes
 - No

@@ -6,7 +6,7 @@
 | Category | undefined |
 | Use case | **B2** — train App Z's AI models and AI agents to improve its services |
 | `inline` (intro / scenarios) | document editing history |
-| `inline_b` (Blocks A & B) | document editing history data |
+| `inline_b` (Blocks A & B) | document editing history |
 | Number (A/B prompts) | singular (is / it / its) |
 
 **Note:** In the live survey, scenario order and Block A/B question order are randomized. This preview uses a fixed order: Subscription Discount → Data Sharing Program; Block B then Block A questions by ascending id (attention check pooled in Block A).
@@ -124,7 +124,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 - I agree  `$____ / month discount`
 - I do not agree
 
-**Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:**
+**Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not accept any discount:**
 
 - Slider: $0 – $20
 - I would not share this data regardless of the discount amount
@@ -193,7 +193,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 - I agree  `____% of revenue`
 - I do not agree
 
-**Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:**
+**Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not accept any percentage:**
 
 - Slider: 0% – 99%
 - I would not share this data regardless of the percentage
@@ -214,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your document editing history data to train App Z's AI models and AI agents to improve its services. By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you be compensated based on how much of your document editing history data is used by App Z?**
+Suppose App Z collects your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you be compensated based on how much of your document editing history is used by App Z?**
 
 - Yes
 - No
@@ -227,7 +227,7 @@ Suppose App Z collects your document editing history data to train App Z's AI mo
 
 ## Block B — postq_comp_per_use (id 8)
 
-Suppose App Z collects your document editing history data to train App Z's AI models and AI agents to improve its services. By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you be compensated each time your document editing history data is used by App Z?**
+Suppose App Z collects your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you be compensated each time your document editing history is used by App Z?**
 
 - Yes
 - No
@@ -240,7 +240,7 @@ Suppose App Z collects your document editing history data to train App Z's AI mo
 
 ## Block B — postq_comp_by_effort (id 9)
 
-Suppose App Z collects your document editing history data to train App Z's AI models and AI agents to improve its services. By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you be compensated based on how much effort it took for you to generate or provide your document editing history data to App Z?**
+Suppose App Z collects your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you be compensated based on how much effort it took for you to generate or provide your document editing history to App Z?**
 
 - Yes
 - No
@@ -253,7 +253,7 @@ Suppose App Z collects your document editing history data to train App Z's AI mo
 
 ## Block B — postq_comp_by_originality (id 10)
 
-Suppose App Z collects your document editing history data to train App Z's AI models and AI agents to improve its services. By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you be compensated for how unique or original your document editing history data is relative to others' on App Z?**
+Suppose App Z collects your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you be compensated for how unique or original your document editing history is relative to others' on App Z?**
 
 - Yes
 - No
@@ -266,7 +266,7 @@ Suppose App Z collects your document editing history data to train App Z's AI mo
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your document editing history data to train App Z's AI models and AI agents to improve its services. By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Suppose your phone manufacturer collected your document editing history data and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Suppose your phone manufacturer collected your document editing history and sold it to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -280,7 +280,7 @@ Suppose App Z wants to collect your document editing history data to train App Z
 
 ## Block B — postq_credit_ack (id 12)
 
-Suppose App Z collects your document editing history data to train App Z's AI models and AI agents to improve its services. By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you receive credit or acknowledgement for your document editing history data when it is used by App Z?**
+Suppose App Z collects your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Should you receive credit or acknowledgement for your document editing history when it is used by App Z?**
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -294,15 +294,15 @@ Suppose App Z collects your document editing history data to train App Z's AI mo
 
 ## Block B — postq_concerns (id 13)
 
-Suppose App Z wants to collect your document editing history data to train App Z's AI models and AI agents to improve its services. By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **What is/are your main concern(s) about sharing your document editing history data with App Z? (Please check all that apply)**
+Suppose App Z wants to collect your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **What is/are your main concern(s) about sharing your document editing history with App Z? (Please check all that apply)**
 
 - It could be used to harm me
-- It's too personal or sensitive
-- I don't trust App Z
-- I don't understand why App Z wants it
 - I'm not concerned
-- It could be used to impersonate or represent me
 - It could be used to manipulate me
+- I don't understand why App Z wants it
+- It's too personal or sensitive
+- It could be used to impersonate or represent me
+- I don't trust App Z
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your document editing history data to train App Z
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about document editing history data, regardless of its use.
+Now, we'd like to understand how you feel about document editing history, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -321,7 +321,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block A — postq_importance (id 1)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Do you consider your document editing history data to be important?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Do you consider your document editing history to be important?**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -331,7 +331,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_sensitivity (id 2)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Do you consider your document editing history data to be sensitive?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Do you consider your document editing history to be sensitive?**
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
@@ -341,7 +341,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_ownership (id 3)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Do you feel ownership over your document editing history data?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Do you feel ownership over your document editing history?**
 
 *(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
 
@@ -351,7 +351,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_share_public (id 4)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Would you ever share your document editing history data publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Would you ever share your document editing history publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.
@@ -364,7 +364,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_buy_sell_appropriate (id 5)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Is it appropriate to buy and sell your document editing history data?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Is it appropriate to buy and sell your document editing history?**
 
 *(1–5 Likert)* 1: Completely inappropriate … 5: Completely appropriate
 
@@ -374,7 +374,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_upset_if_leaked (id 6)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **If you found out your document editing history data had been released publicly without your knowledge, which best describes how you would feel?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **If you found out your document editing history had been released publicly without your knowledge, which best describes how you would feel?**
 
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
@@ -399,7 +399,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_identifiability (id 15)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **How identifiable (traceable to you) do you think your document editing history data is?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **How identifiable (traceable to you) do you think your document editing history is?**
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -409,7 +409,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_usefulness (id 16)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **How useful do you think your document editing history data is to companies?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **How useful do you think your document editing history is to companies?**
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -419,7 +419,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_replaceability (id 17)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **How common or replaceable do you think your document editing history data is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **How common or replaceable do you think your document editing history is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
@@ -429,7 +429,7 @@ By document editing history data, we mean a record of changes to your documents,
 
 ## Block A — postq_control (id 18)
 
-By document editing history data, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **How much control do you feel you have over your document editing history data in general?**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **How much control do you feel you have over your document editing history in general?**
 
 *(1–5 Likert)* 1: no control at all … 5: complete control
 

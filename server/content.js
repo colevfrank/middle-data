@@ -19,22 +19,18 @@ const DATA_TYPES = [
   { id: 5,  inline: 'personal communications data', plural: false,
     definition: 'Emails, text messages, and direct messages on social media apps.' },
   { id: 6,  inline: 'contacts and social media connections', plural: true,
-    definition: 'The list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media.' },
+    definition: 'The list of people in your phone contacts and your connections on social media (friends, followers, followed accounts).' },
   { id: 7,  inline: 'location history', plural: false,
-    inline_b: 'location history data',
     definition: 'A record of where you travel and when, such as your path to work, home, and other places.' },
   { id: 8,  inline: 'web browsing history', plural: false,
-    inline_b: 'web browsing history data',
     definition: 'A record of the URLs you visit online and timestamps of these visits.' },
   { id: 9,  inline: 'photo library', plural: false,
-    inline_b: 'photo library data',
     definition: 'The photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places.' },
   { id: 10, inline: 'email management data', plural: false,
     definition: 'A record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails.' },
   { id: 11, inline: 'errand-related screen recordings', plural: true,
     definition: 'Screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted).' },
   { id: 12, inline: 'document editing history', plural: false,
-    inline_b: 'document editing history data',
     definition: 'A record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised.' },
   { id: 13, inline: 'work-related screen recordings', plural: true,
     definition: 'Screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish.' },
@@ -43,7 +39,7 @@ const DATA_TYPES = [
     definition: 'A record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them.' },
   { id: 15, inline: 'screen usage data', plural: false,
     definition: 'A record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen.' },
-  { id: 16, inline: "phone's motion sensor data", plural: false,
+  { id: 16, inline: 'phone motion sensor data', plural: false,
     definition: "Readings from your phone's motion sensors that capture how you physically move and handle your device, such as when walking, driving, or picking it up." }
 ];
 
@@ -152,7 +148,10 @@ const POST_QUESTIONS = [
 
   // ----- Block B: about compensation for the use case -----
   { id: 7, key: 'postq_comp_by_amount', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    prompt: (dt) => `Should you be compensated based on how much of your ${dt.inline} ${be(dt)} used by App Z?`,
+    // Count plurals read oddly with "how much of your X are used"; use "information from" for ids 2 & 6.
+    prompt: (dt) => (dt.id === 2 || dt.id === 6)
+      ? `Should you be compensated based on how much information from your ${dt.inline} is used by App Z?`
+      : `Should you be compensated based on how much of your ${dt.inline} ${be(dt)} used by App Z?`,
     prompt_emphasis: ['how much'] },
   { id: 8, key: 'postq_comp_per_use', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
     prompt: (dt) => `Should you be compensated each time your ${dt.inline} ${be(dt)} used by App Z?` },

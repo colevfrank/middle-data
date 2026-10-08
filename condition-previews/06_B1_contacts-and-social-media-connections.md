@@ -49,7 +49,7 @@ By default, App Z does not record or store any of your information beyond what i
 
 **But there has been a recent change**
 
-Earlier this year, App Z became interested in its users' contacts and social media connections. By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media.
+Earlier this year, App Z became interested in its users' contacts and social media connections. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts).
 
 App Z would like to use your contacts and social media connections to improve App Z's services.
 
@@ -124,7 +124,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 - I agree  `$____ / month discount`
 - I do not agree
 
-**Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:**
+**Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not accept any discount:**
 
 - Slider: $0 – $20
 - I would not share this data regardless of the discount amount
@@ -193,7 +193,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 - I agree  `____% of revenue`
 - I do not agree
 
-**Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:**
+**Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not accept any percentage:**
 
 - Slider: 0% – 99%
 - I would not share this data regardless of the percentage
@@ -214,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Should you be compensated based on how much of your contacts and social media connections are used by App Z?**
+Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Should you be compensated based on how much information from your contacts and social media connections is used by App Z?**
 
 - Yes
 - No
@@ -227,7 +227,7 @@ Suppose App Z collects your contacts and social media connections to improve App
 
 ## Block B — postq_comp_per_use (id 8)
 
-Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Should you be compensated each time your contacts and social media connections are used by App Z?**
+Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Should you be compensated each time your contacts and social media connections are used by App Z?**
 
 - Yes
 - No
@@ -240,7 +240,7 @@ Suppose App Z collects your contacts and social media connections to improve App
 
 ## Block B — postq_comp_by_effort (id 9)
 
-Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Should you be compensated based on how much effort it took for you to generate or provide your contacts and social media connections to App Z?**
+Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Should you be compensated based on how much effort it took for you to generate or provide your contacts and social media connections to App Z?**
 
 - Yes
 - No
@@ -253,7 +253,7 @@ Suppose App Z collects your contacts and social media connections to improve App
 
 ## Block B — postq_comp_by_originality (id 10)
 
-Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Should you be compensated for how unique or original your contacts and social media connections are relative to others' on App Z?**
+Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Should you be compensated for how unique or original your contacts and social media connections are relative to others' on App Z?**
 
 - Yes
 - No
@@ -266,7 +266,7 @@ Suppose App Z collects your contacts and social media connections to improve App
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Suppose your phone manufacturer collected your contacts and social media connections and sold them to App Z. How would you feel?**
+Suppose App Z wants to collect your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Suppose your phone manufacturer collected your contacts and social media connections and sold them to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -280,7 +280,7 @@ Suppose App Z wants to collect your contacts and social media connections to imp
 
 ## Block B — postq_credit_ack (id 12)
 
-Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Should you receive credit or acknowledgement for your contacts and social media connections when they are used by App Z?**
+Suppose App Z collects your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Should you receive credit or acknowledgement for your contacts and social media connections when they are used by App Z?**
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -294,15 +294,15 @@ Suppose App Z collects your contacts and social media connections to improve App
 
 ## Block B — postq_concerns (id 13)
 
-Suppose App Z wants to collect your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **What is/are your main concern(s) about sharing your contacts and social media connections with App Z? (Please check all that apply)**
+Suppose App Z wants to collect your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **What is/are your main concern(s) about sharing your contacts and social media connections with App Z? (Please check all that apply)**
 
 - It could be used to manipulate me
+- I don't understand why App Z wants it
 - I don't trust App Z
+- It could be used to harm me
 - It could be used to impersonate or represent me
 - I'm not concerned
 - It's too personal or sensitive
-- It could be used to harm me
-- I don't understand why App Z wants it
 - Other
 
 **Button:** Continue
@@ -321,7 +321,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block A — postq_importance (id 1)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Do you consider your contacts and social media connections to be important?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Do you consider your contacts and social media connections to be important?**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -331,7 +331,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_sensitivity (id 2)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Do you consider your contacts and social media connections to be sensitive?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Do you consider your contacts and social media connections to be sensitive?**
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
@@ -341,7 +341,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_ownership (id 3)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Do you feel ownership over your contacts and social media connections?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Do you feel ownership over your contacts and social media connections?**
 
 *(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
 
@@ -351,7 +351,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_share_public (id 4)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Would you ever share your contacts and social media connections publicly? For example, would you share them with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Would you ever share your contacts and social media connections publicly? For example, would you share them with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.
@@ -364,7 +364,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_buy_sell_appropriate (id 5)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **Is it appropriate to buy and sell your contacts and social media connections?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Is it appropriate to buy and sell your contacts and social media connections?**
 
 *(1–5 Likert)* 1: Completely inappropriate … 5: Completely appropriate
 
@@ -374,7 +374,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_upset_if_leaked (id 6)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **If you found out your contacts and social media connections had been released publicly without your knowledge, which best describes how you would feel?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **If you found out your contacts and social media connections had been released publicly without your knowledge, which best describes how you would feel?**
 
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
@@ -399,7 +399,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_identifiability (id 15)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **How identifiable (traceable to you) do you think your contacts and social media connections are?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **How identifiable (traceable to you) do you think your contacts and social media connections are?**
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -409,7 +409,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_usefulness (id 16)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **How useful do you think your contacts and social media connections are to companies?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **How useful do you think your contacts and social media connections are to companies?**
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -419,7 +419,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_replaceability (id 17)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **How common or replaceable do you think your contacts and social media connections are across people? In other words, if you didn't provide them, could someone else easily provide similar data?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **How common or replaceable do you think your contacts and social media connections are across people? In other words, if you didn't provide them, could someone else easily provide similar data?**
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
@@ -429,7 +429,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 ## Block A — postq_control (id 18)
 
-By contacts and social media connections, we mean the list of people in your phone contacts list and your connections (friends, followers, followed accounts) on social media. **How much control do you feel you have over your contacts and social media connections in general?**
+By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **How much control do you feel you have over your contacts and social media connections in general?**
 
 *(1–5 Likert)* 1: no control at all … 5: complete control
 

@@ -71,16 +71,16 @@ Each data type carries:
 | 4 | financial information | — |
 | 5 | personal communications data | — |
 | 6 | contacts and social media connections | — |
-| 7 | location history | location history data |
-| 8 | web browsing history | web browsing history data |
-| 9 | photo library | photo library data |
+| 7 | location history | — |
+| 8 | web browsing history | — |
+| 9 | photo library | — |
 | 10 | email management data | — |
 | 11 | errand-related screen recordings | — |
-| 12 | document editing history | document editing history data |
+| 12 | document editing history | — |
 | 13 | work-related screen recordings | — |
 | 14 | streaming preferences | streaming preferences data |
 | 15 | screen usage data | — |
-| 16 | phone's motion sensor data | — |
+| 16 | phone motion sensor data | — |
 
 Full `definition` values: `SURVEY_PAGES.md`, Page 3.
 

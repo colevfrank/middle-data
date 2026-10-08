@@ -67,7 +67,7 @@ function scenarioPayload(p, screenId) {
       none_label: 'I would not share this data regardless of the discount amount'
     }, common);
     if (isSlider) {
-      payload.question = 'Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not indicate any discount:';
+      payload.question = 'Using the slider, indicate the minimum monthly discount that you would be willing to accept or indicate that you would not accept any discount:';
       payload.slider = {
         min: 0, max: 20, step: 1,
         format: 'dollars', // display as "$N / month off"
@@ -100,7 +100,7 @@ function scenarioPayload(p, screenId) {
     none_label: 'I would not share this data regardless of the percentage'
   }, common);
   if (isSlider) {
-    payload.question = 'Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not indicate any percentage:';
+    payload.question = 'Using the slider, indicate the minimum percentage of revenue that you would be willing to accept or indicate that you would not accept any percentage:';
     payload.slider = {
       min: 0, max: 99, step: 1,
       format: 'percent', // display as "N% of revenue"
