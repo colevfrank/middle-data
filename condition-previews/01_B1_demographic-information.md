@@ -329,7 +329,7 @@ Demographic information includes your age, gender, race, zip code, marital statu
 
 ## Attention check (id 14)
 
-**This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1).**
+**This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all'.**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 

@@ -130,7 +130,7 @@ the screen they should see next, so a reload or a returning link resumes exactly
 | 8–14 | `postq_<id>` | Block B, 7 questions in `block_b_order` | one column per question |
 | 15 | `block_a_intro` | Frames Block A ("regardless of its use") | — |
 | 16–26 | `postq_<id>` | Block A, 11 items in `block_a_order` (10 questions + attention check) | one column per question |
-| 27 | `open_response` | Required free text | `open_data_revenue` |
+| 27 | `open_response` | Two required free-text boxes | `open_data_revenue`, `open_data_ai_training` |
 | 28 | `about_you_intro` | Transition into the about-you section | — |
 | 29 | `ai_usage` | AI / social media / search frequency + two tech-sector items | 5 columns |
 | 30 | `demographics` | Age, gender (+ other), education | 4 columns |
@@ -209,11 +209,11 @@ the middle points are unlabeled.
 
 ### Other measures
 
-- **Screen 27 — open response.** Required free text (`open_data_revenue`, 5,000 char cap)
-  on companies using personal data as a revenue source, and whether AI training changes the answer.
-  Prompt (current): "Many companies rely on user data to improve their services or sell user data
-  as a source of revenue. How do you feel about companies using your data? Does your answer change
-  if your data is being used to train AI models or AI agents?"
+- **Screen 27 — open response.** Two required free-text boxes (5,000 char cap each):
+  - `open_data_revenue` — "Many companies rely on user data to improve their services or sell user
+    data as a source of revenue. How do you feel about companies using your data?"
+  - `open_data_ai_training` — "Does your answer change if your data is being used to train AI
+    models or AI agents?"
 - **Screen 29 — AI usage & literacy.** Frequency of AI tools, social media, and search engines
   (7-point: more than once a day → never), plus current and past tech-sector employment
   (Yes / No / Prefer not to answer). Columns: `ai_tools_freq`, `social_media_freq`,
@@ -246,7 +246,8 @@ counts, `attention_check_pass`, and every response column.
 
 ## Database schema
 
-Two tables (`migrations/0001_init.sql`, `migrations/0002_survey_copy_update.sql`).
+Two tables (`migrations/0001_init.sql`, `migrations/0002_survey_copy_update.sql`,
+`migrations/0004_open_ai_training.sql`, and related additive migrations).
 
 **`participants`** — one row per participant, written incrementally on every Continue so
 attrition still yields usable partial rows:
@@ -265,7 +266,7 @@ attrition still yields usable partial rows:
   `postq_comp_by_originality`, `postq_coworker_sells_feel`, `postq_credit_ack`,
   `postq_concerns TEXT[]`, `postq_concerns_other`
 - Attention check: `attention_check_value`, `attention_check_pass`
-- Open response: `open_data_revenue`
+- Open response: `open_data_revenue`, `open_data_ai_training`
 - AI usage: `ai_tools_freq`, `social_media_freq`, `search_engine_freq`, `tech_current`, `tech_ever`
 - Demographics: `age_band`, `gender`, `gender_other`, `education`
 - Lifecycle: `completed`, `created_at`, `completed_at`

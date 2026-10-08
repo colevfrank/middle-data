@@ -121,7 +121,10 @@ function renderScreen(participant, sid) {
   }
 
   if (sid === 'open_response') {
-    body += `**${pay.prompt}**\n\n*(required free text)*\n\n**Button:** Continue`;
+    for (const it of pay.items || []) {
+      body += `**${it.prompt}**\n\n*(required free text)*\n\n`;
+    }
+    body += '**Button:** Continue';
     return body;
   }
 

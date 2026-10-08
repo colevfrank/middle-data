@@ -38,7 +38,7 @@ function scenarioPayload(p, screenId) {
     intro: [
       'You currently pay $20 per month for our app. By default, we do not record or store your information; we do not sell your information; and we delete all information after one year.'
     ],
-    collect_line: `We will access or give you instructions on how to provide your ${dt.inline}.`,
+    collect_line: `We will access or ask you to provide your ${dt.inline}.`,
     collect_emphasis: [dt.inline],
     // Same bullet, unemphasized (so the repeated name isn't bolded twice).
     collect_definition: definitionSentence(dt),
@@ -252,12 +252,14 @@ function screenPayload(p, screenId, extra = {}) {
     }
 
     case 'post_scenario_intro': {
+      const accessPhrase = `accessing your ${dt.inline} to ${uc.data_use}`;
       return {
         screen: 'post_scenario_intro',
         body: [
-          `Now, we'd like to understand how you feel about App Z accessing your ${dt.inline} to ${uc.data_use}.`,
+          `Now, we'd like to understand how you feel about App Z ${accessPhrase}.`,
           "On the following pages, we'll ask you a series of questions."
-        ]
+        ],
+        emphasis: [accessPhrase]
       };
     }
 
@@ -269,15 +271,15 @@ function screenPayload(p, screenId, extra = {}) {
         body: [
           `Now, we'd like to understand how you feel about ${dtA.inline}, regardless of ${itsTheir} use.`,
           "On the following pages, we'll ask you a series of questions."
-        ]
+        ],
+        emphasis: [dtA.inline, `regardless of ${itsTheir} use`]
       };
     }
 
     case 'open_response': {
       return {
         screen: 'open_response',
-        prompt: OPEN_RESPONSE.prompt,
-        field: OPEN_RESPONSE.key
+        items: OPEN_RESPONSE.items.map(it => ({ key: it.key, prompt: it.prompt }))
       };
     }
 

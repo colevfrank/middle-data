@@ -344,7 +344,8 @@
   // Intro before the post-scenario questions (Block B then Block A).
   RENDERERS.post_scenario_intro = function (p) {
     for (const para of p.body) {
-      root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, para));
+      root.appendChild(el('p', { class: 'text-slate-800 mb-3' },
+        emphasize(para, p.emphasis || [])));
     }
     const btn = continueBtn(() => submit('post_scenario_intro', {}), 'Continue');
     btn.disabled = false;
@@ -355,7 +356,7 @@
   RENDERERS.block_a_intro = function (p) {
     for (const para of p.body) {
       root.appendChild(el('p', { class: 'text-slate-800 mb-3' },
-        emphasize(para, ['regardless of its use', 'regardless of their use'])));
+        emphasize(para, p.emphasis || [])));
     }
     const btn = continueBtn(() => submit('block_a_intro', {}), 'Continue');
     btn.disabled = false;
@@ -892,16 +893,28 @@
 
   RENDERERS.open_response = function (p) {
     root.appendChild(el('h2', { class: 'text-xl font-semibold mb-3' }, 'In your own words'));
-    root.appendChild(el('p', { class: 'text-slate-800 mb-3' }, p.prompt));
-    const ta = el('textarea', {
-      name: p.field, class: 'input-text', rows: 6, maxlength: 5000,
-      placeholder: 'Type your response here…'
-    });
-    root.appendChild(ta);
-    const btn = continueBtn(() => submit('open_response', { [p.field]: ta.value.trim() }), 'Continue');
+    const boxes = [];
+    for (const it of p.items) {
+      const block = el('div', { class: 'mb-5' });
+      block.appendChild(el('p', { class: 'text-slate-800 mb-2' }, it.prompt));
+      const ta = el('textarea', {
+        name: it.key, class: 'input-text', rows: 5, maxlength: 5000,
+        placeholder: 'Type your response here…'
+      });
+      block.appendChild(ta);
+      root.appendChild(block);
+      boxes.push({ key: it.key, ta });
+    }
+    const btn = continueBtn(() => {
+      const payload = {};
+      for (const b of boxes) payload[b.key] = b.ta.value.trim();
+      submit('open_response', payload);
+    }, 'Continue');
     root.appendChild(btn);
-    function refresh() { btn.disabled = ta.value.trim().length === 0; }
-    ta.addEventListener('input', refresh);
+    function refresh() {
+      btn.disabled = boxes.some(b => b.ta.value.trim().length === 0);
+    }
+    for (const b of boxes) b.ta.addEventListener('input', refresh);
     refresh();
   };
 

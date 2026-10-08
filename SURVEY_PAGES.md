@@ -584,7 +584,7 @@ How much control do you feel you have over your `{inline_b}` in general?
 
 ### Attention check
 
-This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1).
+This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all'.
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -592,7 +592,11 @@ This is an attention check. To show you are reading carefully, please select the
 
 ## Page 27 — Open response
 
-Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data? Does your answer change if your data is being used to train AI models or AI agents?
+Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data?
+
+*(Required free-text field)*
+
+Does your answer change if your data is being used to train AI models or AI agents?
 
 *(Required free-text field)*
 

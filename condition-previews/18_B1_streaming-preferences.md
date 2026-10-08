@@ -329,7 +329,7 @@ Streaming preferences data includes the shows and movies you watch, whether you 
 
 ## Attention check (id 14)
 
-**This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1).**
+**This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all'.**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 

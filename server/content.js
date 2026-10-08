@@ -199,7 +199,7 @@ const POST_QUESTIONS = [
 
   // ----- Attention check (pooled + randomized with Block A) -----
   { id: 14, key: 'attention_check', block: 'AC', type: 'attention', expected: 1,
-    prompt: () => "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all' (1).",
+    prompt: () => "This is an attention check. To show you are reading carefully, please select the lowest option, 'not important to me at all'.",
     anchors: { low: 'not important to me at all', high: 'extremely important to me' } }
 ];
 
@@ -260,8 +260,16 @@ const DEMOGRAPHICS = [
 ];
 
 const OPEN_RESPONSE = {
-  key: 'open_data_revenue',
-  prompt: 'Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data? Does your answer change if your data is being used to train AI models or AI agents?'
+  items: [
+    {
+      key: 'open_data_revenue',
+      prompt: 'Many companies rely on user data to improve their services or sell user data as a source of revenue. How do you feel about companies using your data?'
+    },
+    {
+      key: 'open_data_ai_training',
+      prompt: 'Does your answer change if your data is being used to train AI models or AI agents?'
+    }
+  ]
 };
 
 const SCREEN_FLOW = [

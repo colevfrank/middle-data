@@ -174,15 +174,19 @@ function validatePostQuestion(body, screenId) {
   return { ok: true, fields };
 }
 
-// Open-ended response — required free text.
+// Open-ended responses — both free-text fields required.
 function validateOpenResponse(body) {
   const b = body || {};
-  const v = b[OPEN_RESPONSE.key];
-  if (v == null || (typeof v === 'string' && v.trim() === '')) {
-    return { ok: false, error: 'open_response_required' };
+  const fields = {};
+  for (const it of OPEN_RESPONSE.items) {
+    const v = b[it.key];
+    if (v == null || (typeof v === 'string' && v.trim() === '')) {
+      return { ok: false, error: `${it.key}_required` };
+    }
+    if (!isStr(v, MAX_OPEN_TEXT)) return { ok: false, error: `${it.key}_invalid` };
+    fields[it.key] = v.trim();
   }
-  if (!isStr(v, MAX_OPEN_TEXT)) return { ok: false, error: 'open_response_invalid' };
-  return { ok: true, fields: { [OPEN_RESPONSE.key]: v.trim() } };
+  return { ok: true, fields };
 }
 
 function validateAiUsage(body) {

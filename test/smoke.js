@@ -295,13 +295,24 @@ test('post-question attention (postq_14): pass iff value === expected', () => {
   const fail = validatePostQuestion({ attention_check: 3 }, 'postq_14');
   assert.equal(fail.fields.attention_check_pass, false);
 });
-test('open_response: required free text; blank rejected, long capped', () => {
+test('open_response: both free-text fields required; blank rejected, long capped', () => {
   assert.equal(VALIDATORS.open_response({}).ok, false);
-  assert.equal(VALIDATORS.open_response({ open_data_revenue: '   ' }).ok, false);
-  const filled = VALIDATORS.open_response({ open_data_revenue: '  I have thoughts.  ' });
+  assert.equal(VALIDATORS.open_response({ open_data_revenue: 'thoughts' }).ok, false);
+  assert.equal(VALIDATORS.open_response({
+    open_data_revenue: '   ',
+    open_data_ai_training: 'no'
+  }).ok, false);
+  const filled = VALIDATORS.open_response({
+    open_data_revenue: '  I have thoughts.  ',
+    open_data_ai_training: '  Yes, for AI.  '
+  });
   assert.equal(filled.ok, true);
   assert.equal(filled.fields.open_data_revenue, 'I have thoughts.');
-  const tooLong = VALIDATORS.open_response({ open_data_revenue: 'x'.repeat(5001) });
+  assert.equal(filled.fields.open_data_ai_training, 'Yes, for AI.');
+  const tooLong = VALIDATORS.open_response({
+    open_data_revenue: 'x'.repeat(5001),
+    open_data_ai_training: 'ok'
+  });
   assert.equal(tooLong.ok, false);
 });
 test('ai_usage: all 5 fields required', () => {
@@ -569,18 +580,25 @@ test('post_scenario_intro screen mentions data type + use case', () => {
   const text = p.body.join(' ');
   assert.ok(text.includes(dtFin.inline));
   assert.ok(text.includes(content.USE_CASES.B1.data_use));
+  assert.deepEqual(p.emphasis, [
+    `accessing your ${dtFin.inline} to ${content.USE_CASES.B1.data_use}`
+  ]);
 });
 test('block_a_intro screen mentions data type regardless of use', () => {
   const p = screenPayload(fakeParticipant, 'block_a_intro');
   const text = p.body.join(' ');
   assert.ok(text.includes(dtFin.inline));
   assert.ok(text.includes('regardless of its use'));
+  assert.deepEqual(p.emphasis, [dtFin.inline, 'regardless of its use']);
 });
-test('open_response screen carries the prompt + field key', () => {
+test('open_response screen carries both prompts + field keys', () => {
   const p = screenPayload(fakeParticipant, 'open_response');
   assert.equal(p.screen, 'open_response');
-  assert.equal(p.field, 'open_data_revenue');
-  assert.ok(p.prompt.includes('source of revenue'));
+  assert.equal(p.items.length, 2);
+  assert.equal(p.items[0].key, 'open_data_revenue');
+  assert.ok(p.items[0].prompt.includes('source of revenue'));
+  assert.equal(p.items[1].key, 'open_data_ai_training');
+  assert.ok(p.items[1].prompt.includes('train AI models'));
 });
 test('ai_usage lists the 5 literacy questions', () => {
   const p = screenPayload(fakeParticipant, 'ai_usage');
