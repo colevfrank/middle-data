@@ -73,12 +73,12 @@ Each data type carries:
 | 6 | contacts and social media connections | — |
 | 7 | location history | — |
 | 8 | web browsing history | — |
-| 9 | photo library | — |
+| 9 | photo library | photo library data |
 | 10 | email management data | — |
 | 11 | errand-related screen recordings | — |
 | 12 | document editing history | — |
 | 13 | work-related screen recordings | — |
-| 14 | streaming preferences | streaming preferences data |
+| 14 | streaming preferences | — |
 | 15 | screen usage data | — |
 | 16 | phone motion sensor data | — |
 
@@ -194,7 +194,7 @@ bolded question. The attention check has no header.
 | --- | --- | --- | --- |
 | 1 | `postq_importance` | Do you consider your [DATA TYPE] to be important? | 1–5: not important to me at all → extremely important to me |
 | 2 | `postq_sensitivity` | Do you consider your [DATA TYPE] to be sensitive? | 1–5: not sensitive at all → extremely sensitive |
-| 3 | `postq_ownership` | Do you feel ownership over your [DATA TYPE]? | 1–5: I do not feel ownership over this type of data → I feel strong ownership over it |
+| 3 | `postq_ownership` | Do you feel ownership over your [DATA TYPE]? | 1–5: I do not feel ownership over this type of data → I feel strong ownership over this type of data |
 | 4 | `postq_share_public` | Would you ever share it publicly? | 4 options, stored 0–3 (never → yes, with my name attached) |
 | 5 | `postq_buy_sell_appropriate` | Is it appropriate to buy and sell it? | 1–5: Completely inappropriate → Completely appropriate |
 | 6 | `postq_upset_if_leaked` | Released publicly without your knowledge — how would you feel? | 6 categorical options (not upset · a little uncomfortable · upset if named · upset even if anonymous · very upset either way · not sure) |

@@ -297,12 +297,12 @@ Suppose App Z collects your demographic information to improve App Z's services.
 Suppose App Z wants to collect your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **What is/are your main concern(s) about sharing your demographic information with App Z? (Please check all that apply)**
 
 - I don't trust App Z
-- I don't understand why App Z wants it
-- It could be used to manipulate me
 - It's too personal or sensitive
-- It could be used to harm me
-- I'm not concerned
 - It could be used to impersonate or represent me
+- I'm not concerned
+- It could be used to harm me
+- It could be used to manipulate me
+- I don't understand why App Z wants the data
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By demographic information, we mean basic facts about who you are, such as your 
 
 By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **Do you feel ownership over your demographic information?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

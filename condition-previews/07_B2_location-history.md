@@ -296,13 +296,13 @@ Suppose App Z collects your location history to train App Z's AI models and AI a
 
 Suppose App Z wants to collect your location history to train App Z's AI models and AI agents to improve its services. By location history, we mean a record of where you travel and when, such as your path to work, home, and other places. **What is/are your main concern(s) about sharing your location history with App Z? (Please check all that apply)**
 
-- I'm not concerned
-- I don't understand why App Z wants it
-- I don't trust App Z
-- It could be used to impersonate or represent me
 - It's too personal or sensitive
-- It could be used to harm me
 - It could be used to manipulate me
+- It could be used to harm me
+- It could be used to impersonate or represent me
+- I don't understand why App Z wants the data
+- I don't trust App Z
+- I'm not concerned
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By location history, we mean a record of where you travel and when, such as your
 
 By location history, we mean a record of where you travel and when, such as your path to work, home, and other places. **Do you feel ownership over your location history?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

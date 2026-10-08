@@ -296,13 +296,13 @@ Suppose App Z collects your voice data to improve App Z's services. By voice dat
 
 Suppose App Z wants to collect your voice data to improve App Z's services. By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **What is/are your main concern(s) about sharing your voice data with App Z? (Please check all that apply)**
 
-- I don't trust App Z
-- It could be used to impersonate or represent me
-- I don't understand why App Z wants it
-- It could be used to harm me
-- I'm not concerned
+- I don't understand why App Z wants the data
 - It's too personal or sensitive
 - It could be used to manipulate me
+- It could be used to impersonate or represent me
+- I'm not concerned
+- I don't trust App Z
+- It could be used to harm me
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By voice data, we mean recordings of your voice, such as voice messages you've s
 
 By voice data, we mean recordings of your voice, such as voice messages you've sent, voice recordings you've dictated, and conversations with voice assistants. **Do you feel ownership over your voice data?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

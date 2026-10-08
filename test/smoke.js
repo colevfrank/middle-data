@@ -524,7 +524,9 @@ test('Blocks A/B use inline_b where set; unified names otherwise', () => {
   const histA = screenPayload({ ...fakeParticipant, data_type: 7 }, 'postq_1');
   assert.equal(histA.item.prompt, 'Do you consider your location history to be important?');
   const prefB = screenPayload({ ...fakeParticipant, data_type: 14 }, 'postq_8');
-  assert.ok(prefB.item.prompt.includes('streaming preferences data is used'));
+  assert.ok(prefB.item.prompt.includes('streaming preferences are used'));
+  const photoOwn = screenPayload({ ...fakeParticipant, data_type: 9 }, 'postq_3');
+  assert.equal(photoOwn.item.prompt, 'Do you feel ownership over your photo library data?');
   const rec = screenPayload({ ...fakeParticipant, data_type: 13 }, 'postq_1');
   assert.ok(rec.item.header.startsWith('By work-related screen recordings, we mean screen or video recordings'));
   const recIntro = screenPayload({ ...fakeParticipant, data_type: 13 }, 'block_a_intro');
@@ -572,6 +574,15 @@ test('postq_comp_by_amount uses "information from" for government IDs and contac
   const fin = screenPayload(fakeParticipant, 'postq_7'); // financial information (default)
   assert.equal(fin.item.prompt,
     'Should you be compensated based on how much of your financial information is used by App Z?');
+  const photo = screenPayload({ ...fakeParticipant, data_type: 9 }, 'postq_7');
+  assert.equal(photo.item.prompt,
+    'Should you be compensated based on how much of your photo library data is used by App Z?');
+  const errand = screenPayload({ ...fakeParticipant, data_type: 11 }, 'postq_7');
+  assert.equal(errand.item.prompt,
+    'Should you be compensated based on how much of your errand-related screen recordings is used by App Z?');
+  const work = screenPayload({ ...fakeParticipant, data_type: 13 }, 'postq_7');
+  assert.equal(work.item.prompt,
+    'Should you be compensated based on how much of your work-related screen recordings is used by App Z?');
 });
 test('postq_concerns options: randomized order, Other always last', () => {
   const q = content.POST_QUESTIONS.find(x => x.key === 'postq_concerns');

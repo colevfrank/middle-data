@@ -6,7 +6,7 @@
 | Category | undefined |
 | Use case | **B2** — train App Z's AI models and AI agents to improve its services |
 | `inline` (intro / scenarios) | photo library |
-| `inline_b` (Blocks A & B) | photo library |
+| `inline_b` (Blocks A & B) | photo library data |
 | Number (A/B prompts) | singular (is / it / its) |
 
 **Note:** In the live survey, scenario order and Block A/B question order are randomized. This preview uses a fixed order: Subscription Discount → Data Sharing Program; Block B then Block A questions by ascending id (attention check pooled in Block A).
@@ -214,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your photo library to train App Z's AI models and AI agents to improve its services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you be compensated based on how much of your photo library is used by App Z?**
+Suppose App Z collects your photo library data to train App Z's AI models and AI agents to improve its services. By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you be compensated based on how much of your photo library data is used by App Z?**
 
 - Yes
 - No
@@ -227,7 +227,7 @@ Suppose App Z collects your photo library to train App Z's AI models and AI agen
 
 ## Block B — postq_comp_per_use (id 8)
 
-Suppose App Z collects your photo library to train App Z's AI models and AI agents to improve its services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you be compensated each time your photo library is used by App Z?**
+Suppose App Z collects your photo library data to train App Z's AI models and AI agents to improve its services. By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you be compensated each time your photo library data is used by App Z?**
 
 - Yes
 - No
@@ -240,7 +240,7 @@ Suppose App Z collects your photo library to train App Z's AI models and AI agen
 
 ## Block B — postq_comp_by_effort (id 9)
 
-Suppose App Z collects your photo library to train App Z's AI models and AI agents to improve its services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you be compensated based on how much effort it took for you to generate or provide your photo library to App Z?**
+Suppose App Z collects your photo library data to train App Z's AI models and AI agents to improve its services. By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you be compensated based on how much effort it took for you to generate or provide your photo library data to App Z?**
 
 - Yes
 - No
@@ -253,7 +253,7 @@ Suppose App Z collects your photo library to train App Z's AI models and AI agen
 
 ## Block B — postq_comp_by_originality (id 10)
 
-Suppose App Z collects your photo library to train App Z's AI models and AI agents to improve its services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you be compensated for how unique or original your photo library is relative to others' on App Z?**
+Suppose App Z collects your photo library data to train App Z's AI models and AI agents to improve its services. By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you be compensated for how unique or original your photo library data is relative to others' on App Z?**
 
 - Yes
 - No
@@ -266,7 +266,7 @@ Suppose App Z collects your photo library to train App Z's AI models and AI agen
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your photo library to train App Z's AI models and AI agents to improve its services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Suppose your phone manufacturer collected your photo library and sold this data to App Z. How would you feel?**
+Suppose App Z wants to collect your photo library data to train App Z's AI models and AI agents to improve its services. By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Suppose your phone manufacturer collected your photo library data and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -280,7 +280,7 @@ Suppose App Z wants to collect your photo library to train App Z's AI models and
 
 ## Block B — postq_credit_ack (id 12)
 
-Suppose App Z collects your photo library to train App Z's AI models and AI agents to improve its services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you receive credit or acknowledgement for your photo library when it is used by App Z?**
+Suppose App Z collects your photo library data to train App Z's AI models and AI agents to improve its services. By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Should you receive credit or acknowledgement for your photo library data when it is used by App Z?**
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -294,15 +294,15 @@ Suppose App Z collects your photo library to train App Z's AI models and AI agen
 
 ## Block B — postq_concerns (id 13)
 
-Suppose App Z wants to collect your photo library to train App Z's AI models and AI agents to improve its services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **What is/are your main concern(s) about sharing your photo library with App Z? (Please check all that apply)**
+Suppose App Z wants to collect your photo library data to train App Z's AI models and AI agents to improve its services. By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **What is/are your main concern(s) about sharing your photo library data with App Z? (Please check all that apply)**
 
-- I don't understand why App Z wants it
-- It could be used to harm me
-- It could be used to impersonate or represent me
-- It's too personal or sensitive
-- I don't trust App Z
+- I don't understand why App Z wants the data
 - It could be used to manipulate me
+- I don't trust App Z
+- It's too personal or sensitive
+- It could be used to harm me
 - I'm not concerned
+- It could be used to impersonate or represent me
 - Other
 
 **Button:** Continue
@@ -321,7 +321,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block A — postq_importance (id 1)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Do you consider your photo library to be important?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Do you consider your photo library data to be important?**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -331,7 +331,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_sensitivity (id 2)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Do you consider your photo library to be sensitive?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Do you consider your photo library data to be sensitive?**
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
@@ -341,9 +341,9 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_ownership (id 3)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Do you feel ownership over your photo library?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Do you feel ownership over your photo library data?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 
@@ -351,7 +351,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_share_public (id 4)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Would you ever share your photo library publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Would you ever share your photo library data publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.
@@ -364,7 +364,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_buy_sell_appropriate (id 5)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Is it appropriate to buy and sell your photo library?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Is it appropriate to buy and sell your photo library data?**
 
 *(1–5 Likert)* 1: Completely inappropriate … 5: Completely appropriate
 
@@ -374,7 +374,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_upset_if_leaked (id 6)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **If you found out your photo library had been released publicly without your knowledge, which best describes how you would feel?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **If you found out your photo library data had been released publicly without your knowledge, which best describes how you would feel?**
 
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
@@ -399,7 +399,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_identifiability (id 15)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **How identifiable (traceable to you) do you think your photo library is?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **How identifiable (traceable to you) do you think your photo library data is?**
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -409,7 +409,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_usefulness (id 16)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **How useful do you think your photo library is to companies?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **How useful do you think your photo library data is to companies?**
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -419,7 +419,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_replaceability (id 17)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **How common or replaceable do you think your photo library is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **How common or replaceable do you think your photo library data is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
@@ -429,7 +429,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_control (id 18)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **How much control do you feel you have over your photo library in general?**
+By photo library data, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **How much control do you feel you have over your photo library data in general?**
 
 *(1–5 Likert)* 1: no control at all … 5: complete control
 

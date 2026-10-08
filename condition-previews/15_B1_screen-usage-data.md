@@ -296,12 +296,12 @@ Suppose App Z collects your screen usage data to improve App Z's services. By sc
 
 Suppose App Z wants to collect your screen usage data to improve App Z's services. By screen usage data, we mean a record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen. **What is/are your main concern(s) about sharing your screen usage data with App Z? (Please check all that apply)**
 
-- It could be used to impersonate or represent me
-- It's too personal or sensitive
-- I don't understand why App Z wants it
 - It could be used to manipulate me
-- It could be used to harm me
+- I don't understand why App Z wants the data
+- It could be used to impersonate or represent me
 - I'm not concerned
+- It's too personal or sensitive
+- It could be used to harm me
 - I don't trust App Z
 - Other
 
@@ -343,7 +343,7 @@ By screen usage data, we mean a record of how you use your device, such as which
 
 By screen usage data, we mean a record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen. **Do you feel ownership over your screen usage data?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

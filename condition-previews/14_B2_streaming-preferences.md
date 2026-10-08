@@ -6,8 +6,8 @@
 | Category | undefined |
 | Use case | **B2** — train App Z's AI models and AI agents to improve its services |
 | `inline` (intro / scenarios) | streaming preferences |
-| `inline_b` (Blocks A & B) | streaming preferences data |
-| Number (A/B prompts) | singular (is / it / its) |
+| `inline_b` (Blocks A & B) | streaming preferences |
+| Number (A/B prompts) | plural (are / them / their) |
 
 **Note:** In the live survey, scenario order and Block A/B question order are randomized. This preview uses a fixed order: Subscription Discount → Data Sharing Program; Block B then Block A questions by ascending id (attention check pooled in Block A).
 
@@ -214,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your streaming preferences data to train App Z's AI models and AI agents to improve its services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you be compensated based on how much of your streaming preferences data is used by App Z?**
+Suppose App Z collects your streaming preferences to train App Z's AI models and AI agents to improve its services. By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you be compensated based on how much of your streaming preferences are used by App Z?**
 
 - Yes
 - No
@@ -227,7 +227,7 @@ Suppose App Z collects your streaming preferences data to train App Z's AI model
 
 ## Block B — postq_comp_per_use (id 8)
 
-Suppose App Z collects your streaming preferences data to train App Z's AI models and AI agents to improve its services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you be compensated each time your streaming preferences data is used by App Z?**
+Suppose App Z collects your streaming preferences to train App Z's AI models and AI agents to improve its services. By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you be compensated each time your streaming preferences are used by App Z?**
 
 - Yes
 - No
@@ -240,7 +240,7 @@ Suppose App Z collects your streaming preferences data to train App Z's AI model
 
 ## Block B — postq_comp_by_effort (id 9)
 
-Suppose App Z collects your streaming preferences data to train App Z's AI models and AI agents to improve its services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you be compensated based on how much effort it took for you to generate or provide your streaming preferences data to App Z?**
+Suppose App Z collects your streaming preferences to train App Z's AI models and AI agents to improve its services. By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you be compensated based on how much effort it took for you to generate or provide your streaming preferences to App Z?**
 
 - Yes
 - No
@@ -253,7 +253,7 @@ Suppose App Z collects your streaming preferences data to train App Z's AI model
 
 ## Block B — postq_comp_by_originality (id 10)
 
-Suppose App Z collects your streaming preferences data to train App Z's AI models and AI agents to improve its services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you be compensated for how unique or original your streaming preferences data is relative to others' on App Z?**
+Suppose App Z collects your streaming preferences to train App Z's AI models and AI agents to improve its services. By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you be compensated for how unique or original your streaming preferences are relative to others' on App Z?**
 
 - Yes
 - No
@@ -266,7 +266,7 @@ Suppose App Z collects your streaming preferences data to train App Z's AI model
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your streaming preferences data to train App Z's AI models and AI agents to improve its services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Suppose your phone manufacturer collected your streaming preferences data and sold this data to App Z. How would you feel?**
+Suppose App Z wants to collect your streaming preferences to train App Z's AI models and AI agents to improve its services. By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Suppose your phone manufacturer collected your streaming preferences and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -280,7 +280,7 @@ Suppose App Z wants to collect your streaming preferences data to train App Z's 
 
 ## Block B — postq_credit_ack (id 12)
 
-Suppose App Z collects your streaming preferences data to train App Z's AI models and AI agents to improve its services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you receive credit or acknowledgement for your streaming preferences data when it is used by App Z?**
+Suppose App Z collects your streaming preferences to train App Z's AI models and AI agents to improve its services. By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Should you receive credit or acknowledgement for your streaming preferences when they are used by App Z?**
 
 - 1: I definitely do not want to receive credit
 - 2: I do not need to receive credit
@@ -294,15 +294,15 @@ Suppose App Z collects your streaming preferences data to train App Z's AI model
 
 ## Block B — postq_concerns (id 13)
 
-Suppose App Z wants to collect your streaming preferences data to train App Z's AI models and AI agents to improve its services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **What is/are your main concern(s) about sharing your streaming preferences data with App Z? (Please check all that apply)**
+Suppose App Z wants to collect your streaming preferences to train App Z's AI models and AI agents to improve its services. By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **What is/are your main concern(s) about sharing your streaming preferences with App Z? (Please check all that apply)**
 
-- It could be used to manipulate me
-- It could be used to harm me
-- I don't understand why App Z wants it
-- It's too personal or sensitive
-- I don't trust App Z
 - It could be used to impersonate or represent me
 - I'm not concerned
+- It could be used to manipulate me
+- It's too personal or sensitive
+- I don't understand why App Z wants the data
+- I don't trust App Z
+- It could be used to harm me
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your streaming preferences data to train App Z's 
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about your streaming preferences data, regardless of its use.
+Now, we'd like to understand how you feel about your streaming preferences, regardless of their use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -321,7 +321,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block A — postq_importance (id 1)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Do you consider your streaming preferences data to be important?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Do you consider your streaming preferences to be important?**
 
 *(1–5 Likert)* 1: not important to me at all … 5: extremely important to me
 
@@ -331,7 +331,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_sensitivity (id 2)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Do you consider your streaming preferences data to be sensitive?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Do you consider your streaming preferences to be sensitive?**
 
 *(1–5 Likert)* 1: not sensitive at all … 5: extremely sensitive
 
@@ -341,9 +341,9 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_ownership (id 3)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Do you feel ownership over your streaming preferences data?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Do you feel ownership over your streaming preferences?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 
@@ -351,7 +351,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_share_public (id 4)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Would you ever share your streaming preferences data publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Would you ever share your streaming preferences publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.
@@ -364,7 +364,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_buy_sell_appropriate (id 5)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Is it appropriate to buy and sell your streaming preferences data?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Is it appropriate to buy and sell your streaming preferences?**
 
 *(1–5 Likert)* 1: Completely inappropriate … 5: Completely appropriate
 
@@ -374,7 +374,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_upset_if_leaked (id 6)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **If you found out your streaming preferences data had been released publicly without your knowledge, which best describes how you would feel?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **If you found out your streaming preferences had been released publicly without your knowledge, which best describes how you would feel?**
 
 - I would not be upset, whether or not my name was attached.
 - I would be a little uncomfortable.
@@ -399,7 +399,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_identifiability (id 15)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **How identifiable (traceable to you) do you think your streaming preferences data is?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **How identifiable (traceable to you) do you think your streaming preferences are?**
 
 *(1–5 Likert)* 1: not identifiable at all … 5: extremely identifiable
 
@@ -409,7 +409,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_usefulness (id 16)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **How useful do you think your streaming preferences data is to companies?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **How useful do you think your streaming preferences are to companies?**
 
 *(1–5 Likert)* 1: not useful at all … 5: extremely useful
 
@@ -419,7 +419,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_replaceability (id 17)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **How common or replaceable do you think your streaming preferences data is across people? In other words, if you didn't provide it, could someone else easily provide similar data?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **How common or replaceable do you think your streaming preferences are across people? In other words, if you didn't provide them, could someone else easily provide similar data?**
 
 *(1–5 Likert)* 1: unique to me / hard to replace … 5: very common / easily replaceable
 
@@ -429,7 +429,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_control (id 18)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **How much control do you feel you have over your streaming preferences data in general?**
+By streaming preferences, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **How much control do you feel you have over your streaming preferences in general?**
 
 *(1–5 Likert)* 1: no control at all … 5: complete control
 

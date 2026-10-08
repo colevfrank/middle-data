@@ -296,13 +296,13 @@ Suppose App Z collects your phone motion sensor data to train App Z's AI models 
 
 Suppose App Z wants to collect your phone motion sensor data to train App Z's AI models and AI agents to improve its services. By phone motion sensor data, we mean readings from your phone's motion sensors that capture how you physically move and handle your device, such as when walking, driving, or picking it up. **What is/are your main concern(s) about sharing your phone motion sensor data with App Z? (Please check all that apply)**
 
-- It could be used to manipulate me
-- I don't trust App Z
 - It could be used to impersonate or represent me
-- It's too personal or sensitive
-- I don't understand why App Z wants it
-- I'm not concerned
+- I don't trust App Z
+- It could be used to manipulate me
 - It could be used to harm me
+- I don't understand why App Z wants the data
+- I'm not concerned
+- It's too personal or sensitive
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By phone motion sensor data, we mean readings from your phone's motion sensors t
 
 By phone motion sensor data, we mean readings from your phone's motion sensors that capture how you physically move and handle your device, such as when walking, driving, or picking it up. **Do you feel ownership over your phone motion sensor data?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

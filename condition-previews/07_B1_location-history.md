@@ -297,12 +297,12 @@ Suppose App Z collects your location history to improve App Z's services. By loc
 Suppose App Z wants to collect your location history to improve App Z's services. By location history, we mean a record of where you travel and when, such as your path to work, home, and other places. **What is/are your main concern(s) about sharing your location history with App Z? (Please check all that apply)**
 
 - It could be used to impersonate or represent me
-- It could be used to manipulate me
-- I don't trust App Z
-- It's too personal or sensitive
 - It could be used to harm me
-- I don't understand why App Z wants it
+- I don't trust App Z
 - I'm not concerned
+- I don't understand why App Z wants the data
+- It could be used to manipulate me
+- It's too personal or sensitive
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By location history, we mean a record of where you travel and when, such as your
 
 By location history, we mean a record of where you travel and when, such as your path to work, home, and other places. **Do you feel ownership over your location history?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

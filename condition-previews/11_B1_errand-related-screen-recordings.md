@@ -214,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your errand-related screen recordings to improve App Z's services. By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **Should you be compensated based on how much of your errand-related screen recordings are used by App Z?**
+Suppose App Z collects your errand-related screen recordings to improve App Z's services. By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **Should you be compensated based on how much of your errand-related screen recordings is used by App Z?**
 
 - Yes
 - No
@@ -296,13 +296,13 @@ Suppose App Z collects your errand-related screen recordings to improve App Z's 
 
 Suppose App Z wants to collect your errand-related screen recordings to improve App Z's services. By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **What is/are your main concern(s) about sharing your errand-related screen recordings with App Z? (Please check all that apply)**
 
-- It could be used to manipulate me
 - It could be used to harm me
-- I don't understand why App Z wants it
+- I don't understand why App Z wants the data
+- It could be used to manipulate me
 - It could be used to impersonate or represent me
-- I don't trust App Z
-- I'm not concerned
 - It's too personal or sensitive
+- I'm not concerned
+- I don't trust App Z
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By errand-related screen recordings, we mean screen recordings of how you carry 
 
 By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **Do you feel ownership over your errand-related screen recordings?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

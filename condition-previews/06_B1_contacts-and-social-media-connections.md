@@ -296,13 +296,13 @@ Suppose App Z collects your contacts and social media connections to improve App
 
 Suppose App Z wants to collect your contacts and social media connections to improve App Z's services. By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **What is/are your main concern(s) about sharing your contacts and social media connections with App Z? (Please check all that apply)**
 
-- I'm not concerned
-- It's too personal or sensitive
 - It could be used to impersonate or represent me
-- It could be used to harm me
+- I'm not concerned
+- I don't understand why App Z wants the data
+- It's too personal or sensitive
 - It could be used to manipulate me
 - I don't trust App Z
-- I don't understand why App Z wants it
+- It could be used to harm me
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By contacts and social media connections, we mean the list of people in your pho
 
 By contacts and social media connections, we mean the list of people in your phone contacts and your connections on social media (friends, followers, followed accounts). **Do you feel ownership over your contacts and social media connections?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

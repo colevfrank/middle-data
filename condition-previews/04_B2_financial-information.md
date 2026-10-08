@@ -296,12 +296,12 @@ Suppose App Z collects your financial information to train App Z's AI models and
 
 Suppose App Z wants to collect your financial information to train App Z's AI models and AI agents to improve its services. By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **What is/are your main concern(s) about sharing your financial information with App Z? (Please check all that apply)**
 
+- I don't understand why App Z wants the data
 - It's too personal or sensitive
-- It could be used to harm me
-- It could be used to impersonate or represent me
 - I'm not concerned
+- It could be used to harm me
 - I don't trust App Z
-- I don't understand why App Z wants it
+- It could be used to impersonate or represent me
 - It could be used to manipulate me
 - Other
 
@@ -343,7 +343,7 @@ By financial information, we mean records of your bank accounts, balances, and s
 
 By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **Do you feel ownership over your financial information?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

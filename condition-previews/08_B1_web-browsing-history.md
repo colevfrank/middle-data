@@ -296,13 +296,13 @@ Suppose App Z collects your web browsing history to improve App Z's services. By
 
 Suppose App Z wants to collect your web browsing history to improve App Z's services. By web browsing history, we mean a record of the URLs you visit online and timestamps of these visits. **What is/are your main concern(s) about sharing your web browsing history with App Z? (Please check all that apply)**
 
+- I don't understand why App Z wants the data
 - I don't trust App Z
-- I'm not concerned
-- It could be used to manipulate me
-- It could be used to harm me
-- I don't understand why App Z wants it
-- It's too personal or sensitive
 - It could be used to impersonate or represent me
+- It could be used to harm me
+- It could be used to manipulate me
+- It's too personal or sensitive
+- I'm not concerned
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By web browsing history, we mean a record of the URLs you visit online and times
 
 By web browsing history, we mean a record of the URLs you visit online and timestamps of these visits. **Do you feel ownership over your web browsing history?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

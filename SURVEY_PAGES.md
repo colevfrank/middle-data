@@ -6,7 +6,7 @@ Page-by-page text as currently assembled from `server/content.js` and `server/sc
 
 - `{definition}` — second-person definition, shown as “By `{inline}`, we mean `{definition}`” (first letter lower-cased) in the intro, scenarios, and Block A/B headers
 - `{inline}` — short mid-sentence data-type name (intro, scenarios, …)
-- `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. streaming preferences data)
+- `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. photo library data)
 - `{data_use}` — use-case phrase (same wording as `comp_use` / `scenario_use` in code)
 
 Scenario order (Subscription Discount vs Data Sharing Program) is randomized. Block B questions are randomized within Block B; Block A questions (plus the attention check) are randomized within Block A. Block B is always shown before Block A.
@@ -381,12 +381,12 @@ Example: Suppose App Z wants to collect your email management data to improve Ap
 6. contacts and social media connections
 7. location history
 8. web browsing history
-9. photo library
+9. photo library data
 10. email management data
 11. errand-related screen recordings
 12. document editing history
 13. work-related screen recordings
-14. streaming preferences data
+14. streaming preferences
 15. screen usage data
 16. phone motion sensor data
 
@@ -402,6 +402,8 @@ Should you be compensated based on how much of your `{inline_b}` `{is/are}` used
 Exceptions (government IDs; contacts and social media connections):
 
 Should you be compensated based on how much information from your `{inline_b}` is used by App Z?
+
+Exceptions (errand-related / work-related screen recordings): use singular *is* — *how much of your … screen recordings is used*.
 
 - Yes
 - No
@@ -466,7 +468,7 @@ What is/are your main concern(s) about sharing your `{inline_b}` with App Z? (Pl
 *(Options randomized per participant/load; Other always last.)*
 
 - I'm not concerned
-- I don't understand why App Z wants it
+- I don't understand why App Z wants the data
 - It's too personal or sensitive
 - It could be used to manipulate me
 - It could be used to impersonate or represent me
@@ -479,8 +481,6 @@ What is/are your main concern(s) about sharing your `{inline_b}` with App Z? (Pl
 ## Page 15 — Block A intro
 
 Now, we'd like to understand how you feel about your `{inline_b}`, regardless of `{its/their}` use.
-
-Photo library (this page only): your photo library data.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -520,7 +520,7 @@ Do you consider your `{inline_b}` to be sensitive?
 
 Do you feel ownership over your `{inline_b}`?
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 `{inline_b}`: *(same list as Block B)*
 

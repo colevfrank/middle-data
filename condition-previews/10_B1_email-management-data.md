@@ -296,13 +296,13 @@ Suppose App Z collects your email management data to improve App Z's services. B
 
 Suppose App Z wants to collect your email management data to improve App Z's services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **What is/are your main concern(s) about sharing your email management data with App Z? (Please check all that apply)**
 
-- I don't understand why App Z wants it
-- I'm not concerned
 - It could be used to impersonate or represent me
-- It could be used to manipulate me
+- I don't understand why App Z wants the data
+- I don't trust App Z
+- I'm not concerned
 - It could be used to harm me
 - It's too personal or sensitive
-- I don't trust App Z
+- It could be used to manipulate me
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By email management data, we mean a record of how you manage your email inbox, s
 
 By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Do you feel ownership over your email management data?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

@@ -297,12 +297,12 @@ Suppose App Z collects your government IDs to improve App Z's services. By gover
 Suppose App Z wants to collect your government IDs to improve App Z's services. By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **What is/are your main concern(s) about sharing your government IDs with App Z? (Please check all that apply)**
 
 - It could be used to harm me
-- I don't trust App Z
-- It could be used to manipulate me
 - I'm not concerned
-- I don't understand why App Z wants it
-- It's too personal or sensitive
 - It could be used to impersonate or represent me
+- I don't understand why App Z wants the data
+- I don't trust App Z
+- It's too personal or sensitive
+- It could be used to manipulate me
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By government IDs, we mean government-issued identification, such as your driver
 
 By government IDs, we mean government-issued identification, such as your driver's license, passport, or visa. **Do you feel ownership over your government IDs?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

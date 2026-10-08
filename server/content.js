@@ -25,6 +25,7 @@ const DATA_TYPES = [
   { id: 8,  inline: 'web browsing history', plural: false,
     definition: 'A record of the URLs you visit online and timestamps of these visits.' },
   { id: 9,  inline: 'photo library', plural: false,
+    inline_b: 'photo library data',
     definition: 'The photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places.' },
   { id: 10, inline: 'email management data', plural: false,
     definition: 'A record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails.' },
@@ -35,7 +36,6 @@ const DATA_TYPES = [
   { id: 13, inline: 'work-related screen recordings', plural: true,
     definition: 'Screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish.' },
   { id: 14, inline: 'streaming preferences', plural: true,
-    inline_b: 'streaming preferences data', plural_b: false,
     definition: 'A record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them.' },
   { id: 15, inline: 'screen usage data', plural: false,
     definition: 'A record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen.' },
@@ -110,7 +110,7 @@ const POST_QUESTIONS = [
     anchors: { low: 'not sensitive at all', high: 'extremely sensitive' } },
   { id: 3, key: 'postq_ownership', block: 'A', type: 'likert5',
     prompt: (dt) => `Do you feel ownership over your ${dt.inline}?`,
-    anchors: { low: 'I do not feel ownership over this type of data', high: 'I feel strong ownership over it' } },
+    anchors: { low: 'I do not feel ownership over this type of data', high: 'I feel strong ownership over this type of data' } },
   { id: 4, key: 'postq_share_public', block: 'A', type: 'choice_num',
     prompt: (dt) => `Would you ever share your ${dt.inline} publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:`,
     options: [
@@ -148,10 +148,14 @@ const POST_QUESTIONS = [
 
   // ----- Block B: about compensation for the use case -----
   { id: 7, key: 'postq_comp_by_amount', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
-    // Count plurals read oddly with "how much of your X are used"; use "information from" for ids 2 & 6.
-    prompt: (dt) => (dt.id === 2 || dt.id === 6)
-      ? `Should you be compensated based on how much information from your ${dt.inline} is used by App Z?`
-      : `Should you be compensated based on how much of your ${dt.inline} ${be(dt)} used by App Z?`,
+    // Exceptions: ids 2 & 6 use "information from… is"; screen recordings (11, 13) use singular "is" with "how much".
+    prompt: (dt) => {
+      if (dt.id === 2 || dt.id === 6) {
+        return `Should you be compensated based on how much information from your ${dt.inline} is used by App Z?`;
+      }
+      const verb = (dt.id === 11 || dt.id === 13) ? 'is' : be(dt);
+      return `Should you be compensated based on how much of your ${dt.inline} ${verb} used by App Z?`;
+    },
     prompt_emphasis: ['how much'] },
   { id: 8, key: 'postq_comp_per_use', block: 'B', type: 'choice', options: YESNO_UNSURE_CARE,
     prompt: (dt) => `Should you be compensated each time your ${dt.inline} ${be(dt)} used by App Z?` },
@@ -184,7 +188,7 @@ const POST_QUESTIONS = [
     prompt: (dt) => `What is/are your main concern(s) about sharing your ${dt.inline} with App Z? (Please check all that apply)`,
     options: [
       { value: 'not_concerned', label: "I'm not concerned" },
-      { value: 'dont_understand', label: "I don't understand why App Z wants it" },
+      { value: 'dont_understand', label: "I don't understand why App Z wants the data" },
       { value: 'too_personal',  label: "It's too personal or sensitive" },
       { value: 'manipulate',    label: 'It could be used to manipulate me' },
       { value: 'impersonate',   label: 'It could be used to impersonate or represent me' },

@@ -296,13 +296,13 @@ Suppose App Z collects your document editing history to improve App Z's services
 
 Suppose App Z wants to collect your document editing history to improve App Z's services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **What is/are your main concern(s) about sharing your document editing history with App Z? (Please check all that apply)**
 
-- I don't trust App Z
 - It could be used to manipulate me
-- It could be used to impersonate or represent me
 - It's too personal or sensitive
+- I don't trust App Z
+- It could be used to impersonate or represent me
 - It could be used to harm me
+- I don't understand why App Z wants the data
 - I'm not concerned
-- I don't understand why App Z wants it
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By document editing history, we mean a record of changes to your documents, pres
 
 By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Do you feel ownership over your document editing history?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

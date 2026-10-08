@@ -296,13 +296,13 @@ Suppose App Z collects your personal communications data to improve App Z's serv
 
 Suppose App Z wants to collect your personal communications data to improve App Z's services. By personal communications data, we mean emails, text messages, and direct messages on social media apps. **What is/are your main concern(s) about sharing your personal communications data with App Z? (Please check all that apply)**
 
-- It's too personal or sensitive
-- I'm not concerned
-- I don't understand why App Z wants it
 - I don't trust App Z
-- It could be used to impersonate or represent me
 - It could be used to harm me
+- I'm not concerned
+- I don't understand why App Z wants the data
+- It's too personal or sensitive
 - It could be used to manipulate me
+- It could be used to impersonate or represent me
 - Other
 
 **Button:** Continue
@@ -343,7 +343,7 @@ By personal communications data, we mean emails, text messages, and direct messa
 
 By personal communications data, we mean emails, text messages, and direct messages on social media apps. **Do you feel ownership over your personal communications data?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 

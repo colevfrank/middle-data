@@ -214,7 +214,7 @@ On the following pages, we'll ask you a series of questions.
 
 ## Block B — postq_comp_by_amount (id 7)
 
-Suppose App Z collects your work-related screen recordings to improve App Z's services. By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **Should you be compensated based on how much of your work-related screen recordings are used by App Z?**
+Suppose App Z collects your work-related screen recordings to improve App Z's services. By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **Should you be compensated based on how much of your work-related screen recordings is used by App Z?**
 
 - Yes
 - No
@@ -296,11 +296,11 @@ Suppose App Z collects your work-related screen recordings to improve App Z's se
 
 Suppose App Z wants to collect your work-related screen recordings to improve App Z's services. By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **What is/are your main concern(s) about sharing your work-related screen recordings with App Z? (Please check all that apply)**
 
-- It could be used to harm me
-- I don't understand why App Z wants it
 - I'm not concerned
-- It's too personal or sensitive
+- It could be used to harm me
 - It could be used to manipulate me
+- It's too personal or sensitive
+- I don't understand why App Z wants the data
 - It could be used to impersonate or represent me
 - I don't trust App Z
 - Other
@@ -343,7 +343,7 @@ By work-related screen recordings, we mean screen or video recordings of your co
 
 By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **Do you feel ownership over your work-related screen recordings?**
 
-*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over it
+*(1–5 Likert)* 1: I do not feel ownership over this type of data … 5: I feel strong ownership over this type of data
 
 **Button:** Continue
 
