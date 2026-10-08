@@ -547,7 +547,8 @@ test('Block B prompts use short data name instead of generic "your data"', () =>
     const p = screenPayload(fakeParticipant, `postq_${id}`);
     assert.ok(p.item.prompt.includes(dtFin.inline), `postq_${id}`);
     assert.ok(!/\byour data\b/.test(p.item.prompt), `postq_${id}`);
-    assert.ok(!/\bthis data\b/.test(p.item.prompt), `postq_${id}`);
+    // postq_11 intentionally says "sold this data" after naming the type.
+    if (id !== 11) assert.ok(!/\bthis data\b/.test(p.item.prompt), `postq_${id}`);
   }
 });
 test('prompts use is/are agreement from data-type plural flag', () => {
@@ -605,9 +606,11 @@ test('post_scenario_intro screen mentions data type + use case', () => {
 test('block_a_intro screen mentions data type regardless of use', () => {
   const p = screenPayload(fakeParticipant, 'block_a_intro');
   const text = p.body.join(' ');
-  assert.ok(text.includes(dtFin.inline));
+  assert.ok(text.includes(`how you feel about your ${dtFin.inline}`));
   assert.ok(text.includes('regardless of its use'));
   assert.deepEqual(p.emphasis, [dtFin.inline, 'regardless of its use']);
+  const photo = screenPayload({ ...fakeParticipant, data_type: 9 }, 'block_a_intro');
+  assert.ok(photo.body[0].includes('how you feel about your photo library data, regardless of its use'));
 });
 test('open_response screen carries both prompts + field keys', () => {
   const p = screenPayload(fakeParticipant, 'open_response');

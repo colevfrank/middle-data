@@ -266,7 +266,7 @@ Suppose App Z collects your financial information to improve App Z's services. B
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your financial information to improve App Z's services. By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **Suppose your phone manufacturer collected your financial information and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your financial information to improve App Z's services. By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **Suppose your phone manufacturer collected your financial information and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -296,13 +296,13 @@ Suppose App Z collects your financial information to improve App Z's services. B
 
 Suppose App Z wants to collect your financial information to improve App Z's services. By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **What is/are your main concern(s) about sharing your financial information with App Z? (Please check all that apply)**
 
+- It could be used to harm me
 - It could be used to manipulate me
+- It could be used to impersonate or represent me
 - I don't understand why App Z wants it
+- I'm not concerned
 - It's too personal or sensitive
 - I don't trust App Z
-- It could be used to harm me
-- It could be used to impersonate or represent me
-- I'm not concerned
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your financial information to improve App Z's ser
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about financial information, regardless of its use.
+Now, we'd like to understand how you feel about your financial information, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By financial information, we mean records of your bank accounts, balances, and s
 
 ## Block A — postq_share_public (id 4)
 
-By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **Would you ever share your financial information publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **Would you ever share your financial information publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

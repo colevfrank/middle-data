@@ -439,7 +439,7 @@ Should you be compensated for how unique or original your `{inline_b}` `{is/are}
 
 *(Header uses “wants to collect” instead of “collects”.)*
 
-Suppose your phone manufacturer collected your `{inline_b}` and sold `{it/them}` to App Z. How would you feel?
+Suppose your phone manufacturer collected your `{inline_b}` and sold this data to App Z. How would you feel?
 
 - Very upset
 - A little upset
@@ -478,7 +478,9 @@ What is/are your main concern(s) about sharing your `{inline_b}` with App Z? (Pl
 
 ## Page 15 — Block A intro
 
-Now, we'd like to understand how you feel about `{inline_b}`, regardless of `{its/their}` use.
+Now, we'd like to understand how you feel about your `{inline_b}`, regardless of `{its/their}` use.
+
+Photo library (this page only): your photo library data.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -524,7 +526,7 @@ Do you feel ownership over your `{inline_b}`?
 
 ### A4 — Share publicly
 
-Would you ever share your `{inline_b}` publicly? For example, would you share `{it/them}` with a person or group of people you have never met before? Choose the option that best describes your answer:
+Would you ever share your `{inline_b}` publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

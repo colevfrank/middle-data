@@ -266,7 +266,7 @@ Suppose App Z collects your errand-related screen recordings to train App Z's AI
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your errand-related screen recordings to train App Z's AI models and AI agents to improve its services. By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **Suppose your phone manufacturer collected your errand-related screen recordings and sold them to App Z. How would you feel?**
+Suppose App Z wants to collect your errand-related screen recordings to train App Z's AI models and AI agents to improve its services. By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **Suppose your phone manufacturer collected your errand-related screen recordings and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -296,13 +296,13 @@ Suppose App Z collects your errand-related screen recordings to train App Z's AI
 
 Suppose App Z wants to collect your errand-related screen recordings to train App Z's AI models and AI agents to improve its services. By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **What is/are your main concern(s) about sharing your errand-related screen recordings with App Z? (Please check all that apply)**
 
-- It could be used to manipulate me
-- I'm not concerned
-- I don't understand why App Z wants it
-- It could be used to impersonate or represent me
-- I don't trust App Z
 - It's too personal or sensitive
+- I'm not concerned
+- It could be used to impersonate or represent me
+- I don't understand why App Z wants it
 - It could be used to harm me
+- It could be used to manipulate me
+- I don't trust App Z
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your errand-related screen recordings to train Ap
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about errand-related screen recordings, regardless of their use.
+Now, we'd like to understand how you feel about your errand-related screen recordings, regardless of their use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By errand-related screen recordings, we mean screen recordings of how you carry 
 
 ## Block A — postq_share_public (id 4)
 
-By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **Would you ever share your errand-related screen recordings publicly? For example, would you share them with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By errand-related screen recordings, we mean screen recordings of how you carry out errands on the computer, such as booking flights, filling out forms, filing documents, and managing your calendar (personal data can be redacted). **Would you ever share your errand-related screen recordings publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

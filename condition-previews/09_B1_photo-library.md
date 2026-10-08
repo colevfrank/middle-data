@@ -266,7 +266,7 @@ Suppose App Z collects your photo library to improve App Z's services. By photo 
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your photo library to improve App Z's services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Suppose your phone manufacturer collected your photo library and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your photo library to improve App Z's services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Suppose your phone manufacturer collected your photo library and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -296,11 +296,11 @@ Suppose App Z collects your photo library to improve App Z's services. By photo 
 
 Suppose App Z wants to collect your photo library to improve App Z's services. By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **What is/are your main concern(s) about sharing your photo library with App Z? (Please check all that apply)**
 
+- It's too personal or sensitive
 - It could be used to harm me
 - It could be used to manipulate me
-- It could be used to impersonate or represent me
-- It's too personal or sensitive
 - I don't trust App Z
+- It could be used to impersonate or represent me
 - I'm not concerned
 - I don't understand why App Z wants it
 - Other
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your photo library to improve App Z's services. B
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about photo library, regardless of its use.
+Now, we'd like to understand how you feel about your photo library data, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By photo library, we mean the photos and videos stored on your phone or in your 
 
 ## Block A — postq_share_public (id 4)
 
-By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Would you ever share your photo library publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By photo library, we mean the photos and videos stored on your phone or in your cloud account, including pictures of you, other people, and places. **Would you ever share your photo library publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

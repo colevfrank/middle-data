@@ -266,7 +266,7 @@ Suppose App Z collects your document editing history to train App Z's AI models 
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Suppose your phone manufacturer collected your document editing history and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Suppose your phone manufacturer collected your document editing history and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -296,13 +296,13 @@ Suppose App Z collects your document editing history to train App Z's AI models 
 
 Suppose App Z wants to collect your document editing history to train App Z's AI models and AI agents to improve its services. By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **What is/are your main concern(s) about sharing your document editing history with App Z? (Please check all that apply)**
 
-- It could be used to harm me
-- I'm not concerned
-- It could be used to manipulate me
-- I don't understand why App Z wants it
+- I don't trust App Z
 - It's too personal or sensitive
 - It could be used to impersonate or represent me
-- I don't trust App Z
+- It could be used to manipulate me
+- It could be used to harm me
+- I'm not concerned
+- I don't understand why App Z wants it
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your document editing history to train App Z's AI
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about document editing history, regardless of its use.
+Now, we'd like to understand how you feel about your document editing history, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By document editing history, we mean a record of changes to your documents, pres
 
 ## Block A — postq_share_public (id 4)
 
-By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Would you ever share your document editing history publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By document editing history, we mean a record of changes to your documents, presentations, or code, such as how Google/Word Docs or Google/PowerPoint Slides are drafted and revised. **Would you ever share your document editing history publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

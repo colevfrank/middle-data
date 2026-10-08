@@ -266,13 +266,15 @@ function screenPayload(p, screenId, extra = {}) {
     case 'block_a_intro': {
       const dtA = forBlockB(dt);
       const itsTheir = dtA.plural ? 'their' : 'its';
+      // Photo library reads oddly bare; this intro page only uses "photo library data".
+      const name = dt.id === 9 ? 'photo library data' : dtA.inline;
       return {
         screen: 'block_a_intro',
         body: [
-          `Now, we'd like to understand how you feel about ${dtA.inline}, regardless of ${itsTheir} use.`,
+          `Now, we'd like to understand how you feel about your ${name}, regardless of ${itsTheir} use.`,
           "On the following pages, we'll ask you a series of questions."
         ],
-        emphasis: [dtA.inline, `regardless of ${itsTheir} use`]
+        emphasis: [name, `regardless of ${itsTheir} use`]
       };
     }
 

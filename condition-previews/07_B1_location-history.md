@@ -266,7 +266,7 @@ Suppose App Z collects your location history to improve App Z's services. By loc
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your location history to improve App Z's services. By location history, we mean a record of where you travel and when, such as your path to work, home, and other places. **Suppose your phone manufacturer collected your location history and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your location history to improve App Z's services. By location history, we mean a record of where you travel and when, such as your path to work, home, and other places. **Suppose your phone manufacturer collected your location history and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -299,10 +299,10 @@ Suppose App Z wants to collect your location history to improve App Z's services
 - It could be used to impersonate or represent me
 - It could be used to manipulate me
 - I don't trust App Z
-- I'm not concerned
-- I don't understand why App Z wants it
 - It's too personal or sensitive
 - It could be used to harm me
+- I don't understand why App Z wants it
+- I'm not concerned
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your location history to improve App Z's services
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about location history, regardless of its use.
+Now, we'd like to understand how you feel about your location history, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By location history, we mean a record of where you travel and when, such as your
 
 ## Block A — postq_share_public (id 4)
 
-By location history, we mean a record of where you travel and when, such as your path to work, home, and other places. **Would you ever share your location history publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By location history, we mean a record of where you travel and when, such as your path to work, home, and other places. **Would you ever share your location history publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

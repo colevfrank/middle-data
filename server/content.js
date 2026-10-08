@@ -112,7 +112,7 @@ const POST_QUESTIONS = [
     prompt: (dt) => `Do you feel ownership over your ${dt.inline}?`,
     anchors: { low: 'I do not feel ownership over this type of data', high: 'I feel strong ownership over it' } },
   { id: 4, key: 'postq_share_public', block: 'A', type: 'choice_num',
-    prompt: (dt) => `Would you ever share your ${dt.inline} publicly? For example, would you share ${itThem(dt)} with a person or group of people you have never met before? Choose the option that best describes your answer:`,
+    prompt: (dt) => `Would you ever share your ${dt.inline} publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:`,
     options: [
       // Pronoun-neutral so labels work for both singular and plural data types.
       { value: 0, label: 'No — I would never share this publicly.' },
@@ -162,7 +162,7 @@ const POST_QUESTIONS = [
     prompt: (dt) => `Should you be compensated for how unique or original your ${dt.inline} ${be(dt)} relative to others' on App Z?`,
     prompt_emphasis: ['how unique or original'] },
   { id: 11, key: 'postq_coworker_sells_feel', block: 'B', type: 'choice',
-    prompt: (dt) => `Suppose your phone manufacturer collected your ${dt.inline} and sold ${itThem(dt)} to App Z. How would you feel?`,
+    prompt: (dt) => `Suppose your phone manufacturer collected your ${dt.inline} and sold this data to App Z. How would you feel?`,
     options: [
       { value: 'very_upset',   label: 'Very upset' },
       { value: 'little_upset', label: 'A little upset' },

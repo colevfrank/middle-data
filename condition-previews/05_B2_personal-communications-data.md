@@ -266,7 +266,7 @@ Suppose App Z collects your personal communications data to train App Z's AI mod
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your personal communications data to train App Z's AI models and AI agents to improve its services. By personal communications data, we mean emails, text messages, and direct messages on social media apps. **Suppose your phone manufacturer collected your personal communications data and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your personal communications data to train App Z's AI models and AI agents to improve its services. By personal communications data, we mean emails, text messages, and direct messages on social media apps. **Suppose your phone manufacturer collected your personal communications data and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -296,13 +296,13 @@ Suppose App Z collects your personal communications data to train App Z's AI mod
 
 Suppose App Z wants to collect your personal communications data to train App Z's AI models and AI agents to improve its services. By personal communications data, we mean emails, text messages, and direct messages on social media apps. **What is/are your main concern(s) about sharing your personal communications data with App Z? (Please check all that apply)**
 
-- I don't trust App Z
 - It's too personal or sensitive
-- I don't understand why App Z wants it
 - It could be used to impersonate or represent me
+- I don't understand why App Z wants it
+- I don't trust App Z
+- It could be used to harm me
 - I'm not concerned
 - It could be used to manipulate me
-- It could be used to harm me
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your personal communications data to train App Z'
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about personal communications data, regardless of its use.
+Now, we'd like to understand how you feel about your personal communications data, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By personal communications data, we mean emails, text messages, and direct messa
 
 ## Block A — postq_share_public (id 4)
 
-By personal communications data, we mean emails, text messages, and direct messages on social media apps. **Would you ever share your personal communications data publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By personal communications data, we mean emails, text messages, and direct messages on social media apps. **Would you ever share your personal communications data publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

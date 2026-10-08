@@ -266,7 +266,7 @@ Suppose App Z collects your work-related screen recordings to improve App Z's se
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your work-related screen recordings to improve App Z's services. By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **Suppose your phone manufacturer collected your work-related screen recordings and sold them to App Z. How would you feel?**
+Suppose App Z wants to collect your work-related screen recordings to improve App Z's services. By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **Suppose your phone manufacturer collected your work-related screen recordings and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -296,13 +296,13 @@ Suppose App Z collects your work-related screen recordings to improve App Z's se
 
 Suppose App Z wants to collect your work-related screen recordings to improve App Z's services. By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **What is/are your main concern(s) about sharing your work-related screen recordings with App Z? (Please check all that apply)**
 
-- I don't understand why App Z wants it
-- It could be used to manipulate me
 - It could be used to harm me
+- I don't understand why App Z wants it
+- I'm not concerned
+- It's too personal or sensitive
+- It could be used to manipulate me
 - It could be used to impersonate or represent me
 - I don't trust App Z
-- It's too personal or sensitive
-- I'm not concerned
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your work-related screen recordings to improve Ap
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about work-related screen recordings, regardless of their use.
+Now, we'd like to understand how you feel about your work-related screen recordings, regardless of their use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By work-related screen recordings, we mean screen or video recordings of your co
 
 ## Block A — postq_share_public (id 4)
 
-By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **Would you ever share your work-related screen recordings publicly? For example, would you share them with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By work-related screen recordings, we mean screen or video recordings of your computer as you do work, showing the steps you take to complete a task from start to finish. **Would you ever share your work-related screen recordings publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

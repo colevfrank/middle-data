@@ -266,7 +266,7 @@ Suppose App Z collects your streaming preferences data to improve App Z's servic
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your streaming preferences data to improve App Z's services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Suppose your phone manufacturer collected your streaming preferences data and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your streaming preferences data to improve App Z's services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Suppose your phone manufacturer collected your streaming preferences data and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -296,13 +296,13 @@ Suppose App Z collects your streaming preferences data to improve App Z's servic
 
 Suppose App Z wants to collect your streaming preferences data to improve App Z's services. By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **What is/are your main concern(s) about sharing your streaming preferences data with App Z? (Please check all that apply)**
 
-- I don't trust App Z
 - It could be used to impersonate or represent me
-- I don't understand why App Z wants it
-- It could be used to manipulate me
-- It's too personal or sensitive
 - It could be used to harm me
 - I'm not concerned
+- I don't trust App Z
+- It could be used to manipulate me
+- It's too personal or sensitive
+- I don't understand why App Z wants it
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your streaming preferences data to improve App Z'
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about streaming preferences data, regardless of its use.
+Now, we'd like to understand how you feel about your streaming preferences data, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By streaming preferences data, we mean a record of what you watch and listen to 
 
 ## Block A — postq_share_public (id 4)
 
-By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Would you ever share your streaming preferences data publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By streaming preferences data, we mean a record of what you watch and listen to on streaming platforms, such as the shows, movies, and music you choose, how you interact with them, and how you rate them. **Would you ever share your streaming preferences data publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

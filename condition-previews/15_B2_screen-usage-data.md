@@ -266,7 +266,7 @@ Suppose App Z collects your screen usage data to train App Z's AI models and AI 
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your screen usage data to train App Z's AI models and AI agents to improve its services. By screen usage data, we mean a record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen. **Suppose your phone manufacturer collected your screen usage data and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your screen usage data to train App Z's AI models and AI agents to improve its services. By screen usage data, we mean a record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen. **Suppose your phone manufacturer collected your screen usage data and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -298,11 +298,11 @@ Suppose App Z wants to collect your screen usage data to train App Z's AI models
 
 - It's too personal or sensitive
 - I don't trust App Z
-- I'm not concerned
-- It could be used to impersonate or represent me
-- It could be used to manipulate me
 - It could be used to harm me
+- I'm not concerned
+- It could be used to manipulate me
 - I don't understand why App Z wants it
+- It could be used to impersonate or represent me
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your screen usage data to train App Z's AI models
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about screen usage data, regardless of its use.
+Now, we'd like to understand how you feel about your screen usage data, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By screen usage data, we mean a record of how you use your device, such as which
 
 ## Block A — postq_share_public (id 4)
 
-By screen usage data, we mean a record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen. **Would you ever share your screen usage data publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By screen usage data, we mean a record of how you use your device, such as which apps you open, how long you spend in each, and how you move between them — not the specifics of what is shown on your screen. **Would you ever share your screen usage data publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.

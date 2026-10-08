@@ -266,7 +266,7 @@ Suppose App Z collects your email management data to train App Z's AI models and
 
 ## Block B — postq_coworker_sells_feel (id 11)
 
-Suppose App Z wants to collect your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Suppose your phone manufacturer collected your email management data and sold it to App Z. How would you feel?**
+Suppose App Z wants to collect your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Suppose your phone manufacturer collected your email management data and sold this data to App Z. How would you feel?**
 
 - Very upset
 - A little upset
@@ -296,13 +296,13 @@ Suppose App Z collects your email management data to train App Z's AI models and
 
 Suppose App Z wants to collect your email management data to train App Z's AI models and AI agents to improve its services. By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **What is/are your main concern(s) about sharing your email management data with App Z? (Please check all that apply)**
 
-- I don't understand why App Z wants it
-- It could be used to impersonate or represent me
 - I don't trust App Z
-- It could be used to harm me
 - It could be used to manipulate me
+- It could be used to harm me
+- It could be used to impersonate or represent me
 - I'm not concerned
 - It's too personal or sensitive
+- I don't understand why App Z wants it
 - Other
 
 **Button:** Continue
@@ -311,7 +311,7 @@ Suppose App Z wants to collect your email management data to train App Z's AI mo
 
 ## Block A intro
 
-Now, we'd like to understand how you feel about email management data, regardless of its use.
+Now, we'd like to understand how you feel about your email management data, regardless of its use.
 
 On the following pages, we'll ask you a series of questions.
 
@@ -351,7 +351,7 @@ By email management data, we mean a record of how you manage your email inbox, s
 
 ## Block A — postq_share_public (id 4)
 
-By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Would you ever share your email management data publicly? For example, would you share it with a person or group of people you have never met before? Choose the option that best describes your answer:**
+By email management data, we mean a record of how you manage your email inbox, such as when and how you open, archive, delete, label, or reply to emails. **Would you ever share your email management data publicly? For example, would you share this data with a person or group of people you have never met before? Choose the option that best describes your answer:**
 
 - No — I would never share this publicly.
 - Maybe — it would depend on the situation.
