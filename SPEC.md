@@ -111,7 +111,10 @@ options are shuffled per render with "Other" pinned last.
 Block randomization across 16 × 2 = **32 cells**, target **100 per cell** (`TARGET_N = 3200`).
 `server/randomization.js` keeps a shuffled bag of the assignments still needed to reach the
 per-cell target, refilling it from live counts under a Postgres advisory lock; once every cell
-is full it falls back to uniform random assignment.
+is full it falls back to uniform random assignment. The target counts **completes**: a refill
+counts completed participants plus sessions still in progress (started within the last 2 hours,
+consent not refused), so consent refusals and abandoned sessions are re-assigned rather than
+consuming a cell's slot.
 
 ## Survey flow (31 screens)
 
@@ -135,6 +138,11 @@ the screen they should see next, so a reload or a returning link resumes exactly
 | 29 | `ai_usage` | AI / social media / search frequency + two tech-sector items | 5 columns |
 | 30 | `demographics` | Age, gender (+ other), education | 4 columns |
 | 31 | `debrief` | Debrief + IRB protocol; button completes the study | sets `completed`, `completed_at` |
+
+**Slider robustness check (on).** With `ENABLE_SCENARIO_SLIDER_FOLLOWUPS` true in
+`server/surveyFeatures.js`, each scenario is immediately followed by `scenario_<n>_slider`, which
+re-asks the same question as a minimum-acceptable-amount slider (`s1_slider_value`/`s1_slider_none`,
+`s2_slider_value`/`s2_slider_none`), bringing the flow to 33 screens.
 
 Consent refusal sends `current_screen` to `returned` and redirects out; completion sends it to
 `complete`. Both clear the session cookie.

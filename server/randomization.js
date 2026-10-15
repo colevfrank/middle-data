@@ -21,11 +21,19 @@ function shuffle(arr) {
 let assignmentBag = []; // [{data_type, use_case}]
 let bagInitialized = false;
 
+// The per-cell target counts completes. Sessions still in progress (started within
+// this window, consent not refused) hold their slot so a burst of starts doesn't
+// overfill a cell; abandoned sessions release it once the window passes.
+const ACTIVE_WINDOW_HOURS = 2;
+
 async function refillBag(client) {
   const { rows } = await client.query(
     `SELECT data_type, use_case, COUNT(*)::int AS n
        FROM participants
-      GROUP BY data_type, use_case`
+      WHERE completed
+         OR (current_screen <> 'returned' AND created_at > NOW() - make_interval(hours => $1))
+      GROUP BY data_type, use_case`,
+    [ACTIVE_WINDOW_HOURS]
   );
   const countMap = new Map();
   for (const r of rows) {
