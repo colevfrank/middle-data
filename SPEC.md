@@ -108,7 +108,9 @@ options are shuffled per render with "Other" pinned last.
 
 ### Sample size
 
-Block randomization across 16 × 2 = **32 cells**, target **100 per cell** (`TARGET_N = 3200`).
+Block randomization across 16 × 2 = **32 cells**, target **100 per cell** (N = 3200). The
+per-cell target is set by the `PER_CELL_TARGET` env var (default 100; e.g. 10 for a 320-person
+pilot). Changing it on Railway redeploys the service, which rebuilds the assignment bag.
 `server/randomization.js` keeps a shuffled bag of the assignments still needed to reach the
 per-cell target, refilling it from live counts under a Postgres advisory lock; once every cell
 is full it falls back to uniform random assignment. The target counts **completes**: a refill
@@ -320,6 +322,7 @@ attrition still yields usable partial rows:
 | `DATABASE_URL` | Railway Postgres |
 | `CLOUDRESEARCH_COMPLETE_URL` | Study's end-of-study redirect URL |
 | `CLOUDRESEARCH_TERMINATE_URL` | Optional screen-out / consent-refusal landing URL (falls back to the completion URL) |
+| `PER_CELL_TARGET` | Completes per cell for block randomization (default 100; 10 for the pilot) |
 | `ADMIN_PASSWORD` | HTTP basic auth for the admin exports; unset disables them |
 | `NODE_ENV` | `production` enables Secure cookies and HSTS |
 | `PORT` | Server port (default 3000) |

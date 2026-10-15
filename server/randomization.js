@@ -1,9 +1,18 @@
 const { withClient } = require('./db');
 const { POST_QUESTIONS } = require('./content');
 
-const TARGET_N = 3200;
-const CELLS_PER_BLOCK = 32; // 16 data types × 2 use cases
-const PER_CELL_TARGET = Math.floor(TARGET_N / CELLS_PER_BLOCK); // 100
+// Completes per cell (16 data types × 2 use cases = 32 cells). Defaults to 100
+// (N = 3200); override with the PER_CELL_TARGET env var, e.g. 10 for the pilot.
+const DEFAULT_PER_CELL_TARGET = 100;
+const PER_CELL_TARGET = (() => {
+  const raw = process.env.PER_CELL_TARGET;
+  if (raw === undefined || raw === '') return DEFAULT_PER_CELL_TARGET;
+  const n = Number(raw);
+  if (!Number.isInteger(n) || n < 1) {
+    throw new Error(`PER_CELL_TARGET must be a positive integer, got "${raw}"`);
+  }
+  return n;
+})();
 
 const NUM_DATA_TYPES = 16;
 
