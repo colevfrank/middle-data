@@ -92,7 +92,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 - I agree  `$____ / month discount`
 - I do not agree
 
-**Please select what discount you would be willing to accept (select all that apply):**
+**Please select ALL of the discounts you would be willing to accept (select ALL that apply):**
 
 - I would accept if I receive $1 off / month (which means my subscription is $19/mo)
 - I would accept if I receive $3 off / month (which means my subscription is $17/mo)
@@ -161,7 +161,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 - I agree  `____% of revenue`
 - I do not agree
 
-**Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):**
+**Please select ALL of the percentages of the revenue attributed to your data that you would be willing to accept (select ALL that apply):**
 
 - I would agree if I receive 1% of the revenue attributed to my data
 - I would agree if I receive 10% of the revenue attributed to my data
@@ -296,12 +296,12 @@ Suppose App Z collects your financial information to improve App Z's services. B
 
 Suppose App Z wants to collect your financial information to improve App Z's services. By financial information, we mean records of your bank accounts, balances, and statements as well as your investments, income, credit history, and credit score. **What is/are your main concern(s) about sharing your financial information with App Z? (Please check all that apply)**
 
-- It could be used to manipulate me
+- It's too personal or sensitive
 - It could be used to harm me
 - It could be used to impersonate or represent me
-- It's too personal or sensitive
-- I don't trust App Z
 - I'm not concerned
+- I don't trust App Z
+- It could be used to manipulate me
 - I don't understand why App Z wants the data
 - Other
 

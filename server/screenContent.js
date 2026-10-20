@@ -74,7 +74,8 @@ function scenarioPayload(p, screenId) {
       };
       payload.submit = { value: 's1_slider_value', none: 's1_slider_none' };
     } else {
-      payload.question = 'Please select what discount you would be willing to accept (select all that apply):';
+      payload.question = 'Please select ALL of the discounts you would be willing to accept (select ALL that apply):';
+      payload.tier_hint = 'Selecting a discount automatically selects every larger discount.';
       payload.tiers = S1_TIERS;
       payload.submit = { accepted: 's1_accepted_discounts', none: 's1_none' };
     }
@@ -107,7 +108,8 @@ function scenarioPayload(p, screenId) {
     };
     payload.submit = { value: 's2_slider_value', none: 's2_slider_none' };
   } else {
-    payload.question = 'Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):';
+    payload.question = 'Please select ALL of the percentages of the revenue attributed to your data that you would be willing to accept (select ALL that apply):';
+    payload.tier_hint = 'Selecting a percentage automatically selects every larger percentage.';
     payload.tiers = S2_TIERS;
     payload.submit = { accepted: 's2_accepted_shares', none: 's2_none' };
   }

@@ -177,6 +177,13 @@ Stored: `s2_accepted_shares TEXT[]` of `1`/`10`/`25`/`50`/`75`/`99`, and `s2_non
 At least one box (or the decline) is required; the server rejects a decline submitted together
 with accepted tiers, duplicates, and unknown tier codes.
 
+**Upward-closed selection (added 2026-10-20, after the pilot).** Pilot participants often
+checked a single tier and not the larger ones, so the question now reads "select ALL … (select
+ALL that apply)" with a hint line, and the client keeps the selection upward-closed: checking a
+tier checks every larger tier, and unchecking a tier unchecks every smaller one. `input_events`
+logs only the participant's own clicks, not the cascaded checks. Pilot rows used the old format.
+The server does not enforce upward-closure; the client guarantees it.
+
 ### Block B — compensation for the use case (7 questions)
 
 Every Block B screen repeats the same header before the bolded question: "Suppose App Z

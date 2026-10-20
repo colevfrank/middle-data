@@ -92,7 +92,7 @@ We would like to offer you a monthly discount on your subscription for sharing t
 - I agree  `$____ / month discount`
 - I do not agree
 
-**Please select what discount you would be willing to accept (select all that apply):**
+**Please select ALL of the discounts you would be willing to accept (select ALL that apply):**
 
 - I would accept if I receive $1 off / month (which means my subscription is $19/mo)
 - I would accept if I receive $3 off / month (which means my subscription is $17/mo)
@@ -161,7 +161,7 @@ Because your data will increase our revenue, we would like to offer to pay you a
 - I agree  `____% of revenue`
 - I do not agree
 
-**Please select which percentages of the revenue attributed to your data you would be willing to accept (select all that apply):**
+**Please select ALL of the percentages of the revenue attributed to your data that you would be willing to accept (select ALL that apply):**
 
 - I would agree if I receive 1% of the revenue attributed to my data
 - I would agree if I receive 10% of the revenue attributed to my data
@@ -296,13 +296,13 @@ Suppose App Z collects your demographic information to improve App Z's services.
 
 Suppose App Z wants to collect your demographic information to improve App Z's services. By demographic information, we mean basic facts about who you are, such as your age, gender, race, level of education, marital status, income level, occupation, and state of residence. **What is/are your main concern(s) about sharing your demographic information with App Z? (Please check all that apply)**
 
-- I don't trust App Z
-- It's too personal or sensitive
-- It could be used to impersonate or represent me
 - I'm not concerned
-- It could be used to harm me
 - It could be used to manipulate me
 - I don't understand why App Z wants the data
+- I don't trust App Z
+- It could be used to impersonate or represent me
+- It could be used to harm me
+- It's too personal or sensitive
 - Other
 
 **Button:** Continue

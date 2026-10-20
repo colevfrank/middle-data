@@ -597,11 +597,17 @@
     return [el('span', { class: 'font-bold text-cyan-600' }, s)];
   }
 
-  // Bold question below the frame + multi-select checkboxes ("select all that apply")
+  // Bold question below the frame + multi-select checkboxes ("select ALL that apply")
   // with a mutually-exclusive "none". Continue enabled once ≥1 box or "none" is checked.
+  // Tiers are listed smallest → largest and kept upward-closed: checking a tier checks
+  // every larger one; unchecking a tier unchecks every smaller one. Only the clicked
+  // box fires `change`, so input_events logs participant clicks, not the cascade.
   function renderScenarioQuestion(p) {
     root.appendChild(el('p', { class: 'font-bold text-slate-900 mt-6 mb-2' },
-      emphasize(p.question, ['select all that apply'], 'font-bold underline')));
+      emphasize(p.question, ['select ALL that apply', 'ALL'], 'font-extrabold underline')));
+    if (p.tier_hint) {
+      root.appendChild(el('p', { class: 'text-sm text-slate-600 mb-2' }, p.tier_hint));
+    }
     const form = el('div', { class: 'space-y-1' });
     for (const t of p.tiers) {
       form.appendChild(el('label', { class: 'label-radio' }, [
@@ -642,7 +648,15 @@
       btn.disabled = !(noneBox.checked || anyTier);
     }
     noneBox.addEventListener('change', refresh);
-    tierBoxes.forEach(b => b.addEventListener('change', () => { if (b.checked) noneBox.checked = false; refresh(); }));
+    tierBoxes.forEach((b, i) => b.addEventListener('change', () => {
+      if (b.checked) {
+        noneBox.checked = false;
+        tierBoxes.slice(i + 1).forEach(x => { x.checked = true; });
+      } else {
+        tierBoxes.slice(0, i).forEach(x => { x.checked = false; });
+      }
+      refresh();
+    }));
     refresh();
   }
 
