@@ -9,7 +9,7 @@
 | `inline_b` (Blocks A & B) | phone motion sensor data |
 | Number (A/B prompts) | singular (is / it / its) |
 
-**Note:** In the live survey, scenario order and Block A/B question order are randomized. This preview uses a fixed order: Subscription Discount → Data Sharing Program; Block B then Block A questions by ascending id (attention check pooled in Block A).
+**Note:** In the live survey, scenario order and Block A/B question order are randomized. This preview uses a fixed order: Subscription Discount → Data Sharing Program; Block B, then Block C, then Block A questions by ascending id (attention check pooled in Block A).
 
 ---
 
@@ -94,6 +94,8 @@ We would like to offer you a monthly discount on your subscription for sharing t
 
 **Please select ALL of the discounts you would be willing to accept (select ALL that apply):**
 
+*Selecting a discount automatically selects every larger discount.*
+
 - I would accept if I receive $1 off / month (which means my subscription is $19/mo)
 - I would accept if I receive $3 off / month (which means my subscription is $17/mo)
 - I would accept if I receive $5 off / month (which means my subscription is $15/mo)
@@ -162,6 +164,8 @@ Because your data will increase our revenue, we would like to offer to pay you a
 - I do not agree
 
 **Please select ALL of the percentages of the revenue attributed to your data that you would be willing to accept (select ALL that apply):**
+
+*Selecting a percentage automatically selects every larger percentage.*
 
 - I would agree if I receive 1% of the revenue attributed to my data
 - I would agree if I receive 10% of the revenue attributed to my data
@@ -297,13 +301,43 @@ Suppose App Z collects your phone motion sensor data to improve App Z's services
 Suppose App Z wants to collect your phone motion sensor data to improve App Z's services. By phone motion sensor data, we mean readings from your phone's motion sensors that capture how you physically move and handle your device, such as when walking, driving, or picking it up. **What is/are your main concern(s) about sharing your phone motion sensor data with App Z? (Please check all that apply)**
 
 - It's too personal or sensitive
-- It could be used to manipulate me
-- It could be used to harm me
-- I'm not concerned
-- It could be used to impersonate or represent me
 - I don't trust App Z
+- It could be used to impersonate or represent me
+- It could be used to manipulate me
+- I'm not concerned
+- It could be used to harm me
 - I don't understand why App Z wants the data
 - Other
+
+**Button:** Continue
+
+---
+
+## Block C — postq_willing_if_self_benefit (id 19)
+
+Suppose App Z collects your phone motion sensor data to improve App Z's services. By phone motion sensor data, we mean readings from your phone's motion sensors that capture how you physically move and handle your device, such as when walking, driving, or picking it up. **If you benefit from this use of your data, would you be more willing or less willing to share it?**
+
+*(1–5 Likert)* 1: I would be less willing … 3: No change … 5: I would be more willing
+
+**Button:** Continue
+
+---
+
+## Block C — postq_willing_if_others_benefit (id 20)
+
+Suppose App Z collects your phone motion sensor data to improve App Z's services. By phone motion sensor data, we mean readings from your phone's motion sensors that capture how you physically move and handle your device, such as when walking, driving, or picking it up. **If others benefit from this use of your data, would you be more willing or less willing to share it?**
+
+*(1–5 Likert)* 1: I would be less willing … 3: No change … 5: I would be more willing
+
+**Button:** Continue
+
+---
+
+## Block C — postq_willing_if_no_revenue (id 21)
+
+Suppose App Z collects your phone motion sensor data to improve App Z's services. By phone motion sensor data, we mean readings from your phone's motion sensors that capture how you physically move and handle your device, such as when walking, driving, or picking it up. **If App Z does not earn any revenue from your data, would you be more willing or less willing to share it?**
+
+*(1–5 Likert)* 1: I would be less willing … 3: No change … 5: I would be more willing
 
 **Button:** Continue
 

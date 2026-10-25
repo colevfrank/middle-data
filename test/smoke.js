@@ -47,12 +47,12 @@ function makeMockPool() {
       return { rows: [], rowCount: 0 };
     }
     if (/^INSERT INTO participants/i.test(text)) {
-      const [pid, assignmentId, projectId, token, dt, uc, so, bbo, bao] = params;
+      const [pid, assignmentId, projectId, token, dt, uc, so, bbo, bco, bao] = params;
       const row = {
         id: mockState.nextId++,
         participant_id: pid, assignment_id: assignmentId, project_id: projectId, session_token: token,
         data_type: dt, use_case: uc,
-        scenario_order: so, block_b_order: bbo, block_a_order: bao,
+        scenario_order: so, block_b_order: bbo, block_c_order: bco, block_a_order: bao,
         current_screen: 'consent', completed: false
       };
       mockState.participants.set(token, row);
@@ -158,8 +158,8 @@ test('2 use cases B1 and B2 with data_use + intro_sentences', () => {
   assert.ok(content.USE_CASES.B1.data_use && typeof content.USE_CASES.B1.intro_sentences === 'function');
   assert.ok(content.USE_CASES.B2.data_use && typeof content.USE_CASES.B2.intro_sentences === 'function');
 });
-test('18 post-scenario questions (17 + attention check)', () => {
-  assert.equal(content.POST_QUESTIONS.length, 18);
+test('21 post-scenario questions (20 + attention check)', () => {
+  assert.equal(content.POST_QUESTIONS.length, 21);
   const ac = content.POST_QUESTIONS.find(q => q.type === 'attention');
   assert.ok(ac && ac.expected === 1);
 });
@@ -183,6 +183,8 @@ test('generateAllOrderings returns valid permutations', () => {
   // Block B = ids 7-13 (7 questions); Block A = ids 1-6, 15-18 + attention check 14 (11 items)
   assert.deepEqual([...o.block_b_order].sort((a, b) => a - b), [7, 8, 9, 10, 11, 12, 13]);
   assert.deepEqual([...o.block_a_order].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 14, 15, 16, 17, 18]);
+  // Block C = ids 19-21 (3 willingness items)
+  assert.deepEqual([...o.block_c_order].sort((a, b) => a - b), [19, 20, 21]);
 });
 test('assignCell yields a valid cell (dt 1..16, uc B1/B2)', async () => {
   mockState.participants.clear();
@@ -382,6 +384,26 @@ test('post-scenario intro → Block B → Block A intro → Block A → open_res
   assert.equal(nextAfter(fakeParticipant, 'block_a_intro'), 'postq_4');       // intro → first Block A
   assert.equal(nextAfter(fakeParticipant, 'postq_4'), 'postq_1');             // next Block A
   assert.equal(nextAfter(fakeParticipant, 'postq_18'), 'open_response');      // last Block A → open
+});
+test('Block C sits between Block B and Block A intro when assigned', () => {
+  const pc = { ...fakeParticipant, block_c_order: [21, 19, 20] };
+  assert.equal(nextAfter(pc, 'postq_10'), 'postq_21');        // last Block B → first Block C
+  assert.equal(nextAfter(pc, 'postq_21'), 'postq_19');
+  assert.equal(nextAfter(pc, 'postq_19'), 'postq_20');
+  assert.equal(nextAfter(pc, 'postq_20'), 'block_a_intro');   // last Block C → Block A intro
+  assert.equal(nextAfter({ ...fakeParticipant, block_c_order: null }, 'postq_10'), 'block_a_intro'); // pilot rows skip C
+  const prog = progressFor('postq_20', pc);
+  assert.ok(prog > progressFor('postq_10', pc) && prog < progressFor('block_a_intro', pc));
+});
+test('Block C payload: Block B header + verbatim prompt + willingness anchors', () => {
+  const pc = { ...fakeParticipant, block_c_order: [19, 20, 21] };
+  const p = screenPayload(pc, 'postq_20');
+  assert.equal(p.item.type, 'likert5');
+  assert.ok(p.item.header.startsWith('Suppose App Z collects your financial information to '));
+  assert.equal(p.item.prompt, 'If others benefit from this use of your data, would you be more willing or less willing to share it?');
+  assert.deepEqual(p.item.anchors, { low: 'I would be less willing', mid: 'No change', high: 'I would be more willing' });
+  assert.equal(validatePostQuestion({ postq_willing_if_no_revenue: 3 }, 'postq_21').fields.postq_willing_if_no_revenue, 3);
+  assert.equal(validatePostQuestion({ postq_willing_if_no_revenue: 6 }, 'postq_21').ok, false);
 });
 test('post-scenarios sequence', () => {
   assert.equal(nextAfter(fakeParticipant, 'open_response'), 'about_you_intro');

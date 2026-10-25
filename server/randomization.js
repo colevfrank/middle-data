@@ -91,6 +91,7 @@ async function assignCell() {
 
 function generateAllOrderings() {
   const blockB = POST_QUESTIONS.filter(q => q.block === 'B').map(q => q.id);
+  const blockC = POST_QUESTIONS.filter(q => q.block === 'C').map(q => q.id);
   const blockA = POST_QUESTIONS.filter(q => q.block === 'A' || q.block === 'AC').map(q => q.id);
   return {
     // Two scenarios: 1 = subscription discount, 2 = data sharing program
@@ -98,6 +99,8 @@ function generateAllOrderings() {
     // Block B shown first (7 questions), then Block A (10 questions + attention check),
     // each randomized within its block.
     block_b_order: shuffle(blockB),
+    // Block C (3 willingness items) follows Block B, randomized within itself.
+    block_c_order: shuffle(blockC),
     block_a_order: shuffle(blockA)
   };
 }

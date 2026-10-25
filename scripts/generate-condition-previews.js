@@ -24,6 +24,7 @@ function slug(dt, uc) {
 
 function fakeParticipant(dtId, uc) {
   const blockB = POST_QUESTIONS.filter(q => q.block === 'B').map(q => q.id).sort((a, b) => a - b);
+  const blockC = POST_QUESTIONS.filter(q => q.block === 'C').map(q => q.id).sort((a, b) => a - b);
   const blockA = POST_QUESTIONS.filter(q => q.block === 'A' || q.block === 'AC')
     .map(q => q.id).sort((a, b) => a - b);
   return {
@@ -31,6 +32,7 @@ function fakeParticipant(dtId, uc) {
     use_case: uc,
     scenario_order: [1, 2],
     block_b_order: blockB,
+    block_c_order: blockC,
     block_a_order: blockA
   };
 }
@@ -41,7 +43,8 @@ function renderOptions(opts) {
 
 function renderAnchors(anchors) {
   if (!anchors) return '';
-  return `*(1–5 Likert)* 1: ${anchors.low} … 5: ${anchors.high}`;
+  const mid = anchors.mid ? ` … 3: ${anchors.mid}` : '';
+  return `*(1–5 Likert)* 1: ${anchors.low}${mid} … 5: ${anchors.high}`;
 }
 
 function section(title, body) {
@@ -91,6 +94,7 @@ function renderScreen(participant, sid) {
       body += `- ${oa.disagree_label}\n\n`;
     }
     body += `**${pay.question}**\n\n`;
+    if (pay.tier_hint) body += `*${pay.tier_hint}*\n\n`;
     if (pay.response_format === 'slider' && pay.slider) {
       const lo = pay.slider.format === 'percent' ? `${pay.slider.min}%` : `$${pay.slider.min}`;
       const hi = pay.slider.format === 'percent' ? `${pay.slider.max}%` : `$${pay.slider.max}`;
@@ -170,7 +174,7 @@ function buildFile(dt, uc) {
   md += `| Number (A/B prompts) | ${dtB.plural ? 'plural (are / them / their)' : 'singular (is / it / its)'} |\n\n`;
   md += '**Note:** In the live survey, scenario order and Block A/B question order are randomized. ';
   md += 'This preview uses a fixed order: Subscription Discount → Data Sharing Program; ';
-  md += 'Block B then Block A questions by ascending id (attention check pooled in Block A).\n\n';
+  md += 'Block B, then Block C, then Block A questions by ascending id (attention check pooled in Block A).\n\n';
   md += '---\n\n';
 
   md += section('Consent', '*(Same for all conditions — see [`CONSENT.md`](../CONSENT.md).)*');
@@ -194,6 +198,10 @@ function buildFile(dt, uc) {
   for (const qid of participant.block_b_order) {
     const q = POST_QUESTIONS.find(x => x.id === qid);
     flow.push([`postq_${qid}`, `Block B — ${q.key} (id ${qid})`]);
+  }
+  for (const qid of participant.block_c_order) {
+    const q = POST_QUESTIONS.find(x => x.id === qid);
+    flow.push([`postq_${qid}`, `Block C — ${q.key} (id ${qid})`]);
   }
   flow.push(['block_a_intro', 'Block A intro']);
   for (const qid of participant.block_a_order) {

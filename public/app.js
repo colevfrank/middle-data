@@ -169,7 +169,7 @@
   }
 
   // ===== Helpers for question UI =====
-  // Vertical 1–5 radios; endpoint labels from anchors when provided.
+  // Vertical 1–5 radios; endpoint labels from anchors when provided (optional `mid` labels 3).
   function likert5(name, anchors) {
     const container = el('div', { class: 'mt-2 space-y-1' });
     for (let i = 1; i <= 5; i++) {
@@ -177,6 +177,7 @@
       if (anchors) {
         if (i === 1) label = '1: ' + anchors.low;
         else if (i === 5) label = '5: ' + anchors.high;
+        else if (i === 3 && anchors.mid) label = '3: ' + anchors.mid;
       }
       container.appendChild(el('label', { class: 'label-radio' }, [
         el('input', { type: 'radio', name, value: i }),

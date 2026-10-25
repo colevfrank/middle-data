@@ -9,6 +9,7 @@ const FIXED_ORDER = [
   '__scenarios__',        // expanded via scenario_order (+ scenario_transition between)
   'post_scenario_intro',
   '__block_b__',          // expanded via block_b_order
+  '__block_c__',          // expanded via block_c_order (absent on pre-2026-10-24 rows)
   'block_a_intro',
   '__block_a__',          // expanded via block_a_order
   'open_response',
@@ -68,11 +69,20 @@ function nextAfter(participant, currentScreen) {
   if (isPostQuestion(currentScreen)) {
     const qid = parseInt(currentScreen.split('_')[1], 10);
     const bIdx = participant.block_b_order.indexOf(qid);
+    const blockC = participant.block_c_order || [];
     if (bIdx >= 0) {
       if (bIdx < participant.block_b_order.length - 1) {
         return `postq_${participant.block_b_order[bIdx + 1]}`;
       }
-      return 'block_a_intro'; // Block B done → Block A intro
+      // Block B done → Block C (if assigned), else Block A intro
+      return blockC.length ? `postq_${blockC[0]}` : 'block_a_intro';
+    }
+    const cIdx = blockC.indexOf(qid);
+    if (cIdx >= 0) {
+      if (cIdx < blockC.length - 1) {
+        return `postq_${blockC[cIdx + 1]}`;
+      }
+      return 'block_a_intro'; // Block C done → Block A intro
     }
     const aIdx = participant.block_a_order.indexOf(qid);
     if (aIdx >= 0 && aIdx < participant.block_a_order.length - 1) {

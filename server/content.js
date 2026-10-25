@@ -98,7 +98,9 @@ const YESNO_UNSURE_CARE = [
   { value: 'dont_care', label: "I don't care" }
 ];
 
-// Post-scenario questions: Block B first, then Block A (+ attention check in A).
+const WILLINGNESS_ANCHORS = { low: 'I would be less willing', mid: 'No change', high: 'I would be more willing' };
+
+// Post-scenario questions: Block B first, then Block C, then Block A (+ attention check in A).
 // `key` doubles as the DB column name.
 const POST_QUESTIONS = [
   // ----- Block A: about the data type -----
@@ -196,6 +198,17 @@ const POST_QUESTIONS = [
       { value: 'no_trust',      label: "I don't trust App Z" },
       { value: 'other',         label: 'Other', has_other: true }
     ] },
+
+  // ----- Block C: willingness under conditions (after Block B, own randomized order) -----
+  { id: 19, key: 'postq_willing_if_self_benefit', block: 'C', type: 'likert5',
+    prompt: () => 'If you benefit from this use of your data, would you be more willing or less willing to share it?',
+    anchors: WILLINGNESS_ANCHORS },
+  { id: 20, key: 'postq_willing_if_others_benefit', block: 'C', type: 'likert5',
+    prompt: () => 'If others benefit from this use of your data, would you be more willing or less willing to share it?',
+    anchors: WILLINGNESS_ANCHORS },
+  { id: 21, key: 'postq_willing_if_no_revenue', block: 'C', type: 'likert5',
+    prompt: () => 'If App Z does not earn any revenue from your data, would you be more willing or less willing to share it?',
+    anchors: WILLINGNESS_ANCHORS },
 
   // ----- Attention check (pooled + randomized with Block A) -----
   { id: 14, key: 'attention_check', block: 'AC', type: 'attention', expected: 1,

@@ -124,12 +124,12 @@ function postQuestionPayload(p, screenId) {
   const qid = parseInt(screenId.split('_')[1], 10);
   const q = POST_QUESTIONS.find(x => x.id === qid);
   // Blocks A/B may use alternate short names (inline_b); attention check unchanged.
-  const dtForPrompt = (q.block === 'A' || q.block === 'B') ? forBlockB(dt) : dt;
+  const dtForPrompt = (q.block === 'A' || q.block === 'B' || q.block === 'C') ? forBlockB(dt) : dt;
   const item = { id: q.id, key: q.key, type: q.type, prompt: q.prompt(dtForPrompt, uc) };
   if (q.prompt_emphasis) item.prompt_emphasis = q.prompt_emphasis;
-  // Block B: use-case context + definition. Block A: definition reminder.
+  // Blocks B/C: use-case context + definition. Block A: definition reminder.
   // Attention check: no header.
-  if (q.block === 'B') {
+  if (q.block === 'B' || q.block === 'C') {
     // Short name + use, then "By <name>, we mean …".
     // Some items: "wants to collect" (hypothetical intent); others: "collects".
     const wantsToCollect = q.key === 'postq_coworker_sells_feel'
@@ -338,6 +338,7 @@ function progressFor(screenId, participant) {
   if (ENABLE_SCENARIO_SLIDER_FOLLOWUPS) order.push(`${second}_slider`);
   order.push('post_scenario_intro');
   for (const qid of participant.block_b_order) order.push(`postq_${qid}`);
+  for (const qid of participant.block_c_order || []) order.push(`postq_${qid}`);
   order.push('block_a_intro');
   for (const qid of participant.block_a_order) order.push(`postq_${qid}`);
   order.push('open_response', 'about_you_intro', 'ai_usage', 'demographics', 'debrief');

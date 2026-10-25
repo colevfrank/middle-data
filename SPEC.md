@@ -100,6 +100,7 @@ post-scenario intro):
 
 - Order of the two scenarios (Subscription Discount, Data Sharing Program) — `scenario_order`
 - Order of the 7 Block B questions — `block_b_order`
+- Order of the 3 Block C questions — `block_c_order`
 - Order of the 11 Block A items (10 questions + the attention check, pooled) — `block_a_order`
 
 Blocks are never interleaved: Block B is always shown in full before Block A.
@@ -133,6 +134,7 @@ the screen they should see next, so a reload or a returning link resumes exactly
 | 6 | `scenario_2` \| `scenario_1` | Second scenario | scenario response |
 | 7 | `post_scenario_intro` | Frames the Block B battery (data type + use case) | — |
 | 8–14 | `postq_<id>` | Block B, 7 questions in `block_b_order` | one column per question |
+| 14a–c | `postq_<id>` | Block C, 3 willingness questions in `block_c_order` | one column per question |
 | 15 | `block_a_intro` | Frames Block A ("regardless of its use") | — |
 | 16–26 | `postq_<id>` | Block A, 11 items in `block_a_order` (10 questions + attention check) | one column per question |
 | 27 | `open_response` | Two required free-text boxes | `open_data_revenue`, `open_data_ai_training` |
@@ -144,7 +146,7 @@ the screen they should see next, so a reload or a returning link resumes exactly
 **Slider robustness check (on).** With `ENABLE_SCENARIO_SLIDER_FOLLOWUPS` true in
 `server/surveyFeatures.js`, each scenario is immediately followed by `scenario_<n>_slider`, which
 re-asks the same question as a minimum-acceptable-amount slider (`s1_slider_value`/`s1_slider_none`,
-`s2_slider_value`/`s2_slider_none`), bringing the flow to 33 screens.
+`s2_slider_value`/`s2_slider_none`), and Block C adds three more, bringing the flow to 36 screens.
 
 Consent refusal sends `current_screen` to `returned` and redirects out; completion sends it to
 `complete`. Both clear the session cookie.
@@ -200,6 +202,20 @@ collection: `postq_coworker_sells_feel` and `postq_concerns`.
 | 11 | `postq_coworker_sells_feel` | Phone manufacturer collected the data and sold it to App Z — how would you feel? | Very upset / A little upset / Confused / Don't care at all / Happy for them |
 | 12 | `postq_credit_ack` | Should you receive **credit or acknowledgement** when it is used? | 1–5, each labeled ("1: I definitely do not want to receive credit" … "5: I absolutely should receive credit") |
 | 13 | `postq_concerns` | Main concern(s) about sharing this data with App Z | Multi-select, 8 options incl. "Other" + free text; order shuffled, "Other" last. Also writes `postq_concerns_other` |
+
+### Block C — willingness under conditions (3 questions, added after the pilot)
+
+Shown immediately after Block B, before the Block A intro, in `block_c_order`. Same header as
+Block B ("Suppose App Z collects your [DATA TYPE] to [USE CASE]. By [DATA TYPE], we mean …"), so
+"this use of your data" refers to the assigned use case. All three use a 1–5 scale with endpoints
+"1: I would be less willing", "3: No change", "5: I would be more willing" (2 and 4 unlabeled). Pilot rows have `block_c_order` NULL
+and skipped this block.
+
+| id | Column | Question |
+| --- | --- | --- |
+| 19 | `postq_willing_if_self_benefit` | If you benefit from this use of your data, would you be more willing or less willing to share it? |
+| 20 | `postq_willing_if_others_benefit` | If others benefit from this use of your data, would you be more willing or less willing to share it? |
+| 21 | `postq_willing_if_no_revenue` | If App Z does not earn any revenue from your data, would you be more willing or less willing to share it? |
 
 ### Block A — about the data type (10 questions + attention check)
 
@@ -258,20 +274,20 @@ Per screen, one `events` row: `screen_id`, `timestamp_shown`, `timestamp_submitt
 `latency_ms` (the difference), and `input_events` — a JSONB log of individual input
 selections timestamped client-side, for finer-grained response dynamics.
 
-On the participant row: condition assignment, the three randomized orders, the comprehension
+On the participant row: condition assignment, the four randomized orders, the comprehension
 counts, `attention_check_pass`, and every response column.
 
 ## Database schema
 
 Two tables (`migrations/0001_init.sql`, `migrations/0002_survey_copy_update.sql`,
-`migrations/0004_open_ai_training.sql`, and related additive migrations).
+`migrations/0004_open_ai_training.sql`, `migrations/0005_block_c_willingness.sql`, and related additive migrations).
 
 **`participants`** — one row per participant, written incrementally on every Continue so
 attrition still yields usable partial rows:
 
 - Identity: `id`, `participant_id` (unique), `assignment_id`, `project_id`, `session_token` (UUID, unique)
 - Condition (server-only): `data_type SMALLINT CHECK (1–16)`, `use_case CHAR(2) CHECK ('B1','B2')`
-- Orders: `scenario_order INT[]`, `block_b_order INT[]`, `block_a_order INT[]`
+- Orders: `scenario_order INT[]`, `block_b_order INT[]`, `block_c_order INT[]`, `block_a_order INT[]`
 - State: `current_screen TEXT`
 - Comprehension: `comp_check_1/2/3_wrong_count`, `comp_check_fail_count` (SMALLINT)
 - Consent: `consent_age_ok`, `consent_read`, `consent_participate`
@@ -282,6 +298,8 @@ attrition still yields usable partial rows:
 - Block B: `postq_comp_by_amount`, `postq_comp_per_use`, `postq_comp_by_effort`,
   `postq_comp_by_originality`, `postq_coworker_sells_feel`, `postq_credit_ack`,
   `postq_concerns TEXT[]`, `postq_concerns_other`
+- Block C: `postq_willing_if_self_benefit`, `postq_willing_if_others_benefit`,
+  `postq_willing_if_no_revenue` (SMALLINT 1–5)
 - Attention check: `attention_check_value`, `attention_check_pass`
 - Open response: `open_data_revenue`, `open_data_ai_training`
 - AI usage: `ai_tools_freq`, `social_media_freq`, `search_engine_freq`, `tech_current`, `tech_ever`

@@ -9,7 +9,7 @@ Page-by-page text as currently assembled from `server/content.js` and `server/sc
 - `{inline_b}` — Block A/B short name (same as `{inline}` except where noted, e.g. photo library data)
 - `{data_use}` — use-case phrase (same wording as `comp_use` / `scenario_use` in code)
 
-Scenario order (Subscription Discount vs Data Sharing Program) is randomized. Block B questions are randomized within Block B; Block A questions (plus the attention check) are randomized within Block A. Block B is always shown before Block A.
+Scenario order (Subscription Discount vs Data Sharing Program) is randomized. Block B questions are randomized within Block B; the three Block C questions (shown right after Block B) are randomized within Block C; Block A questions (plus the attention check) are randomized within Block A. Block B is always shown before Block A.
 
 **Optional slider follow-ups:** When `ENABLE_SCENARIO_SLIDER_FOLLOWUPS` is `true` in `server/surveyFeatures.js`, each scenario is immediately followed by an identical page that asks for a minimum acceptable amount via a slider instead of checkboxes. Set that flag to `false` to remove both pages.
 
@@ -479,6 +479,28 @@ What is/are your main concern(s) about sharing your `{inline_b}` with App Z? (Pl
 - It could be used to harm me
 - I don't trust App Z
 - Other [text box]
+
+---
+
+## Pages 14a–14c — Block C (willingness questions)
+
+*Added after the pilot. Each question is its own page, shown right after Block B (before the Block A intro). Order randomized within Block C. Same header as Block B ("collects").*
+
+Suppose App Z collects your `{inline_b}` to `{data_use}`. By `{inline_b}`, we mean `{definition}` **`{question}`**
+
+All three use the same 1–5 scale (2 and 4 unlabeled):
+
+- 1: I would be less willing
+- 2
+- 3: No change
+- 4
+- 5: I would be more willing
+
+**C1** (`postq_willing_if_self_benefit`): If you benefit from this use of your data, would you be more willing or less willing to share it?
+
+**C2** (`postq_willing_if_others_benefit`): If others benefit from this use of your data, would you be more willing or less willing to share it?
+
+**C3** (`postq_willing_if_no_revenue`): If App Z does not earn any revenue from your data, would you be more willing or less willing to share it?
 
 ---
 
