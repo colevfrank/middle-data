@@ -193,6 +193,35 @@ test('assignCell yields a valid cell (dt 1..16, uc B1/B2)', async () => {
   assert.ok(cell.data_type >= 1 && cell.data_type <= 16);
   assert.ok(['B1', 'B2'].includes(cell.use_case));
 });
+test('assignCell keeps cells within 1 of each other at any stopping point', async () => {
+  mockState.participants.clear();
+  mockState.byPid.clear();
+  const counts = new Map();
+  const record = (cell) => {
+    const token = 'bal-' + mockState.nextId;
+    mockState.participants.set(token, { id: mockState.nextId++, session_token: token, ...cell });
+    const k = cell.data_type + ':' + cell.use_case;
+    counts.set(k, (counts.get(k) || 0) + 1);
+  };
+  for (let n = 1; n <= 1293; n++) {
+    record(await assignCell());
+    const vals = [...counts.values()];
+    const min = counts.size < 32 ? 0 : Math.min(...vals);
+    assert.ok(Math.max(...vals) - min <= 1, `imbalance after ${n} assignments`);
+  }
+  // A dropout releases its slot; later refills top that cell back up.
+  const [first] = mockState.participants.keys();
+  mockState.participants.delete(first);
+  for (let i = 0; i < 64; i++) record(await assignCell());
+  const dbCounts = new Map();
+  for (const r of mockState.participants.values()) {
+    const k = r.data_type + ':' + r.use_case;
+    dbCounts.set(k, (dbCounts.get(k) || 0) + 1);
+  }
+  const vals = [...dbCounts.values()];
+  assert.equal(dbCounts.size, 32);
+  assert.ok(Math.max(...vals) - Math.min(...vals) <= 1, 'dropout cell not refilled');
+});
 
 section('validation');
 test('consent: all yes → consented true', () => {

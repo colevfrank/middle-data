@@ -49,16 +49,21 @@ async function refillBag(client) {
     countMap.set(`${r.data_type}:${r.use_case}`, r.n);
   }
 
-  const bag = [];
+  // Permuted blocks: each refill holds one slot per under-target cell at the
+  // current minimum count, so cells stay within ~1 of each other at any
+  // stopping point (data collection runs in tranches and may stop before
+  // N = 3200), and cells that lost participants catch up first.
+  const cells = [];
   for (let dt = 1; dt <= NUM_DATA_TYPES; dt++) {
     for (const uc of ['B1', 'B2']) {
       const have = countMap.get(`${dt}:${uc}`) || 0;
-      const need = Math.max(0, PER_CELL_TARGET - have);
-      for (let i = 0; i < need; i++) {
-        bag.push({ data_type: dt, use_case: uc });
-      }
+      if (have < PER_CELL_TARGET) cells.push({ data_type: dt, use_case: uc, have });
     }
   }
+  const minHave = Math.min(...cells.map(c => c.have));
+  const bag = cells
+    .filter(c => c.have === minHave)
+    .map(({ data_type, use_case }) => ({ data_type, use_case }));
 
   if (bag.length === 0) {
     // Past target — fall back to pure random

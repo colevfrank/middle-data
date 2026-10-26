@@ -112,9 +112,13 @@ options are shuffled per render with "Other" pinned last.
 Block randomization across 16 × 2 = **32 cells**, target **100 per cell** (N = 3200). The
 per-cell target is set by the `PER_CELL_TARGET` env var (default 100; e.g. 10 for a 320-person
 pilot). Changing it on Railway redeploys the service, which rebuilds the assignment bag.
-`server/randomization.js` keeps a shuffled bag of the assignments still needed to reach the
-per-cell target, refilling it from live counts under a Postgres advisory lock; once every cell
-is full it falls back to uniform random assignment. The target counts **completes**: a refill
+Assignment uses permuted blocks so cells stay balanced at any stopping point (data collection
+runs in tranches, starting with ~1,293, and may stop before 3,200 based on interim power checks):
+`server/randomization.js` keeps a shuffled bag holding one slot for each under-target cell at
+the current minimum count, refilling it from live counts under a Postgres advisory lock whenever
+it empties. Cells therefore stay within about 1 of each other (plus in-progress sessions), and
+cells that lose participants are topped up first. Once every cell is full it falls back to
+uniform random assignment. The target counts **completes**: a refill
 counts completed participants plus sessions still in progress (started within the last 2 hours,
 consent not refused), so consent refusals and abandoned sessions are re-assigned rather than
 consuming a cell's slot.
