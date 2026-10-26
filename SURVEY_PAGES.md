@@ -39,7 +39,7 @@ Risks are minimal. Some questions ask you to consider your choices in a hypothet
 There are no direct benefits to you. The research aims to inform academic and policy discussions.
 
 #### Compensation & Costs
-You will receive $4 through CloudResearch upon completion of the survey. Partial completions are not compensated; if you believe you should be compensated but were not due to an error, you may contact the research team.
+You will receive $3 through CloudResearch upon completion of the survey. Partial completions are not compensated; if you believe you should be compensated but were not due to an error, you may contact the research team.
 
 #### Future Use of Information
 We may release, share, or reuse the data. Any released or shared data will be first de-identified so that no responses can be traced back to you. Such release, sharing, and reuse will not require further consent from you.
