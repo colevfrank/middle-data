@@ -78,8 +78,9 @@ function validateIntro(body) {
   return { ok: true, fields };
 }
 
-// Multi-select scenario: participant checks all acceptable tier values, or the
-// mutually-exclusive "none" (declined). Stored as an array + a boolean.
+// Scenario price list: an array of accepted tier values, or the mutually-exclusive
+// "none" (declined), stored as an array + a boolean. The current client sends a single
+// minimum tier; earlier multi-select clients (pilot, early tranche 1) sent several.
 function validateMultiSelect(body, tiers, acceptedKey, noneKey) {
   const b = body || {};
   const declined = b[noneKey] === true;
@@ -96,12 +97,12 @@ function validateMultiSelect(body, tiers, acceptedKey, noneKey) {
   return { ok: true, fields: { [acceptedKey]: accepted, [noneKey]: false } };
 }
 
-// Scenario 1 = Subscription Discount (multi-select: which discounts they'd accept).
+// Scenario 1 = Subscription Discount (price list: minimum acceptable discount).
 function validateScenario1(body) {
   return validateMultiSelect(body, S1_TIERS, 's1_accepted_discounts', 's1_none');
 }
 
-// Scenario 2 = Data Sharing Program (multi-select: which revenue shares they'd accept).
+// Scenario 2 = Data Sharing Program (price list: minimum acceptable revenue share).
 function validateScenario2(body) {
   return validateMultiSelect(body, S2_TIERS, 's2_accepted_shares', 's2_none');
 }

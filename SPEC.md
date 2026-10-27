@@ -190,6 +190,16 @@ tier checks every larger tier, and unchecking a tier unchecks every smaller one.
 logs only the participant's own clicks, not the cascaded checks. Pilot rows used the old format.
 The server does not enforce upward-closure; the client guarantees it.
 
+**Single-choice minimum (added 2026-10-27, during main tranche 1).** The price lists now ask
+"Please select the minimum discount you would be willing to accept:" (Scenario 2: "the minimum
+percentage of the revenue attributed to your data …") and take a single choice: radio buttons
+for the tiers plus the decline, with no auto-selection. Storage is unchanged: the chosen tier is
+a one-item `s1_accepted_discounts` / `s2_accepted_shares` list, or `[]` with `s1_none` /
+`s2_none` true. The radios are named `min_tier` (value = tier code or `none`), whereas the two
+earlier formats logged `tier_<value>` and `scn_none` checkbox clicks, so each participant's
+format is identifiable from `input_events`. The server still accepts multi-tier lists, so
+participants whose page loaded before the deploy can finish on the old format.
+
 ### Block B — compensation for the use case (7 questions)
 
 Every Block B screen repeats the same header before the bolded question: "Suppose App Z

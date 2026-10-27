@@ -281,6 +281,14 @@ test('scenario_1: multi-select accepted set + mutually-exclusive none', () => {
   assert.equal(VALIDATORS.scenario_1({ s1_accepted_discounts: ['bogus'], s1_none: false }).ok, false);
   assert.equal(VALIDATORS.scenario_1({ s1_accepted_discounts: ['5off'], s1_none: true }).ok, false);
 });
+test('scenario price lists: single minimum tier stored as a one-item list', () => {
+  const s1 = VALIDATORS.scenario_1({ s1_accepted_discounts: ['5off'], s1_none: false });
+  assert.ok(s1.ok);
+  assert.deepEqual(s1.fields.s1_accepted_discounts, ['5off']);
+  const s2 = VALIDATORS.scenario_2({ s2_accepted_shares: ['25'], s2_none: false });
+  assert.ok(s2.ok);
+  assert.deepEqual(s2.fields.s2_accepted_shares, ['25']);
+});
 test('scenario_2: multi-select accepted set + mutually-exclusive none', () => {
   const ok = VALIDATORS.scenario_2({ s2_accepted_shares: ['50', '75', '99'], s2_none: false });
   assert.equal(ok.ok, true);

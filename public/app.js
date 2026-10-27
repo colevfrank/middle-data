@@ -598,38 +598,34 @@
     return [el('span', { class: 'font-bold text-cyan-600' }, s)];
   }
 
-  // Bold question below the frame + multi-select checkboxes ("select ALL that apply")
-  // with a mutually-exclusive "none". Continue enabled once ≥1 box or "none" is checked.
-  // Tiers are listed smallest → largest and kept upward-closed: checking a tier checks
-  // every larger one; unchecking a tier unchecks every smaller one. Only the clicked
-  // box fires `change`, so input_events logs participant clicks, not the cascade.
+  // Bold question below the frame + single-choice price list: the minimum acceptable
+  // tier, or "none" (would not share). Stored in the old multi-select fields as a
+  // one-item list. The radios are named `min_tier` (not the earlier `tier_<value>` /
+  // `scn_none` checkboxes), so input_events shows which format a participant saw.
   function renderScenarioQuestion(p) {
     root.appendChild(el('p', { class: 'font-bold text-slate-900 mt-6 mb-2' },
-      emphasize(p.question, ['select ALL that apply', 'ALL'], 'font-extrabold underline')));
-    if (p.tier_hint) {
-      root.appendChild(el('p', { class: 'text-sm text-slate-600 mb-2' }, p.tier_hint));
-    }
+      emphasize(p.question, ['minimum'], 'font-extrabold underline')));
     const form = el('div', { class: 'space-y-1' });
     for (const t of p.tiers) {
       form.appendChild(el('label', { class: 'label-radio' }, [
-        el('input', { type: 'checkbox', name: 'tier_' + t.value, value: t.value, 'data-tier': '1' }),
+        el('input', { type: 'radio', name: 'min_tier', value: t.value }),
         el('span', {}, scenarioTierLabelNodes(t.label))
       ]));
     }
     form.appendChild(el('label', { class: 'label-radio' }, [
-      el('input', { type: 'checkbox', name: 'scn_none', id: 'scn_none' }),
+      el('input', { type: 'radio', name: 'min_tier', value: 'none' }),
       el('span', { class: 'font-bold text-cyan-600' }, p.none_label)
     ]));
     root.appendChild(form);
 
-    const noneBox = form.querySelector('#scn_none');
-    const tierBoxes = Array.from(form.querySelectorAll('input[data-tier]'));
+    const radios = Array.from(form.querySelectorAll('input[name="min_tier"]'));
+    const chosen = () => (radios.find(r => r.checked) || {}).value;
 
     const btn = continueBtn(() => {
-      const accepted = tierBoxes.filter(b => b.checked).map(b => b.value);
+      const v = chosen();
       const body = {};
-      body[p.submit.accepted] = noneBox.checked ? [] : accepted;
-      body[p.submit.none] = noneBox.checked;
+      body[p.submit.accepted] = v === 'none' ? [] : [v];
+      body[p.submit.none] = v === 'none';
       submit(p.screen, body);
     }, 'Continue');
     root.appendChild(el('div', { class: 'flex items-center gap-3 mt-6' }, [
@@ -641,23 +637,9 @@
     btn.classList.remove('mt-6');
 
     function refresh() {
-      tierBoxes.forEach(b => {
-        if (noneBox.checked) { b.checked = false; b.disabled = true; }
-        else { b.disabled = false; }
-      });
-      const anyTier = tierBoxes.some(b => b.checked);
-      btn.disabled = !(noneBox.checked || anyTier);
+      btn.disabled = !chosen();
     }
-    noneBox.addEventListener('change', refresh);
-    tierBoxes.forEach((b, i) => b.addEventListener('change', () => {
-      if (b.checked) {
-        noneBox.checked = false;
-        tierBoxes.slice(i + 1).forEach(x => { x.checked = true; });
-      } else {
-        tierBoxes.slice(0, i).forEach(x => { x.checked = false; });
-      }
-      refresh();
-    }));
+    form.addEventListener('change', refresh);
     refresh();
   }
 

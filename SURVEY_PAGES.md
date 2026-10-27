@@ -215,9 +215,9 @@ We would like to offer you a monthly discount on your subscription for sharing t
 1. improve App Z's services
 2. train App Z's AI models and AI agents to improve its services
 
-**Question:** Please select ALL of the discounts you would be willing to accept (select ALL that apply):
+**Question:** Please select the minimum discount you would be willing to accept:
 
-*Hint (below the question):* Selecting a discount automatically selects every larger discount.
+*(Single choice: one tier or the decline.)*
 
 - I would accept if I receive $1 off / month (which means my subscription is $19/mo)
 - I would accept if I receive $3 off / month (which means my subscription is $17/mo)
@@ -315,9 +315,9 @@ Because your data will increase our revenue, we would like to offer to pay you a
 1. improve App Z's services
 2. train App Z's AI models and AI agents to improve its services
 
-**Question:** Please select ALL of the percentages of the revenue attributed to your data that you would be willing to accept (select ALL that apply):
+**Question:** Please select the minimum percentage of the revenue attributed to your data that you would be willing to accept:
 
-*Hint (below the question):* Selecting a percentage automatically selects every larger percentage.
+*(Single choice: one tier or the decline.)*
 
 - I would agree if I receive 1% of the revenue attributed to my data
 - I would agree if I receive 10% of the revenue attributed to my data
